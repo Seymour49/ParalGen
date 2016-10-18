@@ -3,12 +3,12 @@ CFLAGS= -Wall -O2 -std=c++11
 LDFLAGS = 
 EXEC = $(BUILD_DIR)/paralGen
 
-SRC = 	main.cpp\
-		itemSet.cpp
+SRC =	main.cpp\
+	itemSet.cpp\
+	dataSet.cpp
 
 OBJ_DIR = ./obj
 SRC_DIR = ./src
-BIN_DIR = ./bin
 BUILD_DIR = ./build
 INC_DIR = ./include
 
@@ -19,8 +19,10 @@ all: $(EXEC)
 $(EXEC): $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 	
-$(OBJ_DIR)/itemSet.o: $(SRC_DIR)/itemSet.cpp
-$(OBJ_DIR)/main.o: $(SRC_DIR)/main.cpp $(INC_DIR)/itemSet.h
+
+
+$(OBJ_DIR)/main.o: $(INC_DIR)/itemSet.h
+$(OBJ_DIR)/dataSet.o: $(INC_DIR)/itemSet.h
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) -o $@ -c $< $(CFLAGS)

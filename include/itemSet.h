@@ -5,6 +5,13 @@
 #include <iostream>
 
 
+
+
+/**
+  * Représente une transaction en une liste de booléen (1 ou 0) signifiant 
+  * si un item est présent dans la transaction ou non
+  * @author Johan Defaye
+  */
 class itemSet : public std::vector<char> {
 
 
@@ -15,24 +22,27 @@ public:
    * CONSTRUCTORS  *
    * * * * * * * * */
   
-/** Constructeur par défaut d'un itemSet
+/** 
+  * Constructeur par défaut d'un itemSet
   * Initialise un itemSet comme un vecteur de char vide
   * @author Johan Defaye
   */
   itemSet();
   
   
-/** Constructeur prenant un vecteur de char en paramètre
+/** 
+  * Constructeur prenant un vecteur de char en paramètre
   * Initilise un itemSet avec un vecteur de char donné en paramètre
-  * @param v Vecteur de char
+  * @param v : Vecteur de char
   * @author Johan Defaye
   */
   itemSet(const std::vector<char> & v);
   
   
-/** Constructeur par copie
+/** 
+  * Constructeur par copie
   * Initilise un itemSet avec un autre itemSet donné en paramètre
-  * @param i Un itemSet
+  * @param i : Un itemSet
   * @author Johan Defaye
   */  
   itemSet( const itemSet & i);
@@ -58,7 +68,7 @@ public:
   
 /** 
   * Affiche l'itemSet dans le flux passé en paramètre
-  * @param flux Un flux pour l'affichage
+  * @param flux : Un flux pour l'affichage
   * @author Johan Defaye
   */
   void print(std::ostream & flux) const;
@@ -69,8 +79,8 @@ public:
 
 /** 
 * Surcharge de l'opérateur d'affichage
-* @param flux Un flux pour l'affichage
-* @param i itemSet à afficher
+* @param flux : Un flux pour l'affichage
+* @param i : itemSet à afficher
 * @author Johan Defaye
 */
 std::ostream& operator<<(std::ostream &flux, const itemSet & i);
