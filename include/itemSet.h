@@ -4,6 +4,9 @@
 #include <vector>
 #include <iostream>
 
+/*
+ * Classe représentent un ensemble d'items via un bitset codé en vecteur de char. 
+ */
 
 
 
@@ -58,7 +61,7 @@ public:
   * @author Johan Defaye
   */
   std::vector<int> getListItem() const;
-  
+    
   
   /* * * * * * * * * * * * *
    * SURCHARGE D'OPÉRATEUR *
