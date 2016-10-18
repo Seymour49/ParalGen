@@ -3,9 +3,11 @@ CFLAGS= -Wall -O2 -std=c++11
 LDFLAGS = 
 EXEC = $(BUILD_DIR)/paralGen
 
-SRC =	main.cpp\
-	itemSet.cpp\
-	dataSet.cpp
+SRC =	main.cpp	\
+	itemSet.cpp	\
+	dataSet.cpp 	\
+	individual.cpp	\
+	geneticAlgo.cpp
 
 OBJ_DIR = ./obj
 SRC_DIR = ./src
@@ -21,8 +23,9 @@ $(EXEC): $(OBJ)
 	
 
 
-$(OBJ_DIR)/main.o: $(INC_DIR)/itemSet.h
+$(OBJ_DIR)/main.o: $(INC_DIR)/itemSet.h 
 $(OBJ_DIR)/dataSet.o: $(INC_DIR)/itemSet.h
+$(OBJ_DIR)/geneticAlgo.o : $(INC_DIR)/individual.h
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) -o $@ -c $< $(CFLAGS)
