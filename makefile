@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS= -Wall -O2 -std=c++11
 LDFLAGS = 
-EXEC = $(BIN_DIR)/paralGen
+EXEC = $(BUILD_DIR)/paralGen
 
 SRC = 	main.cpp\
 		itemSet.cpp
@@ -9,6 +9,7 @@ SRC = 	main.cpp\
 OBJ_DIR = ./obj
 SRC_DIR = ./src
 BIN_DIR = ./bin
+BUILD_DIR = ./build
 INC_DIR = ./include
 
 OBJ = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SRC))
