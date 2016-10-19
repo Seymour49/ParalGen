@@ -35,4 +35,4 @@
 ./build/*
 
 # Fichier main
-main.cpp
+./src/main.cpp
