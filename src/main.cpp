@@ -9,23 +9,16 @@ using namespace std;
 int main(int argc, char **argv) {
   
   vector<char> v;
+  v.resize(30);
   for(unsigned i=0; i < 30; ++i){
       if( (i%2) == 0)
-      v.push_back('0');
+      v[i]='0';
       else
-	v.push_back('1');
+	v[i]='1';
   }
   
   
-    vector<int> v2;
-  for(unsigned i=0; i < 30; ++i){
-      if( (i%2) == 0)
-      v2.push_back(0);
-      else
-	v2.push_back(1);
-  }
-  cout << v2;
-  cout << v;
+  cout << "Vecteur : -"<<v<< "-"<<endl;
   
   
   ItemSet it(v);
