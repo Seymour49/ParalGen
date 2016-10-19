@@ -30,3 +30,6 @@
 
 # Fichier Kdevelop
 *.kdev4
+
+# Dossier build
+./build/*
