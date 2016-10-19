@@ -12,7 +12,6 @@ itemSet::itemSet(const vector< char >& v): vector<char>(v)
 {}
 
 
-
 itemSet::itemSet(const itemSet& i): vector<char>(i)
 {}
 

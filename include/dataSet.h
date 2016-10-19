@@ -19,7 +19,7 @@ class dataSet : public std::vector< itemSet > {
   
 private:
   unsigned int _nbLine; // Nombre de ligne du tableau
-  unsigned int _nbRow;  // Nombre de colonne du tableau
+  unsigned int _nbCol;  // Nombre de colonne du tableau
   
   
 public:
@@ -36,13 +36,12 @@ public:
 
   
   /**
-    * Constructeur prenant un nombre de ligne et un nombre de colonne en paramètre
-    * Construit un tableau 2D vide avec le nombre de ligne et de colonne passé en paramètre
-    * @param nbRow : Nombre de colonne
-    * @param nbLine : Nombre de ligne
+    * Constructeur prenant un nombre de ligne
+    * Construit un tableau de transaction avec le nombre de transaction passé en paramètre
+    * @param nbTransaction : Nombre de ligne du tableau
     * @author Johan Defaye 
     */
-  dataSet(unsigned int nbLine, unsigned int nbRow);
+  dataSet(unsigned int nbTransaction);
   
   
   /**
@@ -70,7 +69,7 @@ public:
    * @return : Nombre de colonne du tableau
    * @author Johan Defaye
    */
-  unsigned int getNbRow() const {return _nbRow;}
+  unsigned int getNbCol() const {return _nbCol;}
 
   
   /* * * * * *

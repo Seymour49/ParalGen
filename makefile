@@ -23,7 +23,7 @@ $(EXEC): $(OBJ)
 	
 
 
-$(OBJ_DIR)/main.o: $(INC_DIR)/itemSet.h 
+$(OBJ_DIR)/main.o: $(INC_DIR)/dataSet.h 
 $(OBJ_DIR)/dataSet.o: $(INC_DIR)/itemSet.h
 $(OBJ_DIR)/geneticAlgo.o : $(INC_DIR)/individual.h
 

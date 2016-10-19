@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../include/itemSet.h"
+#include "../include/dataSet.h"
 
 using namespace std;
 
@@ -28,5 +28,8 @@ int main(int argc, char **argv) {
   }
   cout << endl;
   
+  dataSet data;
+  data.loadFile("./data/T10I4D100K.dat");
+  cout << data << endl;
   return 0;
 }
