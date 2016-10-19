@@ -50,7 +50,6 @@ vector< int > ItemSet::getListItem() const
 }
 
 
-
 void ItemSet::print(ostream& flux) const
 {
   Individual::print(flux);
