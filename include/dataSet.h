@@ -8,13 +8,13 @@
 #include "../include/itemSet.h"
 
 /**
- * Représente un ensemble de transaction comme un tableau 2D de char (ou un tableau d'itemSet)
- * Chaque ligne représente une transaction(itemSet) et chaque colonne un item
+ * Représente un ensemble de transaction comme un tableau 2D de char 
+ * Chaque ligne représente une transaction et chaque colonne un item
  * La case de coordonnée [i,j] aura pour valeur 1 si l'item j figure
  * dans la transaction i et 0 s'il n'y figure pas
  * @author Johan Defaye
  */
-class dataSet : public std::vector< itemSet > {
+class dataSet : public std::vector< std::vector< char > > {
   
   
 private:
@@ -87,9 +87,19 @@ public:
   /**
    * Prend un itemSet en paramètre et retourne sa fréquence d'apparition dans le tableau
    * @param item : Un itemSet
+   * @return La fréquence entre 0 et 1 de l'itemSet
    * @author Johan Defaye
    */
   float freqItemSet(const itemSet & item) const;
+  
+  
+    /**
+   * Prend un vecteur de char en paramètre et retourne sa fréquence d'apparition dans le tableau
+   * @param v : Un vecteur de char
+   * @return La fréquence entre 0 et 1 du vecteur de char
+   * @author Johan Defaye
+   */
+  float freqItemSet(const std::vector<char> & v) const;
   
   
   /**

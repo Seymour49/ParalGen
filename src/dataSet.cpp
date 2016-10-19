@@ -23,29 +23,47 @@ dataSet::dataSet(): _nbLine(0), _nbCol(0)
 dataSet::dataSet(unsigned int nbLine): _nbLine(nbLine), _nbCol(0)
 {
   resize(_nbLine);
-  itemSet item;
+  vector<char> v;
   for (unsigned int i = 0; i < _nbLine; ++i) {
-    at(i) = item;
+    at(i) = v;
   }
 }
 
 
 
-dataSet::dataSet(const dataSet& data): vector<itemSet>(data), _nbLine(data.getNbLine()), _nbCol(data.getNbCol())
+dataSet::dataSet(const dataSet& data): vector<vector<char>>(data), _nbLine(data.getNbLine()), _nbCol(data.getNbCol())
 {}
 
 
 void dataSet::print(ostream& flux) const
 {
   for (unsigned int i = 0; i < _nbLine; ++i) {
-    flux << at(i) << endl;
+    for (unsigned int j = 0; j < _nbCol; ++j) {
+      flux << this->at(i).at(j) << " ";
+    }
+    flux << endl;
   }
 }
 
 
 float dataSet::freqItemSet(const itemSet& item) const
 {
-  return 0.0;
+  int nbOccurrence = 0;
+  
+  if (item.size() != _nbCol) {
+    cerr << "Erreur ! L'itemSet ne correspond pas au fichier de donnée" << endl;
+  }
+  for (unsigned int i = 0; i < _nbLine; ++i) {
+    for (unsigned int j = 0; j < _nbCol; ++j) {
+      
+    }
+  }
+}
+
+
+float dataSet::freqItemSet(const vector< char >& v) const
+{
+
 }
 
 
@@ -53,7 +71,7 @@ float dataSet::freqItemSet(const itemSet& item) const
 void dataSet::loadFile(const string& fileName)
 {
   ifstream f(fileName.c_str());
-  vector< vector<unsigned int> > matrice;
+  vector< vector<int> > matrice;
   
   if(!f){	    
     cerr << "Erreur pendant l'ouverture du fichier" << endl;
@@ -62,36 +80,31 @@ void dataSet::loadFile(const string& fileName)
     string line;
     while(getline(f,line)){
       vector<string>& tokens = explode(line);
-      vector<unsigned int> row;
+      vector<int> row;
       // Traitement
-      for(unsigned i=0; i<tokens.size(); ++i){
+      for(unsigned int i = 0; i < tokens.size(); ++i){
 	row.push_back(atoi(tokens[i].c_str()));
       }
       matrice.push_back(row);
       delete(&tokens);
     }
-    unsigned int Cols = 0;
-    unsigned int Rows = matrice.size()-1;
-    resize(Rows);
-    for(unsigned i=0; i < Rows; ++i){ // Recherche du nombre d'item
-	if( matrice[i].back() > Cols) Cols = matrice[i].back();
+    int Cols = 0;
+    int Rows = matrice.size();
+    int start_index = 1; // indice du premier item
+    for(int i = 0; i < Rows; ++i){ // Recherche du nombre maximum d'item et de l'indice du premier item
+      if (matrice[i].back() > Cols) Cols = matrice[i].back();
+      if (matrice[i].front() < start_index) start_index = matrice[i].front();
     }
-    _nbLine = Rows;
-    _nbCol = Cols;
-    cout << "ligne = " << _nbLine << "\t colonnes = " << _nbCol << endl;
+    _nbLine = (unsigned int) Rows;
+    _nbCol = (unsigned int) Cols;
     resize(_nbLine);
-    for(unsigned i=0; i < Rows; ++i){
-      cout << "début " << i << endl;
+    for (int i = 0; i < Rows; ++i){
       vector<char> line;
       line.assign(_nbCol, '0');
-      cout << "ici 0 " << endl;
-      for(unsigned it=0; it < matrice[i].size(); ++it){
-	cout << "\t" << matrice[i][it]-1 << endl;
-	  line[matrice[i][it]-1] = '1';
+      for (unsigned int it = 0; it < matrice[i].size(); ++it){
+	line[matrice[i][it]-start_index] = '1';
       }
-      cout << "ici 1" << endl;
       at(i) = line;
-      cout << "ici 2" << endl;
    }
   }
 }
