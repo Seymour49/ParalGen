@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <exception>
 #include "../include/itemSet.h"
 
 /**
@@ -14,10 +15,11 @@
  * dans la transaction i et 0 s'il n'y figure pas
  * @author Johan Defaye
  */
-class dataSet : public std::vector< std::vector< char > > {
+class DataSet : public std::vector< std::vector< char > > {
   
   
 private:
+  
   unsigned int _nbLine; // Nombre de ligne du tableau
   unsigned int _nbCol;  // Nombre de colonne du tableau
   
@@ -28,29 +30,30 @@ public:
    * CONSTRUCTORS  *
    * * * * * * * * */
   
+  
   /**
-    * Constructeur par défaut d'un dataSet
+    * Constructeur par défaut d'un DataSet
     * @author Johan Defaye
     */
-  dataSet();
+  DataSet();
 
   
   /**
-    * Constructeur prenant un nombre de ligne
+    * Constructeur prenant un nombre de ligne en paramètre
     * Construit un tableau de transaction avec le nombre de transaction passé en paramètre
     * @param nbTransaction : Nombre de ligne du tableau
     * @author Johan Defaye 
     */
-  dataSet(unsigned int nbTransaction);
+  DataSet(unsigned int nbTransaction);
   
   
   /**
     * Constructeur par copie
-    * Utilise les données d'un autre dataSet pour instancier ses propres données
-    * @param data : Un autre dataSet
+    * Utilise les données d'un autre DataSet pour instancier ses propres données
+    * @param data : Un autre DataSet
     * @author Johan defaye
     */
-  dataSet(const dataSet & data);
+  DataSet(const DataSet & data);
   
   
   /* * * * * * *
@@ -85,9 +88,9 @@ public:
   
   
   /**
-   * Prend un itemSet en paramètre et retourne sa fréquence d'apparition dans le tableau
-   * @param item : Un itemSet
-   * @return La fréquence entre 0 et 1 de l'itemSet
+   * Prend un ItemSet en paramètre et retourne sa fréquence d'apparition dans le tableau
+   * @param item : Un ItemSet
+   * @return La fréquence entre 0 et 1 de l'ItemSet
    * @author Johan Defaye
    */
   float freqItemSet(const ItemSet & item) const;
@@ -120,10 +123,10 @@ public:
 /**
  * Surcharge de l'opérateur d'affichage
  * @param flux : un flux pour l'affichage
- * @param data :  dataSet à afficher
+ * @param data :  DataSet à afficher
  * @author Johan Defaye
  */
-std::ostream & operator<<(std::ostream & flux, const dataSet & data);
+std::ostream & operator<<(std::ostream & flux, const DataSet & data);
 
 
 
