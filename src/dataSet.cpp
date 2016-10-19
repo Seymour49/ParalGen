@@ -46,11 +46,11 @@ void dataSet::print(ostream& flux) const
 }
 
 
-float dataSet::freqItemSet(const itemSet& item) const
+float dataSet::freqItemSet(const ItemSet& item) const
 {
   int nbOccurrence = 0;
   
-  if (item.size() != _nbCol) {
+  if (item.getSize() != _nbCol) {
     cerr << "Erreur ! L'itemSet ne correspond pas au fichier de donnée" << endl;
   }
   for (unsigned int i = 0; i < _nbLine; ++i) {

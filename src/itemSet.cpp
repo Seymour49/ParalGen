@@ -1,29 +1,41 @@
 #include "../include/itemSet.h"
-
+#include <time.h>
 
 using namespace std;
 
 
-itemSet::itemSet()
+ItemSet::ItemSet(): Individual()
 {}
 
 
-itemSet::itemSet(const vector< char >& v): vector<char>(v)
+ItemSet::ItemSet(const vector< char >& v):Individual(), _bitset(v)
 {}
 
 
-itemSet::itemSet(const itemSet& i): vector<char>(i)
+ItemSet::ItemSet(const ItemSet& i):Individual(), _bitset(i._bitset)
 {}
 
 
+void ItemSet::Mutate()
+{  
+
+}
+
+Individual& ItemSet::CrossClassic(const Individual& ind, std::size_t pos)
+{
+  
+  ItemSet* res = new ItemSet();
+  return *res;
+}
 
 
-vector< int > itemSet::getListItem() const
+
+vector< int > ItemSet::getListItem() const
 {
   vector<int> listItem; // Valeur de retour
   
-  for (unsigned int i = 0; i < size(); ++i) {
-    if (at(i) == '1') listItem.push_back(i + 1);
+  for (unsigned int i = 0; i < _bitset.size(); ++i) {
+    if (_bitset.at(i) == '1') listItem.push_back(i + 1);
   }
   
   return listItem;
@@ -31,17 +43,22 @@ vector< int > itemSet::getListItem() const
 
 
 
-void itemSet::print(ostream& flux) const
+void ItemSet::print(ostream& flux) const
 {
-  if (size() > 0) flux << at(0);
-  for (unsigned int i = 1; i < size(); ++i) {
-    flux << " " << at(i);
+  Individual::print(flux);
+  flux << endl << "Bitset : ";
+  
+  if (_bitset.size() > 0) flux << _bitset.at(0);
+  for (unsigned int i = 1; i < _bitset.size(); ++i) {
+    flux << " " << _bitset.at(i);
   }
+  
+  flux << endl;
 }
 
 
 
-ostream& operator<<(ostream& flux, const itemSet& i)
+ostream& operator<<(ostream& flux, const ItemSet& i)
 {
   i.print(flux);
   return flux;

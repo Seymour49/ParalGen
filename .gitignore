@@ -33,3 +33,6 @@
 
 # Dossier build
 ./build/*
+
+# Fichier main
+main.cpp

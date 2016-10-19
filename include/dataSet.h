@@ -90,7 +90,7 @@ public:
    * @return La fréquence entre 0 et 1 de l'itemSet
    * @author Johan Defaye
    */
-  float freqItemSet(const itemSet & item) const;
+  float freqItemSet(const ItemSet & item) const;
   
   
     /**

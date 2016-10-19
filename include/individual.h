@@ -21,11 +21,16 @@ public:
    */
   virtual ~Individual() {}
   
-  /**
-   * Accesseurs  
-   */
+  /* * * * * * 
+   * GETTERS *
+   * * * * * */
   int getAge() const { return _age; }
   int getScore() const { return _score; }
+  
+  /* * * * * * 
+   * SETTERS *
+   * * * * * */
+  void setScore(int s);
   
   /* * * * * * 
    * METHODS *

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include "../include/individual.h"
 
 /*
  * Classe représentent un ensemble d'items via un bitset codé en vecteur de char. 
@@ -15,9 +16,11 @@
   * si un item est présent dans la transaction ou non
   * @author Johan Defaye
   */
-class itemSet : public std::vector<char> {
+class ItemSet : public Individual {
 
-
+private:
+  std::vector<char> _bitset;
+  
 public:
   
   
@@ -30,7 +33,7 @@ public:
   * Initialise un itemSet comme un vecteur de char vide
   * @author Johan Defaye
   */
-  itemSet();
+  ItemSet();
   
   
 /** 
@@ -39,7 +42,7 @@ public:
   * @param v : Vecteur de char
   * @author Johan Defaye
   */
-  itemSet(const std::vector<char> & v);
+  ItemSet(const std::vector<char> & v);
   
   
 /** 
@@ -48,8 +51,12 @@ public:
   * @param i : Un itemSet
   * @author Johan Defaye
   */  
-  itemSet( const itemSet & i);
+  ItemSet( const ItemSet & i);
   
+  /* * * * * * 
+   * Getters *
+   * * * * * */
+  int getSize() const { return (int)_bitset.size(); }
   
   /* * * * * * 
    * METHODS *
@@ -61,8 +68,28 @@ public:
   * @author Johan Defaye
   */
   std::vector<int> getListItem() const;
-    
   
+  /* * * * * * * * * * * * *
+   *    HERITED METHODS    *
+   * * * * * * * * * * * * */ 
+  
+ /**
+   * Méthode faisant muter un individu. Modifie de manière aléatoire
+   * une seule information de l'individu. 
+   */
+  void Mutate();
+  
+  /**
+   * Croisement monopoint entre deux individus. Le parent 1 est l'objet
+   * courant et le parent 2 est passé en paramètre. La position du pivot
+   * est également passsé en paramètre.
+   * @param ind Parent 2
+   * @param pos Indice du pivot
+   * @return nouvel individu
+   */
+  Individual& CrossClassic(const Individual& ind,std::size_t pos);
+  
+ 
   /* * * * * * * * * * * * *
    * SURCHARGE D'OPÉRATEUR *
    * * * * * * * * * * * * */
@@ -86,7 +113,7 @@ public:
 * @param i : itemSet à afficher
 * @author Johan Defaye
 */
-std::ostream& operator<<(std::ostream &flux, const itemSet & i);
+std::ostream& operator<<(std::ostream &flux, const ItemSet & i);
 
 
 #endif
