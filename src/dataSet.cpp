@@ -52,7 +52,7 @@ float DataSet::freqItemSet(const ItemSet& item) const
   float nbOccurrence = 0;
   
   if (item.getSize() != _nbCol) {
-    cerr << "Erreur ! L'itemSet ne correspond pas au fichier de donnée" << endl;
+    throw string("Erreur ! L'itemSet ne correspond pas au fichier de donnée");
   }
   else {
     vector<int> listItem = item.getListItem();
@@ -76,7 +76,7 @@ float DataSet::freqItemSet(const vector< char >& v) const
   float nbOccurrence = 0;
   
   if (v.size() != _nbCol) {
-    cerr << "Erreur ! L'ItemSet ne correspond pas au fichier de donnée" << endl;
+    throw string("Erreur ! L'itemSet ne correspond pas au fichier de donnée");
   }
   else {
     bool newOccurrence;
@@ -101,15 +101,16 @@ void DataSet::loadFile(const string& fileName)
   vector< vector<int> > matrice;
   
   if(!f){	    
-    cerr << "Erreur pendant l'ouverture du fichier" << endl;
+    throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
   }
   else {
     string line;
     while(getline(f,line)){
+      if (line.compare("\n")) throw string("Fichier non conforme! Il existe une ligne vide dans le fichier");
       vector<string>& tokens = explode(line);
       vector<int> row;
       // Traitement
-      for(unsigned int i = 0; i < tokens.size(); ++i){
+      for (unsigned int i = 0; i < tokens.size(); ++i){
 	row.push_back(atoi(tokens[i].c_str()));
       }
       matrice.push_back(row);
@@ -118,7 +119,7 @@ void DataSet::loadFile(const string& fileName)
     int Cols = 0;
     int Rows = matrice.size();
     int start_index = 1; // indice du premier item
-    for(int i = 0; i < Rows; ++i){ // Recherche du nombre maximum d'item et de l'indice du premier item
+    for (int i = 0; i < Rows; ++i){ // Recherche du nombre maximum d'item et de l'indice du premier item
       if (matrice[i].back() > Cols) Cols = matrice[i].back();
       if (matrice[i].front() < start_index) start_index = matrice[i].front();
     }
