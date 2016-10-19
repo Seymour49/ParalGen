@@ -4,21 +4,21 @@
 using namespace std;
 
 
-itemSet::itemSet()
+ItemSet::ItemSet()
 {}
 
 
-itemSet::itemSet(const vector< char >& v): vector<char>(v)
+ItemSet::ItemSet(const vector< char >& v): vector<char>(v)
 {}
 
 
-itemSet::itemSet(const itemSet& i): vector<char>(i)
+ItemSet::ItemSet(const ItemSet& i): vector<char>(i)
 {}
 
 
 
 
-vector< int > itemSet::getListItem() const
+vector< int > ItemSet::getListItem() const
 {
   vector<int> listItem; // Valeur de retour
   
@@ -31,7 +31,7 @@ vector< int > itemSet::getListItem() const
 
 
 
-void itemSet::print(ostream& flux) const
+void ItemSet::print(ostream& flux) const
 {
   if (size() > 0) flux << at(0);
   for (unsigned int i = 1; i < size(); ++i) {
@@ -41,7 +41,7 @@ void itemSet::print(ostream& flux) const
 
 
 
-ostream& operator<<(ostream& flux, const itemSet& i)
+ostream& operator<<(ostream& flux, const ItemSet& i)
 {
   i.print(flux);
   return flux;

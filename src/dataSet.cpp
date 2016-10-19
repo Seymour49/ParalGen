@@ -15,12 +15,12 @@ vector< string >& explode(const string& str)
 
 
 
-dataSet::dataSet(): _nbLine(0), _nbCol(0)
+DataSet::DataSet(): _nbLine(0), _nbCol(0)
 {}
 
 
 
-dataSet::dataSet(unsigned int nbLine): _nbLine(nbLine), _nbCol(0)
+DataSet::DataSet(unsigned int nbLine): _nbLine(nbLine), _nbCol(0)
 {
   resize(_nbLine);
   vector<char> v;
@@ -31,11 +31,11 @@ dataSet::dataSet(unsigned int nbLine): _nbLine(nbLine), _nbCol(0)
 
 
 
-dataSet::dataSet(const dataSet& data): vector<vector<char>>(data), _nbLine(data.getNbLine()), _nbCol(data.getNbCol())
+DataSet::DataSet(const DataSet& data): vector<vector<char>>(data), _nbLine(data.getNbLine()), _nbCol(data.getNbCol())
 {}
 
 
-void dataSet::print(ostream& flux) const
+void DataSet::print(ostream& flux) const
 {
   for (unsigned int i = 0; i < _nbLine; ++i) {
     for (unsigned int j = 0; j < _nbCol; ++j) {
@@ -46,29 +46,55 @@ void dataSet::print(ostream& flux) const
 }
 
 
-float dataSet::freqItemSet(const itemSet& item) const
+float DataSet::freqItemSet(const ItemSet& item) const
 {
-  int nbOccurrence = 0;
+  float nbOccurrence = 0;
   
   if (item.size() != _nbCol) {
-    cerr << "Erreur ! L'itemSet ne correspond pas au fichier de donnée" << endl;
+    cerr << "Erreur ! L'ItemSet ne correspond pas au fichier de donnée" << endl;
   }
-  for (unsigned int i = 0; i < _nbLine; ++i) {
-    for (unsigned int j = 0; j < _nbCol; ++j) {
-      
+  else {
+    vector<int> listItem = item.getListItem();
+    bool newOccurrence;
+    for (unsigned int i = 0; i < _nbLine; ++i) {
+      newOccurrence = true;
+      for (unsigned int j = 0; ((j < listItem.size())&&newOccurrence); ++j) {
+	if (this->at(i).at(listItem[j] - 1) != '1')  {
+	  newOccurrence = false;
+	}
+      }
+      if (newOccurrence) nbOccurrence++;
     }
   }
+  return (nbOccurrence/_nbLine);
 }
 
 
-float dataSet::freqItemSet(const vector< char >& v) const
+float DataSet::freqItemSet(const vector< char >& v) const
 {
-
+  float nbOccurrence = 0;
+  
+  if (v.size() != _nbCol) {
+    cerr << "Erreur ! L'ItemSet ne correspond pas au fichier de donnée" << endl;
+  }
+  else {
+    bool newOccurrence;
+    for (unsigned int i = 0; i < _nbLine; ++i) {
+      newOccurrence = true;
+      for (unsigned int j = 0; (j < _nbCol)&&(newOccurrence); ++j) {
+	if (v[j] == '1') {
+	  if (this->at(i).at(j) != '1') newOccurrence = false;
+	}
+      }
+      if (newOccurrence) nbOccurrence++;
+    }
+  }
+  return (nbOccurrence/_nbLine);
 }
 
 
 
-void dataSet::loadFile(const string& fileName)
+void DataSet::loadFile(const string& fileName)
 {
   ifstream f(fileName.c_str());
   vector< vector<int> > matrice;
@@ -111,7 +137,7 @@ void dataSet::loadFile(const string& fileName)
 
 
 
-ostream& operator<<(ostream& flux, const dataSet& data)
+ostream& operator<<(ostream& flux, const DataSet& data)
 {
   data.print(flux);
   return flux;

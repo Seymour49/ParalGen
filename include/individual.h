@@ -55,7 +55,7 @@ public:
   
   
 /** 
-  * Affiche l'itemSet dans le flux passé en paramètre
+  * Affiche l'ItemSet dans le flux passé en paramètre
   * @param flux Un flux pour l'affichage
   */
   virtual void print(std::ostream & flux) const;

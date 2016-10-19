@@ -15,7 +15,7 @@
   * si un item est présent dans la transaction ou non
   * @author Johan Defaye
   */
-class itemSet : public std::vector<char> {
+class ItemSet : public std::vector<char> {
 
 
 public:
@@ -26,29 +26,29 @@ public:
    * * * * * * * * */
   
 /** 
-  * Constructeur par défaut d'un itemSet
-  * Initialise un itemSet comme un vecteur de char vide
+  * Constructeur par défaut d'un ItemSet
+  * Initialise un ItemSet comme un vecteur de char vide
   * @author Johan Defaye
   */
-  itemSet();
+  ItemSet();
   
   
 /** 
   * Constructeur prenant un vecteur de char en paramètre
-  * Initilise un itemSet avec un vecteur de char donné en paramètre
+  * Initilise un ItemSet avec un vecteur de char donné en paramètre
   * @param v : Vecteur de char
   * @author Johan Defaye
   */
-  itemSet(const std::vector<char> & v);
+  ItemSet(const std::vector<char> & v);
   
   
 /** 
   * Constructeur par copie
-  * Initilise un itemSet avec un autre itemSet donné en paramètre
-  * @param i : Un itemSet
+  * Initilise un ItemSet avec un autre ItemSet donné en paramètre
+  * @param i : Un ItemSet
   * @author Johan Defaye
   */  
-  itemSet( const itemSet & i);
+  ItemSet( const ItemSet & i);
   
   
   /* * * * * * 
@@ -56,7 +56,7 @@ public:
    * * * * * */
   
 /** 
-  * Construit et retourne la liste des items présent dans l'itemSet
+  * Construit et retourne la liste des items présent dans l'ItemSet
   * @return Un vecteur d'int représentant les items présents dans la transaction
   * @author Johan Defaye
   */
@@ -70,7 +70,7 @@ public:
   
   
 /** 
-  * Affiche l'itemSet dans le flux passé en paramètre
+  * Affiche l'ItemSet dans le flux passé en paramètre
   * @param flux : Un flux pour l'affichage
   * @author Johan Defaye
   */
@@ -83,10 +83,10 @@ public:
 /** 
 * Surcharge de l'opérateur d'affichage
 * @param flux : Un flux pour l'affichage
-* @param i : itemSet à afficher
+* @param i : ItemSet à afficher
 * @author Johan Defaye
 */
-std::ostream& operator<<(std::ostream &flux, const itemSet & i);
+std::ostream& operator<<(std::ostream &flux, const ItemSet & i);
 
 
 #endif

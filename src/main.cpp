@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     }
   }
   
-  itemSet i1(v1), i2(i1), i3(v2), i4;
+  ItemSet i1(v1), i2(i1), i3(v2), i4;
   
   vector<int> listItem = i3.getListItem();
   
@@ -28,10 +28,20 @@ int main(int argc, char **argv) {
   }
   cout << endl;
   
-  dataSet data;
+  DataSet data;
   data.loadFile("./data/mushroom.dat");
   
-  dataSet data2(data);
+  DataSet data2(data);
+  
+  vector<char> v3;
+  v3.assign(data2.getNbCol(), '0');
+  v3[2] = '1';
+  v3[18] = '1';
+  ItemSet i5(v3);
+  float freq = data2.freqItemSet(v3);
+  cout << "Fréquence = " << freq << endl;
+  freq = data2.freqItemSet(i5);
+  cout << "Fréquence = " << freq << endl;
     
   return 0;
 }
