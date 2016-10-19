@@ -2,6 +2,12 @@
 
 using namespace std;
 
+void Individual::setScore(int s)
+{
+  _score = s;
+}
+
+
 void Individual::print(std::ostream& flux) const
 {
   flux << "Age : " << _age << "; Score : " << _score << endl;

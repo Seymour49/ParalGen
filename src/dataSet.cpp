@@ -46,12 +46,13 @@ void DataSet::print(ostream& flux) const
 }
 
 
+
 float DataSet::freqItemSet(const ItemSet& item) const
 {
   float nbOccurrence = 0;
   
-  if (item.size() != _nbCol) {
-    cerr << "Erreur ! L'ItemSet ne correspond pas au fichier de donnée" << endl;
+  if (item.getSize() != _nbCol) {
+    cerr << "Erreur ! L'itemSet ne correspond pas au fichier de donnée" << endl;
   }
   else {
     vector<int> listItem = item.getListItem();
