@@ -1,7 +1,8 @@
 #ifndef GENETICALGO_H
 #define GENETICALGO_H
 
-#include "./include/individual.h"
+#include "individual.h"
+#include "dataSet.h"
 #include <vector>
 
 /**
@@ -18,7 +19,9 @@ class GeneticAlgo {
 private:
     int _nbIteration;
     int _taillePop;
-    std::vector<Individual> _population;
+    DataSet* data;
+    std::vector<Individual*> _population;
+    
     
 public:
   /* * * * * * * * * 
@@ -41,11 +44,20 @@ public:
   GeneticAlgo(int it, int pop);
   
   /* * * * * * * * * 
+   *   DESTRUCTOR  *
+   * * * * * * * * */
+  ~GeneticAlgo();
+  
+  /* * * * * * * * * 
    *  ACCESSEURS   *
    * * * * * * * * */
   int getNbIteration() const { return _nbIteration; }
   
   int getTaillePop() const { return _taillePop; }
+  
+  DataSet* getDataSet() const { return data; }
+  
+  void setData(DataSet* input);
   
   /* * * * * * 
    * METHODS *
@@ -65,6 +77,13 @@ public:
   * @author Ugo Rayer
   */
   void initFreqPop();
+  
+/**
+ * Méthode d'affichage de la population utile pendant le dev.
+ * @author Ugo Rayer
+ */
+  void displayPopulation();
+
   
 };
 

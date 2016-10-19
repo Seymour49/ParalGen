@@ -13,12 +13,19 @@ ItemSet::ItemSet(const vector< char >& v):Individual(), _bitset(v)
 {}
 
 
-ItemSet::ItemSet(const ItemSet& i):Individual(), _bitset(i._bitset)
+ItemSet::ItemSet(const ItemSet& i):Individual(i), _bitset(i._bitset)
 {}
 
 
 void ItemSet::Mutate()
 {  
+    srand(time(NULL));
+    int pivot = rand() % (_bitset.size()-1);
+    
+    if(_bitset[pivot] == '0')
+	_bitset[pivot] = '1';
+    else
+	_bitset[pivot] = '0';
 
 }
 
@@ -57,15 +64,14 @@ vector< int > ItemSet::getListItem() const
 }
 
 
-
 void ItemSet::print(ostream& flux) const
 {
   Individual::print(flux);
-  flux << endl << "Bitset : ";
+  flux<< "Bitset : ";
   
   if (_bitset.size() > 0) flux << _bitset.at(0);
   for (unsigned int i = 1; i < _bitset.size(); ++i) {
-    flux << " " << _bitset.at(i);
+    flux << "" << _bitset.at(i);
   }
   
   flux << endl;

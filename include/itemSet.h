@@ -70,6 +70,7 @@ public:
   */
   std::vector<int> getListItem() const;
   
+  
   /* * * * * * * * * * * * *
    *    HERITED METHODS    *
    * * * * * * * * * * * * */ 

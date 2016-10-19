@@ -1,27 +1,26 @@
 #include <iostream>
 
 #include "../include/dataSet.h"
+#include "../include/itemSet.h"
+#include "../include/geneticAlgo.h"
 
 using namespace std;
 
 int main(int argc, char **argv) {
-  DataSet data;
-  try {
-    data.loadFile("./data/mushroom.dat");
-  } catch(string const & error) {
-    cerr << error << endl;
-  }
-  
-  ItemSet i1(data[0]), i2(data[1]);
-  
-  cout << "i1 = " << i1 << endl << "i2 = " << i2 << endl;
-  try {
-    ItemSet * res = dynamic_cast<ItemSet*>(i1.CrossClassic(&i2, 3));
-    cout << "res = " << *res << endl;
-  }
-  catch(string const & error) {
-    cerr << error << endl;
-  }
+
+   
+    DataSet* data = new DataSet();
+    data->loadFile("./data/mushroom.dat");
+
+    cout << "Nombre d'items : " << data->getNbCol() << endl;
+    GeneticAlgo gen(10000,10);
+    gen.setData(data);
+    
+    cout << "Items dans gen : " << gen.getDataSet()->getNbCol() << endl;
+    gen.initRandomPop();
+    
+    
+    gen.displayPopulation();
   
   return EXIT_SUCCESS;
 }
