@@ -7,7 +7,6 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-
    
     DataSet* data = new DataSet();
     data->loadFile("./data/mushroom.dat");
@@ -22,5 +21,5 @@ int main(int argc, char **argv) {
     
     gen.displayPopulation();
   
-  return EXIT_SUCCESS;
+  return 0;
 }
