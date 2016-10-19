@@ -106,7 +106,7 @@ void DataSet::loadFile(const string& fileName)
   else {
     string line;
     while(getline(f,line)){
-      if (line.compare("\n")) throw string("Fichier non conforme! Il existe une ligne vide dans le fichier");
+      if (line.empty()) throw string("Fichier non conforme! Il existe une ligne vide dans le fichier");
       vector<string>& tokens = explode(line);
       vector<int> row;
       // Traitement

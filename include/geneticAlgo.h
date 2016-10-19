@@ -1,7 +1,7 @@
 #ifndef GENETICALGO_H
 #define GENETICALGO_H
 
-#include "individual.h"
+#include "./include/individual.h"
 #include <vector>
 
 /**

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <exception>
 #include "../include/individual.h"
 
 /*
@@ -56,7 +57,7 @@ public:
   /* * * * * * 
    * Getters *
    * * * * * */
-  int getSize() const { return (int)_bitset.size(); }
+  unsigned int getSize() const { return (unsigned int)_bitset.size(); }
   
   /* * * * * * 
    * METHODS *
@@ -86,8 +87,9 @@ public:
    * @param ind Parent 2
    * @param pos Indice du pivot
    * @return nouvel individu
+   * @author Johan Defaye
    */
-  Individual& CrossClassic(const Individual& ind,std::size_t pos);
+  Individual* CrossClassic(const Individual * ind,std::size_t pos);
   
  
   /* * * * * * * * * * * * *

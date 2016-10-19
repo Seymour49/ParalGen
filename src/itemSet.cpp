@@ -22,10 +22,27 @@ void ItemSet::Mutate()
 
 }
 
-Individual& ItemSet::CrossClassic(const Individual& ind, std::size_t pos)
+Individual* ItemSet::CrossClassic(const Individual * ind, std::size_t pos)
 {
-  ItemSet* res = new ItemSet();
-  return *res;
+  ItemSet * res = new ItemSet();
+  if (ind != NULL) {
+    ItemSet const * it = dynamic_cast<ItemSet const *>(ind);
+    if (it != NULL) {
+      if (it->getSize() != getSize()) throw string("Erreur ! Deux ItemSet à croiser de taille différente");
+      else {
+	res->_bitset.resize(getSize());
+	for (unsigned int i = 0; i < pos; ++i) {
+	  res->_bitset[i] = _bitset[i];
+	}
+	for (unsigned int i = pos; i < getSize(); ++i) {
+	  res->_bitset[i] = it->_bitset[i];
+	}
+      }
+    }
+    else throw string("Erreur lors du cast Individual vers ItemSet !");
+  }
+  else throw string("Erreur ! Pointeur vers NULL");
+  return res;
 }
 
 
