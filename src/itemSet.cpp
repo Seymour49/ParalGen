@@ -57,7 +57,7 @@ void ItemSet::print(ostream& flux) const
   
   if (_bitset.size() > 0) flux << _bitset.at(0);
   for (unsigned int i = 1; i < _bitset.size(); ++i) {
-    flux << " " << _bitset.at(i);
+    flux << "" << _bitset.at(i);
   }
   
   flux << endl;
