@@ -59,6 +59,8 @@ public:
    * * * * * */
   unsigned int getSize() const { return (unsigned int)_bitset.size(); }
   
+  std::vector<char> getBitset() const { return _bitset; }
+  
   /* * * * * * 
    * METHODS *
    * * * * * */
@@ -69,6 +71,7 @@ public:
   * @author Johan Defaye
   */
   std::vector<int> getListItem() const;
+  
   
   
   /* * * * * * * * * * * * *
