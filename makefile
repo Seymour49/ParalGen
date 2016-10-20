@@ -4,6 +4,7 @@ LDFLAGS =
 EXEC = $(BUILD_DIR)/paralGen
 
 SRC =	main.cpp	\
+	itemSetC.cpp	\
 	itemSet.cpp	\
 	dataSet.cpp 	\
 	individual.cpp	\
@@ -25,6 +26,7 @@ $(EXEC): $(OBJ)
 
 
 $(OBJ_DIR)/main.o: $(INC_DIR)/dataSet.h
+$(OBJ_DIR)/itemSetC.o: $(INC_DIR)/individual.h
 $(OBJ_DIR)/itemSet.o: $(INC_DIR)/individual.h
 $(OBJ_DIR)/dataSet.o: $(INC_DIR)/itemSet.h
 $(OBJ_DIR)/dataSetC.o: $(INC_DIR)/itemSet.h
