@@ -15,14 +15,13 @@
  * dans la transaction i et 0 s'il n'y figure pas
  * @author Johan Defaye
  */
-class DataSet {
+class DataSet : public std::vector< std::vector< char > > {
   
   
 private:
   
   unsigned int _nbLine; // Nombre de ligne du tableau
   unsigned int _nbCol;  // Nombre de colonne du tableau
-  char ** _data;
   
   
 public:
@@ -40,13 +39,12 @@ public:
 
   
   /**
-    * Constructeur prenant un nombre de transaction et un nombre d'item par transaction en paramètre
+    * Constructeur prenant un nombre de ligne en paramètre
     * Construit un tableau de transaction avec le nombre de transaction passé en paramètre
     * @param nbTransaction : Nombre de ligne du tableau
-    * @param nbItem : Nombre d'item par transaction
     * @author Johan Defaye 
     */
-  DataSet(unsigned int nbTransaction, unsigned int nbItem);
+  DataSet(unsigned int nbTransaction);
   
   
   /**
@@ -75,13 +73,6 @@ public:
    * @author Johan Defaye
    */
   unsigned int getNbCol() const {return _nbCol;}
-  
-  /**
-   * Retourne les données sous forme de tableau 2D de char
-   * @return : Pointeur sur pointeur de char
-   * @author Johan Defaye
-   */
-  char ** getData() const {return _data;}
 
   
   /* * * * * *
@@ -106,13 +97,12 @@ public:
   
   
     /**
-   * Prend un tableau de char et sa taille en paramètre et retourne sa fréquence d'apparition dans les données
-   * @param t : Un tableau de char
-   * @param size : Taille du tableau de char
-   * @return La fréquence entre 0 et 1 du tableau de char
+   * Prend un vecteur de char en paramètre et retourne sa fréquence d'apparition dans le tableau
+   * @param v : Un vecteur de char
+   * @return La fréquence entre 0 et 1 du vecteur de char
    * @author Johan Defaye
    */
-  float freqItemSet(const char * t, unsigned int size) const;
+  float freqItemSet(const std::vector<char> & v) const;
   
   
   /**
@@ -121,17 +111,6 @@ public:
    * @author Ugo Rayer
    */
   void loadFile(const std::string & fileName);
-  
-  
-  /* * * * * * * *
-   * DESTRUCTOR  *
-   * * * * * * * */
-  
-  /**
-   * Détruit le dataSet en désallouant la mémoire alloué pour le tableau de char
-   * @author Johan Defaye
-   */
-  ~DataSet();
   
 };
 
