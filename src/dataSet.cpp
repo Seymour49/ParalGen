@@ -55,13 +55,12 @@ float DataSet::freqItemSet(const ItemSet& item) const
     throw string("Erreur ! L'itemSet ne correspond pas au fichier de donnée");
   }
   else {
-    vector<int> listItem = item.getListItem();
     bool newOccurrence;
     for (unsigned int i = 0; i < _nbLine; ++i) {
       newOccurrence = true;
-      for (unsigned int j = 0; ((j < listItem.size())&&newOccurrence); ++j) {
-	if (this->at(i).at(listItem[j] - 1) != '1')  {
-	  newOccurrence = false;
+      for (unsigned int j = 0; ((j < _nbCol)&&newOccurrence); ++j) {
+	if (item.getBitset().at(j) == '1')  {
+	  if (this->at(i).at(j) != '1') newOccurrence = false;
 	}
       }
       if (newOccurrence) nbOccurrence++;
