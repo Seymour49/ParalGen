@@ -15,13 +15,14 @@
  * dans la transaction i et 0 s'il n'y figure pas
  * @author Johan Defaye
  */
-class DataSet : public std::vector< std::vector< char > > {
+class DataSetC {
   
   
 private:
   
   unsigned int _nbLine; // Nombre de ligne du tableau
   unsigned int _nbCol;  // Nombre de colonne du tableau
+  char ** _data;
   
   
 public:
@@ -32,28 +33,29 @@ public:
   
   
   /**
-    * Constructeur par défaut d'un DataSet
+    * Constructeur par défaut d'un DataSetC
     * @author Johan Defaye
     */
-  DataSet();
+  DataSetC();
 
   
   /**
-    * Constructeur prenant un nombre de ligne en paramètre
+    * Constructeur prenant un nombre de transaction et un nombre d'item par transaction en paramètre
     * Construit un tableau de transaction avec le nombre de transaction passé en paramètre
     * @param nbTransaction : Nombre de ligne du tableau
+    * @param nbItem : Nombre d'item par transaction
     * @author Johan Defaye 
     */
-  DataSet(unsigned int nbTransaction);
+  DataSetC(unsigned int nbTransaction, unsigned int nbItem);
   
   
   /**
     * Constructeur par copie
-    * Utilise les données d'un autre DataSet pour instancier ses propres données
-    * @param data : Un autre DataSet
+    * Utilise les données d'un autre DataSetC pour instancier ses propres données
+    * @param data : Un autre DataSetC
     * @author Johan defaye
     */
-  DataSet(const DataSet & data);
+  DataSetC(const DataSetC & data);
   
   
   /* * * * * * *
@@ -73,6 +75,13 @@ public:
    * @author Johan Defaye
    */
   unsigned int getNbCol() const {return _nbCol;}
+  
+  /**
+   * Retourne les données sous forme de tableau 2D de char
+   * @return : Pointeur sur pointeur de char
+   * @author Johan Defaye
+   */
+  char ** getData() const {return _data;}
 
   
   /* * * * * *
@@ -97,12 +106,13 @@ public:
   
   
     /**
-   * Prend un vecteur de char en paramètre et retourne sa fréquence d'apparition dans le tableau
-   * @param v : Un vecteur de char
-   * @return La fréquence entre 0 et 1 du vecteur de char
+   * Prend un tableau de char et sa taille en paramètre et retourne sa fréquence d'apparition dans les données
+   * @param t : Un tableau de char
+   * @param size : Taille du tableau de char
+   * @return La fréquence entre 0 et 1 du tableau de char
    * @author Johan Defaye
    */
-  float freqItemSet(const std::vector<char> & v) const;
+  float freqItemSet(const char * t, unsigned int size) const;
   
   
   /**
@@ -111,6 +121,17 @@ public:
    * @author Ugo Rayer
    */
   void loadFile(const std::string & fileName);
+  
+  
+  /* * * * * * * *
+   * DESTRUCTOR  *
+   * * * * * * * */
+  
+  /**
+   * Détruit le dataSet en désallouant la mémoire alloué pour le tableau de char
+   * @author Johan Defaye
+   */
+  ~DataSetC();
   
 };
 
@@ -123,10 +144,10 @@ public:
 /**
  * Surcharge de l'opérateur d'affichage
  * @param flux : un flux pour l'affichage
- * @param data :  DataSet à afficher
+ * @param data :  DataSetC à afficher
  * @author Johan Defaye
  */
-std::ostream & operator<<(std::ostream & flux, const DataSet & data);
+std::ostream & operator<<(std::ostream & flux, const DataSetC & data);
 
 
 
@@ -136,7 +157,7 @@ std::ostream & operator<<(std::ostream & flux, const DataSet & data);
  * @return un pointeur sur un vecteur contenant chaque mot de str
  * @author Ugo Rayer
  */
-std::vector< std::string >& explode2(const std::string& str);
+std::vector< std::string >& explode(const std::string& str);
 
 
 #endif

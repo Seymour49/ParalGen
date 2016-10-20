@@ -1,9 +1,9 @@
-#include "../include/dataSet.h"
+#include "../include/dataSetC.h"
 
 using namespace std;
 
 
-vector< string >& explode2(const string& str)
+vector< string >& explode(const string& str)
 {
   istringstream split(str);
   vector< string >* tokens = new vector<string>;
@@ -15,31 +15,38 @@ vector< string >& explode2(const string& str)
 
 
 
-DataSet::DataSet(): _nbLine(0), _nbCol(0)
+DataSetC::DataSetC(): _nbLine(0), _nbCol(0)
 {}
 
 
 
-DataSet::DataSet(unsigned int nbLine): _nbLine(nbLine), _nbCol(0)
+DataSetC::DataSetC(unsigned int nbTransaction, unsigned int nbItem): _nbLine(nbTransaction), _nbCol(nbItem)
 {
-  resize(_nbLine);
-  vector<char> v;
+  _data = new char*[_nbLine];
   for (unsigned int i = 0; i < _nbLine; ++i) {
-    at(i) = v;
+    _data[i] = new char[_nbCol];
   }
 }
 
 
 
-DataSet::DataSet(const DataSet& data): vector<vector<char>>(data), _nbLine(data.getNbLine()), _nbCol(data.getNbCol())
-{}
+DataSetC::DataSetC(const DataSetC& data): _nbLine(data.getNbLine()), _nbCol(data.getNbCol())
+{
+  _data = new char*[_nbLine];
+  for (unsigned int i = 0; i < _nbLine; ++i) {
+    _data[i] = new char[_nbCol];
+    for (unsigned int j = 0; j < _nbCol; ++j) {
+      _data[i][j] = data.getData()[i][j];
+    }
+  }
+}
 
 
-void DataSet::print(ostream& flux) const
+void DataSetC::print(ostream& flux) const
 {
   for (unsigned int i = 0; i < _nbLine; ++i) {
     for (unsigned int j = 0; j < _nbCol; ++j) {
-      flux << this->at(i).at(j) << " ";
+      flux << _data[i][j] << " ";
     }
     flux << endl;
   }
@@ -47,7 +54,7 @@ void DataSet::print(ostream& flux) const
 
 
 
-float DataSet::freqItemSet(const ItemSet& item) const
+float DataSetC::freqItemSet(const ItemSet& item) const
 {
   float nbOccurrence = 0;
   
@@ -60,7 +67,7 @@ float DataSet::freqItemSet(const ItemSet& item) const
       newOccurrence = true;
       for (unsigned int j = 0; ((j < _nbCol)&&newOccurrence); ++j) {
 	if (item.getBitset()[j] == '1')  {
-	  if (this->at(i).at(j) != '1') newOccurrence = false;
+	  if (_data[i][j]!= '1') newOccurrence = false;
 	}
       }
       if (newOccurrence) nbOccurrence++;
@@ -70,11 +77,11 @@ float DataSet::freqItemSet(const ItemSet& item) const
 }
 
 
-float DataSet::freqItemSet(const vector< char >& v) const
+float DataSetC::freqItemSet(const char * t, unsigned int size) const
 {
   float nbOccurrence = 0;
   
-  if (v.size() != _nbCol) {
+  if (size != _nbCol) {
     throw string("Erreur ! L'itemSet ne correspond pas au fichier de donnée");
   }
   else {
@@ -82,8 +89,8 @@ float DataSet::freqItemSet(const vector< char >& v) const
     for (unsigned int i = 0; i < _nbLine; ++i) {
       newOccurrence = true;
       for (unsigned int j = 0; (j < _nbCol)&&(newOccurrence); ++j) {
-	if (v[j] == '1') {
-	  if (this->at(i).at(j) != '1') newOccurrence = false;
+	if (t[j] == '1') {
+	  if (_data[i][j] != '1') newOccurrence = false;
 	}
       }
       if (newOccurrence) nbOccurrence++;
@@ -94,7 +101,7 @@ float DataSet::freqItemSet(const vector< char >& v) const
 
 
 
-void DataSet::loadFile(const string& fileName)
+void DataSetC::loadFile(const string& fileName)
 {
   ifstream f(fileName.c_str());
   vector< vector<int> > matrice;
@@ -106,7 +113,7 @@ void DataSet::loadFile(const string& fileName)
     string line;
     while(getline(f,line)){
       if (line.empty()) throw string("Fichier non conforme! Il existe une ligne vide dans le fichier");
-      vector<string>& tokens = explode2(line);
+      vector<string>& tokens = explode(line);
       vector<int> row;
       // Traitement
       for (unsigned int i = 0; i < tokens.size(); ++i){
@@ -124,21 +131,33 @@ void DataSet::loadFile(const string& fileName)
     }
     _nbLine = (unsigned int) Rows;
     _nbCol = (unsigned int) Cols;
-    resize(_nbLine);
-    for (int i = 0; i < Rows; ++i){
-      vector<char> line;
-      line.assign(_nbCol, '0');
+    
+    _data = new char*[_nbLine];
+    for (unsigned int i = 0; i < _nbLine; ++i) {
+      _data[i] = new char[_nbCol];
+    }
+    for (unsigned int i = 0; i < _nbLine; ++i){
+      for (unsigned int j = 0; j < _nbCol; ++j) _data[i][j] = '0';
       for (unsigned int it = 0; it < matrice[i].size(); ++it){
-	line[matrice[i][it]-start_index] = '1';
+	_data[i][matrice[i][it]-start_index] = '1';
       }
-      at(i) = line;
-   }
+    }
   }
 }
 
 
+DataSetC::~DataSetC()
+{
+  for (unsigned int i = 0; i < _nbLine; ++i) {
+    delete(_data[i]);
+  }
+  delete [](_data);
+}
 
-ostream& operator<<(ostream& flux, const DataSet& data)
+
+
+
+ostream& operator<<(ostream& flux, const DataSetC& data)
 {
   data.print(flux);
   return flux;

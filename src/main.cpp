@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "../include/dataSet.h"
+#include "../include/dataSetC.h"
 #include "../include/itemSet.h"
 #include "../include/geneticAlgo.h"
 
@@ -20,6 +21,9 @@ int main(int argc, char **argv) {
     
     
     gen.displayPopulation();
+    
+    
+    
   
   return 0;
 }

@@ -7,7 +7,8 @@ SRC =	main.cpp	\
 	itemSet.cpp	\
 	dataSet.cpp 	\
 	individual.cpp	\
-	geneticAlgo.cpp
+	geneticAlgo.cpp \
+	dataSetC.cpp
 
 OBJ_DIR = ./obj
 SRC_DIR = ./src
@@ -26,6 +27,7 @@ $(EXEC): $(OBJ)
 $(OBJ_DIR)/main.o: $(INC_DIR)/dataSet.h
 $(OBJ_DIR)/itemSet.o: $(INC_DIR)/individual.h
 $(OBJ_DIR)/dataSet.o: $(INC_DIR)/itemSet.h
+$(OBJ_DIR)/dataSetC.o: $(INC_DIR)/itemSet.h
 $(OBJ_DIR)/geneticAlgo.o : $(INC_DIR)/individual.h
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
