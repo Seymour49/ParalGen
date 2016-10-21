@@ -53,6 +53,11 @@ public:
   * @author Johan Defaye
   */  
   ItemSet( const ItemSet & i);
+
+  /* * * * * * * * * 
+   *   DESTRUCTOR  *
+   * * * * * * * * */
+
   
   /* * * * * * 
    * Getters *

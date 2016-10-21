@@ -55,6 +55,10 @@ public:
   */  
   ItemSetC( const ItemSetC & it);
   
+  /* * * * * * * * * 
+   *  DESTRUCTOR   *
+   * * * * * * * * */
+  ~ItemSetC();
   
   /* * * * * * 
    * GETTERS *
@@ -69,9 +73,8 @@ public:
    * Setters *
    * * * * * */
   
-  void setBitset(char* BS);
+  void setBitset(char* BS, unsigned size);
   
-  void setNbItems(int nbI); // TODO vérifier si on redimensionne le bitset
   
   /* * * * * * 
    * METHODS *
@@ -117,7 +120,7 @@ public:
    * @return nouvel individu
    * @author Johan Defaye
    */
-  Individual* CrossClassic(const Individual * ind, std::size_t pos);
+  Individual* CrossClassic(const Individual * ind, std::size_t pos) const;
   
  
   /* * * * * * * * * * * * *

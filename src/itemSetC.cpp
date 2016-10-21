@@ -29,9 +29,21 @@ ItemSetC::ItemSetC(const ItemSetC& it):Individual(it), _nbItems(it._nbItems)
     }
 }
 
-void ItemSetC::setBitset(char* BS)
+ItemSetC::~ItemSetC()
 {
-    if(BS != NULL) _bitset = BS;
+  delete[] _bitset;
+}
+
+void ItemSetC::setBitset(char* BS, unsigned size)
+{
+    if(BS != NULL){
+	_nbItems = size;
+	delete _bitset;
+	_bitset = new char[size];
+	for(unsigned i=0; i < size;++i){
+	  _bitset[i] = BS[i]; 
+	}
+    }
 }
 
 
@@ -62,11 +74,6 @@ ItemSetC ItemSetC::CrossMultiPoint(const ItemSetC& it, const vector< unsigned in
 }
 
 
-void ItemSetC::setNbItems(int nbI)
-{
-    _nbItems = nbI;
-}
-
 void ItemSetC::Mutate()
 {  
     srand(time(NULL));
@@ -78,7 +85,8 @@ void ItemSetC::Mutate()
 	_bitset[pivot] = '0';
 }
 
-Individual* ItemSetC::CrossClassic(const Individual * ind, std::size_t pos)
+
+Individual* ItemSetC::CrossClassic(const Individual * ind, std::size_t pos) const
 {
   ItemSetC * res = new ItemSetC();
   if (ind != NULL) {
@@ -94,7 +102,7 @@ Individual* ItemSetC::CrossClassic(const Individual * ind, std::size_t pos)
 	  bitSet[i] = it->getBitsetAt(i);
 	}
 	
-	res->setBitset(bitSet);
+	res->setBitset(bitSet,_nbItems);
       }
     }
     else throw string("Erreur lors du cast Individual vers ItemSet !");
@@ -102,7 +110,6 @@ Individual* ItemSetC::CrossClassic(const Individual * ind, std::size_t pos)
   else throw string("Erreur ! Individu à croiser vide");
   return res;
 }
-
 
 
 vector< int > ItemSetC::getListItem() const
@@ -127,7 +134,6 @@ void ItemSetC::print(ostream& flux) const
   
   flux << endl;
 }
-
 
 
 ostream& operator<<(ostream& flux, const ItemSetC& i)
