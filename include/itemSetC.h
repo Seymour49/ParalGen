@@ -69,7 +69,7 @@ public:
    * Setters *
    * * * * * */
   
-  void setBitset(char* BS);
+  void setBitset(char* BS, unsigned int size);
   
   void setNbItems(int nbI); // TODO vérifier si on redimensionne le bitset
   
@@ -93,7 +93,7 @@ public:
  * @param pivots : vecteur d'entiers trié dans l'ordre croissant
  * @return Un ItemSetC résultant du croisement des deux ItemSetC
  * @author Johan Defaye
- * TODO Au moment de la création du vecteur de pivot, vérifier qu'il a bien été initialisé par ordre croissant
+ * TODO Au moment de la création du vecteur de pivot, vérifier qu'il a bien été initialisé dans l'ordre croissant
  */
   ItemSetC CrossMultiPoint(const ItemSetC & it, const std::vector<unsigned int> & pivots) const;
   
@@ -117,7 +117,7 @@ public:
    * @return nouvel individu
    * @author Johan Defaye
    */
-  Individual* CrossClassic(const Individual * ind, std::size_t pos);
+  Individual* CrossClassic(const Individual * ind, std::size_t pos) const;
   
  
   /* * * * * * * * * * * * *
