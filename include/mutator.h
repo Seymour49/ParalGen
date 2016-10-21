@@ -3,8 +3,6 @@
 
 #include <iostream>
 #include "individual.h"
-#include "itemSet.h"
-#include "itemSetC.h"
 
 /**
  * Cette classe abstraite est la base du design-pattern Strategy appliqué
@@ -19,8 +17,7 @@
 class Mutator {
   
 public:
-    virtual Individual* execute(Individual* p1, Individual* p2)= 0;
-  
+    virtual Individual* execute(Individual* p1, Individual* p2)= 0;  
 };
 
 #endif
