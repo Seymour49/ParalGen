@@ -57,13 +57,13 @@ public:
   
   
   /* * * * * * 
-   * Getters *
+   * GETTERS *
    * * * * * */
   unsigned int getSize() const { return _nbItems; }
   
   char* getBitset() const { return _bitset; }
   
-  char getBitsetAt(int pos) const { return _bitset[pos]; }
+  char getBitsetAt(unsigned int pos) const { return _bitset[pos]; }
   
   void setBitset(char* BS);
   
@@ -78,6 +78,18 @@ public:
   */
   std::vector<int> getListItem() const;
   
+  
+/**
+ * Croisement multipoint entre deux individus. La parent 1 est l'objet 
+ * courant et le parent 2 est passé en paramètre. Les positions des pivots
+ * sont passés en paramètre en tant que vecteur d'entier
+ * @param it : Un ItemSetC faisant office de parent 
+ * @param pivots : vecteur d'entiers trié dans l'ordre croissant
+ * @return Un ItemSetC résultant du croisement des deux ItemSetC
+ * @author Johan Defaye
+ * TODO Au moment de la création du vecteur de pivot, vérifier qu'il a bien été initialisé par ordre croissant
+ */
+  ItemSetC CrossMultiPoint(const ItemSetC & it, const std::vector<unsigned int> & pivots) const;
   
   /* * * * * * * * * * * * *
    *    HERITED METHODS    *

@@ -29,7 +29,7 @@ void ItemSet::Mutate()
 
 }
 
-Individual* ItemSet::CrossClassic(const Individual * ind, std::size_t pos)
+Individual* ItemSet::CrossClassic(const Individual * ind, std::size_t pos) const
 {
   ItemSet * res = new ItemSet();
   if (ind != NULL) {

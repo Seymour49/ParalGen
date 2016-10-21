@@ -50,7 +50,7 @@ public:
    * @param pos Indice du pivot
    * @return nouvel individu
    */
-  virtual Individual* CrossClassic(const Individual * ind, std::size_t pos) = 0;
+  virtual Individual* CrossClassic(const Individual * ind, std::size_t pos) const = 0;
   
  
   /* * * * * * * * * * * * *

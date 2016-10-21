@@ -1,5 +1,6 @@
 #include "../include/itemSetC.h"
 #include <time.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -21,6 +22,34 @@ void ItemSetC::setBitset(char* BS)
     if(BS != NULL) _bitset = BS;
 }
 
+
+ItemSetC ItemSetC::CrossMultiPoint(const ItemSetC& it, const vector< unsigned int >& pivots) const
+{
+  ItemSetC res;
+  if (pivots.empty()) throw string("Erreur ! La liste de pivots est vide");
+  else {
+    if (it.getSize() != _nbItems) {
+      throw string("Erreur ! Les deux individus du croisement sont de taille différente");
+    }
+    else {
+      char * bitSet = new char[_nbItems];
+      unsigned int i = 0, tmp = 0;
+      bool b = true; // Vrai si l'individu fils récupère les données de l'ItemSetC courant et faux si il récupère les données de it (passé en paramètre)
+      while (i < _nbItems) {
+	if (i > (pivots[tmp] - 1)) { 
+	  b = (!b);
+	  tmp++;
+	}
+	if (b) bitSet[i] = _bitset[i];
+	else bitSet[i] = it.getBitsetAt(i);
+	i++;
+      }
+    }
+  }
+  return res;
+}
+
+
 void ItemSetC::Mutate()
 {  
     srand(time(NULL));
@@ -30,9 +59,6 @@ void ItemSetC::Mutate()
 	_bitset[pivot] = '1';
     else
 	_bitset[pivot] = '0';
-    
-    
-
 }
 
 Individual* ItemSetC::CrossClassic(const Individual * ind, std::size_t pos)
@@ -41,22 +67,22 @@ Individual* ItemSetC::CrossClassic(const Individual * ind, std::size_t pos)
   if (ind != NULL) {
     ItemSetC const * it = dynamic_cast<ItemSetC const *>(ind);
     if (it != NULL) {
-      if (it->getSize() != _nbItems) throw string("Erreur ! Deux ItemSet à croiser de taille différente");
+      if (it->getSize() != _nbItems) throw string("Erreur ! Les deux individus du croisement sont de taille différente");
       else {
-	char* tmp = new char[_nbItems];
+	char* bitSet = new char[_nbItems];
 	for (unsigned int i = 0; i < pos; ++i) {
-	  tmp[i] = _bitset[i];
+	  bitSet[i] = _bitset[i];
 	}
 	for (unsigned int i = pos; i < _nbItems; ++i) {
-	  tmp[i] = it->getBitsetAt(i);
+	  bitSet[i] = it->getBitsetAt(i);
 	}
 	
-	res->setBitset(tmp);
+	res->setBitset(bitSet);
       }
     }
     else throw string("Erreur lors du cast Individual vers ItemSet !");
   }
-  else throw string("Erreur ! Pointeur vers NULL");
+  else throw string("Erreur ! Individu à croiser vide");
   return res;
 }
 
