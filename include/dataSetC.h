@@ -1,12 +1,12 @@
-#ifndef DATASET_H
-#define DATASET_H
+#ifndef DATASETC_H
+#define DATASETC_H
 
 #include <vector>
 #include <string>
 #include <sstream>
 #include <fstream>
 #include <exception>
-#include "../include/itemSet.h"
+#include "../include/itemSetC.h"
 
 /**
  * Représente un ensemble de transaction comme un tableau 2D de char 
@@ -102,7 +102,7 @@ public:
    * @return La fréquence entre 0 et 1 de l'ItemSet
    * @author Johan Defaye
    */
-  float freqItemSet(const ItemSet & item) const;
+  float freqItemSet(const ItemSetC & item) const;
   
   
     /**

@@ -24,6 +24,7 @@ DataSet::DataSet(unsigned int nbLine): _nbLine(nbLine), _nbCol(0)
 {
   resize(_nbLine);
   vector<char> v;
+  v.assign(_nbCol, '0');
   for (unsigned int i = 0; i < _nbLine; ++i) {
     at(i) = v;
   }
@@ -105,15 +106,16 @@ void DataSet::loadFile(const string& fileName)
   else {
     string line;
     while(getline(f,line)){
-      if (line.empty()) throw string("Fichier non conforme! Il existe une ligne vide dans le fichier");
-      vector<string>& tokens = explode2(line);
-      vector<int> row;
-      // Traitement
-      for (unsigned int i = 0; i < tokens.size(); ++i){
-	row.push_back(atoi(tokens[i].c_str()));
+      if (!line.empty()) {
+	vector<string>& tokens = explode2(line);
+	vector<int> row;
+	// Traitement
+	for (unsigned int i = 0; i < tokens.size(); ++i){
+	  row.push_back(atoi(tokens[i].c_str()));
+	}
+	matrice.push_back(row);
+	delete(&tokens);
       }
-      matrice.push_back(row);
-      delete(&tokens);
     }
     int Cols = 0;
     int Rows = matrice.size();
@@ -124,6 +126,7 @@ void DataSet::loadFile(const string& fileName)
     }
     _nbLine = (unsigned int) Rows;
     _nbCol = (unsigned int) Cols;
+    clear();
     resize(_nbLine);
     for (int i = 0; i < Rows; ++i){
       vector<char> line;
@@ -132,8 +135,9 @@ void DataSet::loadFile(const string& fileName)
 	line[matrice[i][it]-start_index] = '1';
       }
       at(i) = line;
-   }
+    }
   }
+  f.close();
 }
 
 

@@ -59,7 +59,7 @@ public:
   /* * * * * * 
    * Getters *
    * * * * * */
-  unsigned int getSize() const { return (unsigned int)_nbItems; }
+  unsigned int getSize() const { return _nbItems; }
   
   char* getBitset() const { return _bitset; }
   
@@ -86,6 +86,7 @@ public:
  /**
    * Méthode faisant muter un individu. Modifie de manière aléatoire
    * une seule information de l'individu. 
+   * @author Ugo Rayer
    */
   void Mutate();
   
@@ -98,7 +99,7 @@ public:
    * @return nouvel individu
    * @author Johan Defaye
    */
-  Individual* CrossClassic(const Individual * ind,std::size_t pos);
+  Individual* CrossClassic(const Individual * ind, std::size_t pos);
   
  
   /* * * * * * * * * * * * *
@@ -113,6 +114,7 @@ public:
   * @author Johan Defaye
   */
   void print(std::ostream & flux) const;
+  
   
   
 };

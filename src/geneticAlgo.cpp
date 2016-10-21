@@ -13,7 +13,7 @@ GeneticAlgo::GeneticAlgo(int it, int pop): _nbIteration(it), _taillePop(pop)
 
 GeneticAlgo::~GeneticAlgo()
 {
-    for(unsigned i=0; i < _population.size(); ++i){
+    for(unsigned int i=0; i < _population.size(); ++i){
 	delete _population[i];
     }
 }

@@ -25,6 +25,9 @@ DataSetC::DataSetC(unsigned int nbTransaction, unsigned int nbItem): _nbLine(nbT
   _data = new char*[_nbLine];
   for (unsigned int i = 0; i < _nbLine; ++i) {
     _data[i] = new char[_nbCol];
+    for (unsigned int j = 0; j < _nbCol; ++j) {
+      _data[i][j] = '0';
+    }
   }
 }
 
@@ -54,7 +57,7 @@ void DataSetC::print(ostream& flux) const
 
 
 
-float DataSetC::freqItemSet(const ItemSet& item) const
+float DataSetC::freqItemSet(const ItemSetC& item) const
 {
   float nbOccurrence = 0;
   
@@ -112,15 +115,16 @@ void DataSetC::loadFile(const string& fileName)
   else {
     string line;
     while(getline(f,line)){
-      if (line.empty()) throw string("Fichier non conforme! Il existe une ligne vide dans le fichier");
-      vector<string>& tokens = explode(line);
-      vector<int> row;
-      // Traitement
-      for (unsigned int i = 0; i < tokens.size(); ++i){
-	row.push_back(atoi(tokens[i].c_str()));
+      if (!line.empty()) {
+	vector<string>& tokens = explode(line);
+	vector<int> row;
+	// Traitement
+	for (unsigned int i = 0; i < tokens.size(); ++i){
+	  row.push_back(atoi(tokens[i].c_str()));
+	}
+	matrice.push_back(row);
+	delete(&tokens);
       }
-      matrice.push_back(row);
-      delete(&tokens);
     }
     int Cols = 0;
     int Rows = matrice.size();
@@ -129,6 +133,13 @@ void DataSetC::loadFile(const string& fileName)
       if (matrice[i].back() > Cols) Cols = matrice[i].back();
       if (matrice[i].front() < start_index) start_index = matrice[i].front();
     }
+    if (_data != NULL) {
+      for (unsigned int i = 0; i < _nbLine; ++i) {
+	delete [] (_data[i]);
+      }
+      if (_nbLine != 0) delete [] (_data);
+    }
+    
     _nbLine = (unsigned int) Rows;
     _nbCol = (unsigned int) Cols;
     
@@ -143,15 +154,16 @@ void DataSetC::loadFile(const string& fileName)
       }
     }
   }
+  f.close();
 }
 
 
 DataSetC::~DataSetC()
 {
   for (unsigned int i = 0; i < _nbLine; ++i) {
-    delete(_data[i]);
+    delete [] (_data[i]);
   }
-  delete [](_data);
+  if (_nbLine != 0) delete [] (_data);
 }
 
 
