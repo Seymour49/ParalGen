@@ -32,7 +32,8 @@
 *.kdev4
 
 # Dossier build
-build/*
+build/
+
 
 # Fichier main
 src/main.cpp

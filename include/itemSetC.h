@@ -55,6 +55,10 @@ public:
   */  
   ItemSetC( const ItemSetC & it);
   
+  /* * * * * * * * * 
+   *  DESTRUCTOR   *
+   * * * * * * * * */
+  ~ItemSetC();
   
   /* * * * * * 
    * GETTERS *
@@ -69,9 +73,9 @@ public:
    * Setters *
    * * * * * */
   
-  void setBitset(char* BS, unsigned int size);
+
+  void setBitset(char* BS, unsigned size);
   
-  void setNbItems(int nbI); // TODO vérifier si on redimensionne le bitset
   
   /* * * * * * 
    * METHODS *

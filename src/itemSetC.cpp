@@ -30,13 +30,21 @@ ItemSetC::ItemSetC(const ItemSetC& it):Individual(it), _nbItems(it._nbItems)
 }
 
 
-void ItemSetC::setBitset(char* BS, unsigned int size)
+ItemSetC::~ItemSetC()
 {
-    if(BS != NULL) {
-      _bitset = BS;
-      _nbItems = size;
+  delete[] _bitset;
+}
+
+void ItemSetC::setBitset(char* BS, unsigned size)
+{
+    if(BS != NULL){
+	_nbItems = size;
+	delete _bitset;
+	_bitset = new char[size];
+	for(unsigned i=0; i < size;++i){
+	  _bitset[i] = BS[i]; 
+	}
     }
-    
 }
 
 
@@ -68,12 +76,15 @@ ItemSetC ItemSetC::CrossMultiPoint(const ItemSetC& it, const vector< unsigned in
 }
 
 
+<<<<<<< HEAD
 void ItemSetC::setNbItems(int nbI)
 {
     _nbItems = nbI;
 }
 
 
+=======
+>>>>>>> 0f24f0fc47c0320463979117bd9fb2c6ac7e3b95
 void ItemSetC::Mutate()
 {  
     srand(time(NULL));
@@ -101,7 +112,12 @@ Individual* ItemSetC::CrossClassic(const Individual * ind, std::size_t pos) cons
 	for (unsigned int i = pos; i < _nbItems; ++i) {
 	  bitSet[i] = it->getBitsetAt(i);
 	}
+<<<<<<< HEAD
 	res->setBitset(bitSet, _nbItems);
+=======
+	
+	res->setBitset(bitSet,_nbItems);
+>>>>>>> 0f24f0fc47c0320463979117bd9fb2c6ac7e3b95
       }
     }
     else throw string("Erreur lors du cast Individual vers ItemSet !");
