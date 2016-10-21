@@ -3,6 +3,7 @@
 #include "../include/dataSet.h"
 #include "../include/itemSet.h"
 #include "../include/itemSetC.h"
+#include "../include/dataSetC.h"
 #include "../include/geneticAlgo.h"
 
 using namespace std;
@@ -70,5 +71,10 @@ int main(int argc, char **argv) {
     delete dit; delete dit2; delete dit3; delete[] tmp;
     /*
     */
+    
+    
+    int acd = 0;
+    acd++;
+    
   return 0;
 }

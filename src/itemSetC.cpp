@@ -1,6 +1,5 @@
 #include "../include/itemSetC.h"
-#include <time.h>
-#include <algorithm>
+
 
 using namespace std;
 
@@ -76,15 +75,29 @@ ItemSetC ItemSetC::CrossMultiPoint(const ItemSetC& it, const vector< unsigned in
 }
 
 
-<<<<<<< HEAD
-void ItemSetC::setNbItems(int nbI)
+ItemSetC ItemSetC::CrossUniform(const ItemSetC& it) const
 {
-    _nbItems = nbI;
+  ItemSetC res;
+  if (it.getSize() != _nbItems) {
+    throw string("Erreur ! Les deux individus du croisement sont de taille différente");
+  }
+  else {
+    char * bitSet = new char[_nbItems];
+    for (unsigned int i = 0; i < _nbItems; ++i) {
+      int alea = rand()%2;
+      if (alea == 0) {
+	bitSet[i] = _bitset[i];
+      }
+      else {
+	bitSet[i] = it.getBitsetAt(i);
+      }
+    }
+    res.setBitset(bitSet, _nbItems);
+  }
+  return res;
 }
 
 
-=======
->>>>>>> 0f24f0fc47c0320463979117bd9fb2c6ac7e3b95
 void ItemSetC::Mutate()
 {  
     srand(time(NULL));
@@ -112,12 +125,7 @@ Individual* ItemSetC::CrossClassic(const Individual * ind, std::size_t pos) cons
 	for (unsigned int i = pos; i < _nbItems; ++i) {
 	  bitSet[i] = it->getBitsetAt(i);
 	}
-<<<<<<< HEAD
-	res->setBitset(bitSet, _nbItems);
-=======
-	
 	res->setBitset(bitSet,_nbItems);
->>>>>>> 0f24f0fc47c0320463979117bd9fb2c6ac7e3b95
       }
     }
     else throw string("Erreur lors du cast Individual vers ItemSet !");

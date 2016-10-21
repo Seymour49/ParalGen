@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <iostream>
-#include <exception>
+#include <ctime>
 #include "../include/individual.h"
 
 /*
@@ -93,6 +93,7 @@ public:
  * Croisement multipoint entre deux individus. La parent 1 est l'objet 
  * courant et le parent 2 est passé en paramètre. Les positions des pivots
  * sont passés en paramètre en tant que vecteur d'entier
+ * L'individu fils est créé en alternant les parties des parents suivant les pivots
  * @param it : Un ItemSetC faisant office de parent 
  * @param pivots : vecteur d'entiers trié dans l'ordre croissant
  * @return Un ItemSetC résultant du croisement des deux ItemSetC
@@ -100,6 +101,17 @@ public:
  * TODO Au moment de la création du vecteur de pivot, vérifier qu'il a bien été initialisé dans l'ordre croissant
  */
   ItemSetC CrossMultiPoint(const ItemSetC & it, const std::vector<unsigned int> & pivots) const;
+  
+  
+/**
+ * Croisement uniforme entre deux individus. La parent 1 est l'objet 
+ * courant et le parent 2 est passé en paramètre. À chaque position
+ * de l'ItemSetC, on choisis aléatoirement l'item du parent 1 ou 2
+ * @param it : un ItemSetC faisant office de parent
+ * @return Un ItemSetC résultant du croisement des deux ItemSetC
+ * @author Johan defaye
+ */
+ItemSetC CrossUniform(const ItemSetC & it) const;
   
   /* * * * * * * * * * * * *
    *    HERITED METHODS    *

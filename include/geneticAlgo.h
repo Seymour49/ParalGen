@@ -4,6 +4,7 @@
 #include "individual.h"
 #include "dataSet.h"
 #include <vector>
+#include <ctime>
 
 /**
  * Cette classe implémente un algorithme génétique
