@@ -6,16 +6,28 @@ using namespace std;
 
 
 
-ItemSetC::ItemSetC(): Individual()
-{}
+ItemSetC::ItemSetC(): Individual(), _nbItems(0)
+{
+    _bitset = NULL;
+}
 
 
-ItemSetC::ItemSetC(char* v, int nbI):Individual(), _bitset(v), _nbItems(nbI)
-{}
+ItemSetC::ItemSetC(char* v, int nbI):Individual(),_nbItems(nbI)
+{
+    _bitset = new char[_nbItems];
+    for(unsigned i=0; i < _nbItems; ++i){
+	_bitset[i] = v[i];
+    }
+}
 
 
-ItemSetC::ItemSetC(const ItemSetC& i):Individual(i), _bitset(i._bitset), _nbItems(i._nbItems)
-{}
+ItemSetC::ItemSetC(const ItemSetC& it):Individual(it), _nbItems(it._nbItems)
+{
+    _bitset = new char[_nbItems];
+    for(unsigned i=0; i < _nbItems; ++i){
+	_bitset[i] = it.getBitsetAt(i);
+    }
+}
 
 void ItemSetC::setBitset(char* BS)
 {
@@ -49,6 +61,11 @@ ItemSetC ItemSetC::CrossMultiPoint(const ItemSetC& it, const vector< unsigned in
   return res;
 }
 
+
+void ItemSetC::setNbItems(int nbI)
+{
+    _nbItems = nbI;
+}
 
 void ItemSetC::Mutate()
 {  
