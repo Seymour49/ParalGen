@@ -72,10 +72,5 @@ int main(int argc, char **argv) {
     delete dit; delete dit2; delete dit3; delete[] tmp;
     /*
     */
-    
-    
-    int acd = 0;
-    acd++;
-    
   return 0;
 }
