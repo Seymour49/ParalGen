@@ -53,7 +53,7 @@ public:
   * @param i : Un ItemSet
   * @author Johan Defaye
   */  
-  ItemSetC( const ItemSetC & i);
+  ItemSetC( const ItemSetC & it);
   
   
   /* * * * * * 
@@ -65,7 +65,13 @@ public:
   
   char getBitsetAt(int pos) const { return _bitset[pos]; }
   
+  /* * * * * * 
+   * Setters *
+   * * * * * */
+  
   void setBitset(char* BS);
+  
+  void setNbItems(int nbI); // TODO vérifier si on redimensionne le bitset
   
   /* * * * * * 
    * METHODS *
