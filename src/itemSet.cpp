@@ -1,3 +1,4 @@
+
 #include "../include/itemSet.h"
 #include <time.h>
 
@@ -28,30 +29,6 @@ void ItemSet::Mutate()
 	_bitset[pivot] = '0';
 
 }
-
-Individual* ItemSet::CrossClassic(const Individual * ind, std::size_t pos) const
-{
-  ItemSet * res = new ItemSet();
-  if (ind != NULL) {
-    ItemSet const * it = dynamic_cast<ItemSet const *>(ind);
-    if (it != NULL) {
-      if (it->getSize() != getSize()) throw string("Erreur ! Deux ItemSet à croiser de taille différente");
-      else {
-	res->_bitset.resize(getSize());
-	for (unsigned int i = 0; i < pos; ++i) {
-	  res->_bitset[i] = _bitset[i];
-	}
-	for (unsigned int i = pos; i < getSize(); ++i) {
-	  res->_bitset[i] = it->_bitset[i];
-	}
-      }
-    }
-    else throw string("Erreur lors du cast Individual vers ItemSet !");
-  }
-  else throw string("Erreur ! Pointeur vers NULL");
-  return res;
-}
-
 
 
 vector< int > ItemSet::getListItem() const
