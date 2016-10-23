@@ -17,7 +17,7 @@ MultiPointCross::~MultiPointCross()
 
 ItemSetC* MultiPointCross::execute(ItemSetC* p1, ItemSetC* p2)
 {
-    if( _pivots = NULL ){
+    if( _pivots == NULL ){
 	cerr << "Erreur, _pivots = NULL" << endl;
 	exit(EXIT_FAILURE);
     }
@@ -36,7 +36,7 @@ ItemSetC* MultiPointCross::execute(ItemSetC* p1, ItemSetC* p2)
 
 ItemSet* MultiPointCross::execute(ItemSet* p1, ItemSet* p2)
 {
-    if( _pivots = NULL ){
+    if( _pivots == NULL ){
 	cerr << "Erreur, _pivots = NULL" << endl;
 	exit(EXIT_FAILURE);
     }

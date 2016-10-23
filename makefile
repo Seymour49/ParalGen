@@ -27,7 +27,8 @@ $(EXEC): $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 	
 
-$(OBJ_DIR)/main.o: $(INC_DIR)/dataSet.h $(INC_DIR)/dataSetC.h $(INC_DIR)/cross.h $(INC_DIR)/classicCross.h $(INC_DIR)/multiPointCross.h
+$(OBJ_DIR)/main.o: $(INC_DIR)/dataSet.h $(INC_DIR)/dataSetC.h $(INC_DIR)/cross.h $(INC_DIR)/classicCross.h $(INC_DIR)/multiPointCross.h $(INC_DIR)/uniformCross.h
+$(OBJ_DIR)/uniformCross.o: $(INC_DIR)/cross.h $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h
 $(OBJ_DIR)/multiPointCross.o: $(INC_DIR)/cross.h $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h
 $(OBJ_DIR)/classicCross.o: $(INC_DIR)/cross.h $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h
 $(OBJ_DIR)/cross.o: $(INC_DIR)/individual.h 
