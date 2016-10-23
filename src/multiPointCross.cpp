@@ -17,11 +17,36 @@ MultiPointCross::~MultiPointCross()
 
 ItemSetC* MultiPointCross::execute(ItemSetC* p1, ItemSetC* p2)
 {
-    return NULL;
+    if( _pivots = NULL ){
+	cerr << "Erreur, _pivots = NULL" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else if( _nbPivots > p1->getSize() ){
+	cerr << "Erreur, trop de pivots" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else{
+      
+      
+	return NULL;
+    }
+    
 }
 
 
 ItemSet* MultiPointCross::execute(ItemSet* p1, ItemSet* p2)
 {
-    return NULL;
+    if( _pivots = NULL ){
+	cerr << "Erreur, _pivots = NULL" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else if( _nbPivots > p1->getSize() ){
+	cerr << "Erreur, trop de pivots" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else{
+      
+      
+	return NULL;
+    }
 }
