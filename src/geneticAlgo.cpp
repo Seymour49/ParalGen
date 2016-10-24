@@ -6,7 +6,8 @@ GeneticAlgo::GeneticAlgo():_nbIteration(10000),_taillePop(100), _seuilFrequence(
 {}
 
 
-GeneticAlgo::GeneticAlgo(unsigned int it, unsigned int pop, float seuilfrequence): _nbIteration(it), _taillePop(pop), _seuilFrequence(seuilfrequence)
+GeneticAlgo::GeneticAlgo(unsigned int it, unsigned int pop, float seuilfrequence, Mutator* mut, Cross* cross): _nbIteration(it),
+_taillePop(pop), _seuilFrequence(seuilfrequence), _mutator(mut), _cross(cross)
 {}
 
 
@@ -47,6 +48,34 @@ void GeneticAlgo::initRandomPop()
 	_population.push_back(it);
     }
     
+}
+
+void GeneticAlgo::doMutationFor(unsigned int ind)
+{
+    if(ind > (_taillePop-1) || ind < 0){
+      
+	cerr << "Erreur, indice de l'individu hors de la population" << endl;
+	exit(EXIT_FAILURE);
+    }else{
+	_population[ind] = _mutator->execute(dynamic_cast<ItemSet*>(_population[ind]));
+    }
+}
+
+void GeneticAlgo::doCrossFor(unsigned int id1, unsigned int id2)
+{
+    if( (id1 < 0) || (id2 < 0) || (id1 > (_taillePop-1)) || (id2 > (_taillePop-1)) ){
+	cerr << "Erreur, indices des parents hors de la population" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else{
+	ItemSet* newI = _cross->execute(dynamic_cast<ItemSet*>(_population[id1]),
+					dynamic_cast<ItemSet*>(_population[id2]) );
+	cout << "NOUVEL INDIVIDU A INSERER DANS LA POPULATION" << endl;
+	cout << *newI;
+	
+	cout << "TODO : voir pour la suppression du mauvais" << endl;
+	delete newI;
+    }
 }
 
 
