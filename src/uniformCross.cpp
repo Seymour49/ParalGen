@@ -5,7 +5,6 @@ using namespace std;
 
 UniformCross::UniformCross()
 {
-    cout << "Construction UniformCross ok" << endl;
 }
 
 UniformCross::~UniformCross()
@@ -35,6 +34,7 @@ ItemSetC* UniformCross::execute(ItemSetC* p1, ItemSetC* p2)
       }
       
       ItemSetC* child = new ItemSetC(bitset, p1->getSize());
+      delete[] bitset;
       return child;
   }
 }
