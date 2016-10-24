@@ -48,69 +48,6 @@ void ItemSetC::setBitset(char* BS, unsigned size)
 }
 
 
-ItemSetC ItemSetC::CrossMultiPoint(const ItemSetC& it, const vector< unsigned int >& pivots) const
-{
-  ItemSetC res;
-  if (pivots.empty()) throw string("Erreur ! La liste de pivots est vide");
-  else {
-    if (it.getSize() != _nbItems) {
-      throw string("Erreur ! Les deux individus du croisement sont de taille différente");
-    }
-    else {
-      char * bitSet = new char[_nbItems];
-      unsigned int i = 0, tmp = 0;
-      bool b = true; 
-      while (i < _nbItems) {
-	if (i > (pivots[tmp] - 1)) { 
-	  b = (!b);
-	  tmp++;
-	}
-	if (b) bitSet[i] = _bitset[i];
-	else bitSet[i] = it.getBitsetAt(i);
-	i++;
-      }
-      res.setBitset(bitSet, _nbItems);
-    }
-  }
-  return res;
-}
-
-
-ItemSetC ItemSetC::CrossUniform(const ItemSetC& it) const
-{
-  ItemSetC res;
-  if (it.getSize() != _nbItems) {
-    throw string("Erreur ! Les deux individus du croisement sont de taille différente");
-  }
-  else {
-    char * bitSet = new char[_nbItems];
-    for (unsigned int i = 0; i < _nbItems; ++i) {
-      int alea = rand()%2;
-      if (alea == 0) {
-	bitSet[i] = _bitset[i];
-      }
-      else {
-	bitSet[i] = it.getBitsetAt(i);
-      }
-    }
-    res.setBitset(bitSet, _nbItems);
-  }
-  return res;
-}
-
-
-void ItemSetC::Mutate()
-{  
-    srand(time(NULL));
-    int pivot = rand() % (_nbItems-1);
-    
-    if(_bitset[pivot] == '0')
-	_bitset[pivot] = '1';
-    else
-	_bitset[pivot] = '0';
-}
-
-
 vector< int > ItemSetC::getListItem() const
 {
   vector<int> listItem; // Valeur de retour
