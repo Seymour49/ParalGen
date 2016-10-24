@@ -97,47 +97,51 @@ float DataSet::freqItemSet(const vector< char >& v) const
 
 void DataSet::loadFile(const string& fileName)
 {
-  ifstream f(fileName.c_str());
-  vector< vector<int> > matrice;
-  
-  if(!f){	    
-    throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
-  }
-  else {
-    string line;
-    while(getline(f,line)){
-      if (!line.empty()) {
-	vector<string>& tokens = explode2(line);
-	vector<int> row;
-	// Traitement
-	for (unsigned int i = 0; i < tokens.size(); ++i){
-	  row.push_back(atoi(tokens[i].c_str()));
+  if ((_nbLine == 0)&&(_nbCol == 0)) {
+    ifstream f(fileName.c_str());
+    vector< vector<int> > matrice;
+    
+    if(!f){	    
+      throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
+    }
+    else {
+      string line;
+      while(getline(f,line)){
+	if (!line.empty()) {
+	  vector<string>& tokens = explode2(line);
+	  vector<int> row;
+	  // Traitement
+	  for (unsigned int i = 0; i < tokens.size(); ++i){
+	    row.push_back(atoi(tokens[i].c_str()));
+	  }
+	  matrice.push_back(row);
+	  delete(&tokens);
 	}
-	matrice.push_back(row);
-	delete(&tokens);
+      }
+      int Cols = 0;
+      int Rows = matrice.size();
+      int start_index = 1; // indice du premier item
+      for (int i = 0; i < Rows; ++i){ // Recherche du nombre maximum d'item et de l'indice du premier item
+	if (matrice[i].back() > Cols) Cols = matrice[i].back();
+	if (matrice[i].front() < start_index) start_index = matrice[i].front();
+      }
+      _nbLine = (unsigned int) Rows;
+      _nbCol = (unsigned int) Cols;
+      clear();
+      resize(_nbLine);
+      for (int i = 0; i < Rows; ++i){
+	vector<char> line;
+	line.assign(_nbCol, '0');
+	for (unsigned int it = 0; it < matrice[i].size(); ++it){
+	  line[matrice[i][it]-start_index] = '1';
+	}
+	at(i) = line;
       }
     }
-    int Cols = 0;
-    int Rows = matrice.size();
-    int start_index = 1; // indice du premier item
-    for (int i = 0; i < Rows; ++i){ // Recherche du nombre maximum d'item et de l'indice du premier item
-      if (matrice[i].back() > Cols) Cols = matrice[i].back();
-      if (matrice[i].front() < start_index) start_index = matrice[i].front();
-    }
-    _nbLine = (unsigned int) Rows;
-    _nbCol = (unsigned int) Cols;
-    clear();
-    resize(_nbLine);
-    for (int i = 0; i < Rows; ++i){
-      vector<char> line;
-      line.assign(_nbCol, '0');
-      for (unsigned int it = 0; it < matrice[i].size(); ++it){
-	line[matrice[i][it]-start_index] = '1';
-      }
-      at(i) = line;
-    }
+    f.close();
+  } else {
+    cerr << "Impossible de charger plusieurs fois les données d'un fichier sur un même DataSet !" << endl; 
   }
-  f.close();
 }
 
 

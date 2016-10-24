@@ -106,55 +106,60 @@ float DataSetC::freqItemSet(const char * t, unsigned int size) const
 
 void DataSetC::loadFile(const string& fileName)
 {
-  ifstream f(fileName.c_str());
-  vector< vector<int> > matrice;
   
-  if(!f){	    
-    throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
-  }
-  else {
-    string line;
-    while(getline(f,line)){
-      if (!line.empty()) {
-	vector<string>& tokens = explode(line);
-	vector<int> row;
-	// Traitement
-	for (unsigned int i = 0; i < tokens.size(); ++i){
-	  row.push_back(atoi(tokens[i].c_str()));
+  if ((_nbLine == 0)&&(_nbCol == 0)) {
+    ifstream f(fileName.c_str());
+    vector< vector<int> > matrice;
+    
+    if(!f){	    
+      throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
+    }
+    else {
+      string line;
+      while(getline(f,line)){
+	if (!line.empty()) {
+	  vector<string>& tokens = explode(line);
+	  vector<int> row;
+	  // Traitement
+	  for (unsigned int i = 0; i < tokens.size(); ++i){
+	    row.push_back(atoi(tokens[i].c_str()));
+	  }
+	  matrice.push_back(row);
+	  delete(&tokens);
 	}
-	matrice.push_back(row);
-	delete(&tokens);
       }
-    }
-    int Cols = 0;
-    int Rows = matrice.size();
-    int start_index = 1; // indice du premier item
-    for (int i = 0; i < Rows; ++i){ // Recherche du nombre maximum d'item et de l'indice du premier item
-      if (matrice[i].back() > Cols) Cols = matrice[i].back();
-      if (matrice[i].front() < start_index) start_index = matrice[i].front();
-    }
-    if (_data != NULL) {
+      int Cols = 0;
+      int Rows = matrice.size();
+      int start_index = 1; // indice du premier item
+      for (int i = 0; i < Rows; ++i){ // Recherche du nombre maximum d'item et de l'indice du premier item
+	if (matrice[i].back() > Cols) Cols = matrice[i].back();
+	if (matrice[i].front() < start_index) start_index = matrice[i].front();
+      }
+      if (_data != NULL) {
+	for (unsigned int i = 0; i < _nbLine; ++i) {
+	  delete [] (_data[i]);
+	}
+	if (_nbLine != 0) delete [] (_data);
+      }
+      
+      _nbLine = (unsigned int) Rows;
+      _nbCol = (unsigned int) Cols;
+      
+      _data = new char*[_nbLine];
       for (unsigned int i = 0; i < _nbLine; ++i) {
-	delete [] (_data[i]);
+	_data[i] = new char[_nbCol];
       }
-      if (_nbLine != 0) delete [] (_data);
-    }
-    
-    _nbLine = (unsigned int) Rows;
-    _nbCol = (unsigned int) Cols;
-    
-    _data = new char*[_nbLine];
-    for (unsigned int i = 0; i < _nbLine; ++i) {
-      _data[i] = new char[_nbCol];
-    }
-    for (unsigned int i = 0; i < _nbLine; ++i){
-      for (unsigned int j = 0; j < _nbCol; ++j) _data[i][j] = '0';
-      for (unsigned int it = 0; it < matrice[i].size(); ++it){
-	_data[i][matrice[i][it]-start_index] = '1';
+      for (unsigned int i = 0; i < _nbLine; ++i){
+	for (unsigned int j = 0; j < _nbCol; ++j) _data[i][j] = '0';
+	for (unsigned int it = 0; it < matrice[i].size(); ++it){
+	  _data[i][matrice[i][it]-start_index] = '1';
+	}
       }
     }
+    f.close();
+  } else {
+    cerr << "Impossible de charger plusieurs fois les données d'un fichier sur un même DataSetC !" << endl;
   }
-  f.close();
 }
 
 

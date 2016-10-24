@@ -18,10 +18,11 @@
 class GeneticAlgo {
   
 private:
-    int _nbIteration;
-    int _taillePop;
-    DataSet* data;
+    unsigned int _nbIteration;
+    unsigned int _taillePop;
+    DataSet* _data;
     std::vector<Individual*> _population;
+    float _seuilFrequence; // TODO Définir _seuilFrequence comme un argument à définir par l'utilisateur
     
     
 public:
@@ -42,7 +43,7 @@ public:
   * @param pop : taille de la population à gérer
   * @author Ugo Rayer
   */
-  GeneticAlgo(int it, int pop);
+  GeneticAlgo(unsigned int it, unsigned int pop);
   
   /* * * * * * * * * 
    *   DESTRUCTOR  *
@@ -52,11 +53,11 @@ public:
   /* * * * * * * * * 
    *  ACCESSEURS   *
    * * * * * * * * */
-  int getNbIteration() const { return _nbIteration; }
+  unsigned int getNbIteration() const { return _nbIteration; }
   
-  int getTaillePop() const { return _taillePop; }
+  unsigned int getTaillePop() const { return _taillePop; }
   
-  DataSet* getDataSet() const { return data; }
+  DataSet* getDataSet() const { return _data; }
   
   void setData(DataSet* input);
   
@@ -75,7 +76,7 @@ public:
   * Méthode initialisant une population de manière réfléchie.
   * Nous allons chercher à instancier des individus représentant
   * des itemsets composés d'item fréquents.
-  * @author Ugo Rayer
+  * @author Johan Defaye
   */
   void initFreqPop();
   

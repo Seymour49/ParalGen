@@ -7,7 +7,7 @@ GeneticAlgo::GeneticAlgo():_nbIteration(10000),_taillePop(100)
 {
 }
 
-GeneticAlgo::GeneticAlgo(int it, int pop): _nbIteration(it), _taillePop(pop)
+GeneticAlgo::GeneticAlgo(unsigned int it, unsigned int pop): _nbIteration(it), _taillePop(pop)
 {
 }
 
@@ -20,7 +20,7 @@ GeneticAlgo::~GeneticAlgo()
 
 
 void GeneticAlgo::setData(DataSet* input){
-    data = input;
+    _data = input;
 }
 
 /**
@@ -32,10 +32,10 @@ void GeneticAlgo::initRandomPop()
     srand(time(NULL));
     int alea;
     
-    for(int i=0; i < _taillePop; ++i){
+    for(unsigned int i=0; i < _taillePop; ++i){
 	vector<char> tmp;
 	
-	for(unsigned j=0; j < data->getNbCol(); ++j){
+	for(unsigned j=0; j < _data->getNbCol(); ++j){
 	    alea = rand() % 100;
 	    if( alea <= 50)
 	      tmp.push_back('1');
@@ -48,6 +48,23 @@ void GeneticAlgo::initRandomPop()
     }
     
 }
+
+
+void GeneticAlgo::initFreqPop()
+{
+  if ((_seuilFrequence > 0)&&(_seuilFrequence <= 1)) {
+    unsigned int count_pop = 0; // Compteur de la population
+    vector<vector<char > > listItem;
+    while (count_pop < _taillePop) {
+      for (unsigned int i = 0; i < _data->getNbCol(); ++i) {
+	
+      }
+      count_pop++;
+    }
+  } 
+  else cerr << "Le seuil de fréquence doit être compris entre 0 et 1 pour pouvoir initialiser une population de fréquent !" << endl; 
+}
+
 
 void GeneticAlgo::displayPopulation(){
     cout << "La population actuelle est la suivante : " << endl;
