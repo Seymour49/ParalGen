@@ -18,19 +18,6 @@ ItemSet::ItemSet(const ItemSet& i):Individual(i), _bitset(i._bitset)
 {}
 
 
-void ItemSet::Mutate()
-{  
-    srand(time(NULL));
-    int pivot = rand() % (_bitset.size()-1);
-    
-    if(_bitset[pivot] == '0')
-	_bitset[pivot] = '1';
-    else
-	_bitset[pivot] = '0';
-
-}
-
-
 vector< int > ItemSet::getListItem() const
 {
   vector<int> listItem; // Valeur de retour

@@ -47,18 +47,6 @@ void ItemSetC::setBitset(char* BS, unsigned size)
 }
 
 
-
-void ItemSetC::Mutate()
-{  
-    srand(time(NULL));
-    int pivot = rand() % (_nbItems-1);
-    
-    if(_bitset[pivot] == '0')
-	_bitset[pivot] = '1';
-    else
-	_bitset[pivot] = '0';
-}
-
 vector< int > ItemSetC::getListItem() const
 {
   vector<int> listItem; // Valeur de retour

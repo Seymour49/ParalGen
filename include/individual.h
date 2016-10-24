@@ -31,16 +31,6 @@ public:
    * SETTERS *
    * * * * * */
   void setScore(int s);
-  
-  /* * * * * * 
-   * METHODS *
-   * * * * * */
-  
-  /**
-   * Méthode faisant muter un individu. Modifie de manière aléatoire
-   * une seule information de l'individu. 
-   */
-  virtual void Mutate() = 0;
  
   /* * * * * * * * * * * * *
    * SURCHARGE D'OPÉRATEUR *

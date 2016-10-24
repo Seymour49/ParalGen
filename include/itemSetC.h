@@ -87,17 +87,6 @@ public:
   * @author Johan Defaye
   */
   std::vector<int> getListItem() const;
-  
-  /* * * * * * * * * * * * *
-   *    HERITED METHODS    *
-   * * * * * * * * * * * * */ 
-  
- /**
-   * Méthode faisant muter un individu. Modifie de manière aléatoire
-   * une seule information de l'individu. 
-   * @author Ugo Rayer
-   */
-  void Mutate();
  
   /* * * * * * * * * * * * *
    * SURCHARGE D'OPÉRATEUR *

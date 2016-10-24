@@ -12,6 +12,7 @@
  * méthode virtuelle pure execute devant être redéfinie par les sous-classes 
  * représentant une implémentation de la méthode de croisement entre deux 
  * individus.
+ * TODO Refactorisation lors de la mise en place du design-pattern Template
  * @author Ugo Rayer
  * 
  */
