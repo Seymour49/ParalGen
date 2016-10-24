@@ -2,6 +2,7 @@
 #define GENETICALGO_H
 
 #include "individual.h"
+#include "itemSet.h"
 #include "dataSet.h"
 #include <vector>
 #include <ctime>
@@ -43,7 +44,7 @@ public:
   * @param pop : taille de la population à gérer
   * @author Ugo Rayer
   */
-  GeneticAlgo(unsigned int it, unsigned int pop);
+  GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence);
   
   /* * * * * * * * * 
    *   DESTRUCTOR  *
