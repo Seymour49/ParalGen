@@ -89,8 +89,7 @@ int main(int argc, char **argv) {
     ItemSetC* child = tcross->execute(ditc,ditc2);
     cout << "Enfant du cross classique de ditc, ditc2" << endl;
     cout << *child;
-    
-    
+
     ItemSet* child2 = tcross->execute(dit, dit2);
     cout << "Enfant du cross classique de dit, dit2" << endl;
     cout << *child2;
