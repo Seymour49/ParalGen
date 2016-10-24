@@ -41,17 +41,6 @@ public:
    * une seule information de l'individu. 
    */
   virtual void Mutate() = 0;
-  
-  /**
-   * Croisement monopoint entre deux individus. Le parent 1 est l'objet
-   * courant et le parent 2 est passé en paramètre. La position du pivot
-   * est également passsé en paramètre.
-   * @param ind Parent 2
-   * @param pos Indice du pivot
-   * @return nouvel individu
-   */
-  virtual Individual* CrossClassic(const Individual * ind, std::size_t pos) const = 0;
-  
  
   /* * * * * * * * * * * * *
    * SURCHARGE D'OPÉRATEUR *

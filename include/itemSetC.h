@@ -123,18 +123,6 @@ ItemSetC CrossUniform(const ItemSetC & it) const;
    * @author Ugo Rayer
    */
   void Mutate();
-  
-  /**
-   * Croisement monopoint entre deux individus. Le parent 1 est l'objet
-   * courant et le parent 2 est passé en paramètre. La position du pivot
-   * est également passsé en paramètre.
-   * @param ind Parent 2
-   * @param pos Indice du pivot
-   * @return nouvel individu
-   * @author Johan Defaye
-   */
-  Individual* CrossClassic(const Individual * ind, std::size_t pos) const;
-  
  
   /* * * * * * * * * * * * *
    * SURCHARGE D'OPÉRATEUR *

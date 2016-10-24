@@ -109,32 +109,6 @@ void ItemSetC::Mutate()
 	_bitset[pivot] = '0';
 }
 
-
-Individual* ItemSetC::CrossClassic(const Individual * ind, std::size_t pos) const
-{
-  ItemSetC * res = new ItemSetC();
-  if (ind != NULL) {
-    ItemSetC const * it = dynamic_cast<ItemSetC const *>(ind);
-    if (it != NULL) {
-      if (it->getSize() != _nbItems) throw string("Erreur ! Les deux individus du croisement sont de taille différente");
-      else {
-	char* bitSet = new char[_nbItems];
-	for (unsigned int i = 0; i < pos; ++i) {
-	  bitSet[i] = _bitset[i];
-	}
-	for (unsigned int i = pos; i < _nbItems; ++i) {
-	  bitSet[i] = it->getBitsetAt(i);
-	}
-	res->setBitset(bitSet,_nbItems);
-      }
-    }
-    else throw string("Erreur lors du cast Individual vers ItemSet !");
-  }
-  else throw string("Erreur ! Individu à croiser vide");
-  return res;
-}
-
-
 vector< int > ItemSetC::getListItem() const
 {
   vector<int> listItem; // Valeur de retour
