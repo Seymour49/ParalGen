@@ -61,7 +61,7 @@ ItemSet* UniformCross::execute(ItemSet* p1, ItemSet* p2)
 	   bitset.push_back(p2->getBitset()[i]);
       }
       
-      ItemSet* child = new ItemSetC(bitset);
+      ItemSet* child = new ItemSet(bitset);
       return child;
   }
 }
