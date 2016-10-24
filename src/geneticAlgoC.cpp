@@ -55,35 +55,42 @@ void GeneticAlgoC::initFreqPop()
 {
   if ((_seuilFrequence > 0)&&(_seuilFrequence <= 1)) {
     unsigned int nbItem = _data->getNbCol();
-    if (nbItem > 0) {
-      unsigned int size = 0; // Taille population courante
-      vector<char * > listItem;
-      char * item;
-      while (listItem.size() < _taillePop) {
+    
+    if (nbItem > 0) { // On vérifie que le jeu de donnée n'est pas vide
+      char ** tabItem =  new char*[_taillePop];
+      unsigned int size = 0, size2; // Taille de la population courante
+      while (size < (_taillePop - 1)) {
 	for (unsigned int i = 0; i < nbItem; ++i) {
-	  item = new char[nbItem];
+	  char * item = new char[nbItem];
 	  for (unsigned int j = 0; j < nbItem; ++j) {
 	    item[j] = '0';
 	  }
 	  item[i] = '1';
 	  if (_data->freqItemSet(item, nbItem) >= _seuilFrequence) {
-	    listItem.push_back(item);
-	    size = listItem.size();
-	    for (unsigned int j = 0; (j < size)&&(listItem.size() < _taillePop); ++j) {
-	      item = listItem[j];
+	    tabItem[size] = item;
+	    size++;
+	    size2 = size;
+	    for (unsigned int j = 0; (j < size2)&&(size < (_taillePop - 1)); ++j) {
+	      item = tabItem[j];
 	      item[i] = '1';
-	      if (_data->freqItemSet(item, nbItem) >= _seuilFrequence) listItem.push_back(item);
+	      if (_data->freqItemSet(item, nbItem) >= _seuilFrequence) {
+		char * item2 = new char[nbItem];
+		for (unsigned int k = 0; k < nbItem; ++k) item2[k] = item[k];
+		tabItem[size] = item2;
+		size++;
+	      }
+	      item[i] = '0';
 	    }
 	  }
 	}
       }
-      for (unsigned int i = 0; i < listItem.size(); ++i) {
-	ItemSetC * it = new ItemSetC(listItem[i], nbItem);
+      for (unsigned int i = 0; i < size; ++i) {
+	ItemSetC * it = new ItemSetC(tabItem[i], nbItem);
 	_population.push_back(it);
       }
-      //for (unsigned int i = 0; i < listItem.size(); ++i) delete[] listItem[i];
-      delete item;
-    } 
+      for (unsigned int i = 0; i < _taillePop; ++i) delete[] tabItem[i];
+      delete[] tabItem;
+    }
     else cerr << "Impossible d'initialiser une population de fréquent si il n'y a pas de jeu de donnée !" << endl;
   } 
   else cerr << "Le seuil de fréquence doit être compris entre 0 et 1 pour pouvoir initialiser une population de fréquent !" << endl; 
