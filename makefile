@@ -4,6 +4,7 @@ LDFLAGS =
 EXEC = $(BUILD_DIR)/paralGen
 
 SRC =	main.cpp		\
+	uniformCross.cpp	\
 	multiPointCross.cpp 	\
 	classicCross.cpp 	\
 	cross.cpp		\
