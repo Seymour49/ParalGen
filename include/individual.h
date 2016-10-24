@@ -31,6 +31,7 @@ public:
    * SETTERS *
    * * * * * */
   void setScore(int s);
+  void setAge(int a);
  
   /* * * * * * * * * * * * *
    * SURCHARGE D'OPÉRATEUR *

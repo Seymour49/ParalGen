@@ -3,6 +3,11 @@
 
 #include "individual.h"
 #include "dataSet.h"
+#include "dataSetC.h"
+#include "randomMutator.h"
+#include "uniformCross.h"
+#include "multiPointCross.h"
+#include "classicCross.h"
 #include <vector>
 #include <ctime>
 
@@ -22,7 +27,9 @@ private:
     unsigned int _taillePop;
     DataSet* _data;
     std::vector<Individual*> _population;
-    float _seuilFrequence; // TODO Définir _seuilFrequence comme un argument à définir par l'utilisateur
+    float _seuilFrequence; // TODO Définir _seuilFrequence comme un argument à définir par l'utilisateur pour l'initFreqPop
+    Mutator* _mutator;
+    Cross* _cross;
     
     
 public:
@@ -43,7 +50,7 @@ public:
   * @param pop : taille de la population à gérer
   * @author Ugo Rayer
   */
-  GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence);
+  GeneticAlgo(unsigned int it, unsigned int pop, float seuilfrequence, Mutator* mut, Cross* cross);
   
   /* * * * * * * * * 
    *   DESTRUCTOR  *
@@ -71,6 +78,24 @@ public:
   */
   void initRandomPop();
   
+/**
+ * Méthode effectuant une mutation sur un individu de la population.
+ * Prend en paramètre l'indice de l'individu dans la population.
+ * Renvoie une erreur si l'indice n'est pas dans la population
+ * @param int indice de l'individu à muter
+ * @author Ugo Rayer
+ */
+  void doMutationFor(unsigned ind);
+  
+/**
+ * Méthode effectuant un croisement sur deux individus de la population.
+ * Prend en paramètre les deux indices des individus parents
+ * Renvoie une erreur si les indices sont en dehors de la population.
+ * @param int indice du parent 1
+ * @param int indice du parent 2
+ * @author Ugo Rayer
+ */
+  void doCrossFor(unsigned id1, unsigned id2);
   
 /** 
   * Méthode initialisant une population de manière réfléchie.

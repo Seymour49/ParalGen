@@ -7,6 +7,10 @@ void Individual::setScore(int s)
   _score = s;
 }
 
+void Individual::setAge(int a)
+{
+  _age = a;
+}
 
 void Individual::print(std::ostream& flux) const
 {
