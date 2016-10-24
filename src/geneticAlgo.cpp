@@ -5,8 +5,10 @@ using namespace std;
 GeneticAlgo::GeneticAlgo():_nbIteration(10000),_taillePop(100), _seuilFrequence(0.6)
 {}
 
+
 GeneticAlgo::GeneticAlgo(unsigned int it, unsigned int pop, float seuilfrequence): _nbIteration(it), _taillePop(pop), _seuilFrequence(seuilfrequence)
 {}
+
 
 GeneticAlgo::~GeneticAlgo()
 {
@@ -19,6 +21,7 @@ GeneticAlgo::~GeneticAlgo()
 void GeneticAlgo::setData(DataSet* input){
     _data = input;
 }
+
 
 /**
  * Méthode non-générique. Initialisation d'itemSet
@@ -60,7 +63,7 @@ void GeneticAlgo::initFreqPop()
 	if (_data->freqItemSet(item) >= _seuilFrequence) {
 	  listItem.push_back(item);
 	  size = listItem.size();
-	  for (unsigned int j = 0; (j < size)&&(listItem.size() < _taillePop); ++i) {
+	  for (unsigned int j = 0; (j < size)&&(listItem.size() < _taillePop); ++j) {
 	    item = listItem[j];
 	    item[i] = '1';
 	    if (_data->freqItemSet(item) >= _seuilFrequence) listItem.push_back(item);
@@ -77,11 +80,10 @@ void GeneticAlgo::initFreqPop()
 }
 
 
-void GeneticAlgo::displayPopulation(){
+void GeneticAlgo::displayPopulation() {
     cout << "La population actuelle est la suivante : " << endl;
     
     for(unsigned i=0; i<_population.size(); ++i){
-	cout << *_population[i];
+	_population[i]->print(cout);
     }
-  
 }

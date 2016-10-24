@@ -34,6 +34,7 @@ ItemSetC::~ItemSetC()
   delete[] _bitset;
 }
 
+
 void ItemSetC::setBitset(char* BS, unsigned size)
 {
     if(BS != NULL){
@@ -108,6 +109,7 @@ void ItemSetC::Mutate()
     else
 	_bitset[pivot] = '0';
 }
+
 
 vector< int > ItemSetC::getListItem() const
 {

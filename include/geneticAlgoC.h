@@ -1,8 +1,8 @@
-#ifndef GENETICALGO_H
-#define GENETICALGO_H
+#ifndef GENETICALGOC_H
+#define GENETICALGOC_H
 
 #include "individual.h"
-#include "dataSet.h"
+#include "dataSetC.h"
 #include <vector>
 #include <ctime>
 
@@ -15,12 +15,12 @@
  * 
  */
 
-class GeneticAlgo {
+class GeneticAlgoC {
   
 private:
     unsigned int _nbIteration;
     unsigned int _taillePop;
-    DataSet* _data;
+    DataSetC* _data;
     std::vector<Individual*> _population;
     float _seuilFrequence; // TODO Définir _seuilFrequence comme un argument à définir par l'utilisateur
     
@@ -34,7 +34,7 @@ public:
   * Constructeur par défaut d'un algo génétique
   * @author Ugo Rayer
   */
-  GeneticAlgo();
+  GeneticAlgoC();
   
 /** 
   * Constructeur prenant un nombre d'itérations et une taille de population
@@ -43,12 +43,12 @@ public:
   * @param pop : taille de la population à gérer
   * @author Ugo Rayer
   */
-  GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence);
+  GeneticAlgoC(unsigned int it, unsigned int pop, float seuilFrequence);
   
   /* * * * * * * * * 
    *   DESTRUCTOR  *
    * * * * * * * * */
-  ~GeneticAlgo();
+  ~GeneticAlgoC();
   
   /* * * * * * * * * 
    *  ACCESSEURS   *
@@ -57,9 +57,9 @@ public:
   
   unsigned int getTaillePop() const { return _taillePop; }
   
-  DataSet* getDataSet() const { return _data; }
+  DataSetC* getDataSet() const { return _data; }
   
-  void setData(DataSet* input);
+  void setData(DataSetC* input);
   
   /* * * * * * 
    * METHODS *
