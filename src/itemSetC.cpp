@@ -58,7 +58,7 @@ ItemSetC ItemSetC::CrossMultiPoint(const ItemSetC& it, const vector< unsigned in
     else {
       char * bitSet = new char[_nbItems];
       unsigned int i = 0, tmp = 0;
-      bool b = true; // Vrai si l'individu fils récupère les données de l'ItemSetC courant et faux si il récupère les données de it (passé en paramètre)
+      bool b = true; 
       while (i < _nbItems) {
 	if (i > (pivots[tmp] - 1)) { 
 	  b = (!b);
