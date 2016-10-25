@@ -6,8 +6,8 @@ GeneticAlgo::GeneticAlgo():_nbIteration(10000),_taillePop(100), _seuilFrequence(
 {}
 
 
-GeneticAlgo::GeneticAlgo(unsigned int it, unsigned int pop, float seuilfrequence, Mutator* mut, Cross* cross): _nbIteration(it),
-_taillePop(pop), _seuilFrequence(seuilfrequence), _mutator(mut), _cross(cross)
+GeneticAlgo::GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence, Mutator* mut, Cross* cross): _nbIteration(it),
+_taillePop(pop), _seuilFrequence(seuilFrequence), _mutator(mut), _cross(cross)
 {}
 
 
@@ -45,6 +45,7 @@ void GeneticAlgo::initRandomPop()
 	}
       
 	ItemSet* it = new ItemSet(tmp);
+	it->setScore(_data->freqItemSet(*it));
 	_population.push_back(it);
     }
     
@@ -81,31 +82,71 @@ void GeneticAlgo::doCrossFor(unsigned int id1, unsigned int id2)
 
 void GeneticAlgo::initFreqPop()
 {
-  if ((_seuilFrequence > 0)&&(_seuilFrequence <= 1)) {
-    unsigned int size = 0; // Taille population courante
-    vector<vector<char > > listItem;
-    vector<char> item;
-    while (listItem.size() < _taillePop) {
-      for (unsigned int i = 0; i < _data->getNbCol(); ++i) {
-	item.assign(_data->getNbCol(), '0');
+  if ((_seuilFrequence > 0)&&(_seuilFrequence <= 1)) { // On vérifie que le seuil de fréquence est correctement défini
+    unsigned int nbItem = _data->getNbCol();
+    
+    if (nbItem > 0) { // On vérifie que le jeu de donnée n'est pas vide
+      unsigned int size = 0; // Taille population courante
+      vector<pair< vector<char >, float> > listItem;
+      vector<char> item;
+      float eval = 0;
+      
+      for (unsigned int i = 0; (i < nbItem)&&(listItem.size() < _taillePop); ++i) {
+	item.assign(nbItem, '0');
 	item[i] = '1';
-	if (_data->freqItemSet(item) >= _seuilFrequence) {
-	  listItem.push_back(item);
+	eval = _data->freqItemSet(item);
+	
+	if (eval >= _seuilFrequence) {
+	  listItem.push_back(make_pair(item, eval));
 	  size = listItem.size();
+	  
 	  for (unsigned int j = 0; (j < size)&&(listItem.size() < _taillePop); ++j) {
-	    item = listItem[j];
+	    item = listItem[j].first;
 	    item[i] = '1';
-	    if (_data->freqItemSet(item) >= _seuilFrequence) listItem.push_back(item);
+	    eval = _data->freqItemSet(item);
+	    if (eval >= _seuilFrequence) listItem.push_back(make_pair(item, eval));
 	  }
+	  
 	}
+	
+      }
+      
+      for (unsigned int i = 0; i < listItem.size(); ++i) {
+	ItemSet * it = new ItemSet(listItem[i].first);
+	it->setScore(listItem[i].second);
+	_population.push_back(it);
       }
     }
-    for (unsigned int i = 0; i < listItem.size(); ++i) {
-      ItemSet * it = new ItemSet(listItem[i]);
-      _population.push_back(it);
-    }
+    else cerr << "Impossible d'initialiser une population de fréquent si il n'y a pas de jeu de donnée !" << endl;
   } 
   else cerr << "Le seuil de fréquence doit être compris entre 0 et 1 pour pouvoir initialiser une population de fréquent !" << endl; 
+}
+
+
+void GeneticAlgo::incAgePop()
+{
+  for (unsigned int i = 0; i < _population.size(); ++i) {
+    _population[i]->incAge();
+  }
+}
+
+
+void GeneticAlgo::run()
+{
+  unsigned int iteration = 0;
+  int alea;
+  vector<unsigned int> 
+  initRandomPop();
+  while (iteration < _nbIteration) {
+    incAgePop();
+    alea = rand()%100 + 1;
+    if (alea == 1) {
+      
+    }
+    else {
+      
+    }
+  }
 }
 
 

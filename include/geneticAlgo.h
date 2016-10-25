@@ -43,13 +43,16 @@ public:
   GeneticAlgo();
   
 /** 
-  * Constructeur prenant un nombre d'itérations et une taille de population
+  * Constructeur prenant un nombre d'itérations, une taille de population, un seuil de fréquence et un opérateur de mutation et de croisement
   * en paramètres.
   * @param it : nombre d'itérations de l'algorithme
   * @param pop : taille de la population à gérer
+  * @param seuilFrequence : seuil minimum de fréquence
+  * @param mut : opérateur de mutation
+  * @param cross : opérateur de croisement
   * @author Ugo Rayer
   */
-  GeneticAlgo(unsigned int it, unsigned int pop, float seuilfrequence, Mutator* mut, Cross* cross);
+  GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence, Mutator* mut, Cross* cross);
   
   /* * * * * * * * * 
    *   DESTRUCTOR  *
@@ -110,7 +113,12 @@ public:
   */
   void incAgePop();
   
-  
+/**
+ * Méthode principale de la classe. Lance l'algorithme génétique avec un nombre d'itération 
+ * et une taille de population définit dans le constructeur.
+ * @author Johan Defaye
+ */
+  void run();
   
 /**
  * Méthode d'affichage de la population utile pendant le dev.
@@ -118,7 +126,6 @@ public:
  */
   void displayPopulation();
 
-  
 };
 
 #endif
