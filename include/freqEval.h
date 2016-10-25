@@ -1,32 +1,36 @@
-#ifndef EVALUATE_H
-#define EVALUATE_H
+#ifndef FREQEVAL_H
+#define FREQEVAL_H
 
-#include <iostream>
-#include "itemSet.h"
-#include "itemSetC.h"
-#include "dataSet.h"
-#include "dataSetC.h"
+#include "evaluate.h"
 
 /**
- * Cette classe abstraite est la base du design-pattern Strategy appliqué à 
- * la fonction d'évaluation de notre algorithme. Elle définit une seule méthode
- * virtuelle pure execute() devant être redéfinie par les sous-classes repré-
- * sentant un objectif à évaluer.
+ * Cette classe représente une fonction d'évaluation sur la fréquence d'un
+ * itemset sur un ensemble d'itemset de même type.
  * TODO Refactorisation lors de la mise en place du design-pattern Template
  * @author Ugo Rayer
  * 
  */
 
-class Evaluate {
-
+class FreqEval : public Evaluate {
+  
 public:
-
+  
+  /* * * * * * * *
+   * CONSTRUCTOR *
+   * * * * * * * */
+  
+  /**
+   * Constructeur par défaut. Cette fonction ne nécessite aucun paramètre
+   * @author Ugo Rayer
+   */
+  FreqEval();
+  
   /* * * * * * * *
    * DESTRUCTOR  *
    * * * * * * * */
-  virtual ~Evaluate() {}
+  ~FreqEval();
   
-  /* * * * * * 
+   /* * * * * * 
    * METHODS *
    * * * * * */
   
@@ -37,7 +41,7 @@ public:
  * @param DataSet* jeu de données
  * @author Ugo Rayer
  */
-  virtual float execute(ItemSet* ind, DataSet* data) = 0;
+  float execute(ItemSet* ind, DataSet* data);
 
 /**
  * Méthode évaluant un individu de type itemSetC vis à vis d'un jeu de 
@@ -46,8 +50,9 @@ public:
  * @param DataSetC* jeu de données
  * @author Ugo Rayer
  */
-  virtual float execute(ItemSetC* ind, DataSetC* data) = 0;
-    
+  float execute(ItemSetC* ind, DataSetC* data);
+  
+
 };
 
 #endif

@@ -13,7 +13,7 @@ class Individual {
 
 private:
   int _age;
-  int _score;
+  float _score;
   
 public:
   /**
@@ -25,12 +25,12 @@ public:
    * GETTERS *
    * * * * * */
   int getAge() const { return _age; }
-  int getScore() const { return _score; }
+  float getScore() const { return _score; }
   
   /* * * * * * 
    * SETTERS *
    * * * * * */
-  void setScore(int s);
+  void setScore(float s);
   void setAge(int a);
  
   /* * * * * * * * * * * * *
