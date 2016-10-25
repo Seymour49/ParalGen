@@ -3,7 +3,6 @@
 
 #include "individual.h"
 #include "dataSet.h"
-#include "dataSetC.h"
 #include "randomMutator.h"
 #include "uniformCross.h"
 #include "multiPointCross.h"

@@ -5,8 +5,7 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include <exception>
-#include "../include/itemSetC.h"
+#include "itemSetC.h"
 
 /**
  * Représente un ensemble de transaction comme un tableau 2D de char 

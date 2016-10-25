@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <iostream>
-#include <exception>
 #include "../include/individual.h"
 
 /*
