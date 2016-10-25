@@ -99,7 +99,7 @@ public:
 /** 
   * Méthode initialisant une population de manière réfléchie.
   * Nous allons chercher à instancier des individus représentant
-  * des itemsets composés d'item fréquents.
+  * des itemsets composés d'item fréquents à l'aide d'un algorithme glouton
   * @author Johan Defaye
   */
   void initFreqPop();
