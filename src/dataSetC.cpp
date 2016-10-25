@@ -56,54 +56,6 @@ void DataSetC::print(ostream& flux) const
 }
 
 
-
-float DataSetC::freqItemSet(const ItemSetC& item) const
-{
-  float nbOccurrence = 0;
-  
-  if (item.getSize() != _nbCol) {
-    throw string("Erreur ! L'itemSet ne correspond pas au fichier de donnée");
-  }
-  else {
-    bool newOccurrence;
-    for (unsigned int i = 0; i < _nbLine; ++i) {
-      newOccurrence = true;
-      for (unsigned int j = 0; ((j < _nbCol)&&newOccurrence); ++j) {
-	if (item.getBitset()[j] == '1')  {
-	  if (_data[i][j]!= '1') newOccurrence = false;
-	}
-      }
-      if (newOccurrence) nbOccurrence++;
-    }
-  }
-  return (nbOccurrence/_nbLine);
-}
-
-
-float DataSetC::freqItemSet(const char * t, unsigned int size) const
-{
-  float nbOccurrence = 0;
-  
-  if (size != _nbCol) {
-    throw string("Erreur ! L'itemSet ne correspond pas au fichier de donnée");
-  }
-  else {
-    bool newOccurrence;
-    for (unsigned int i = 0; i < _nbLine; ++i) {
-      newOccurrence = true;
-      for (unsigned int j = 0; (j < _nbCol)&&(newOccurrence); ++j) {
-	if (t[j] == '1') {
-	  if (_data[i][j] != '1') newOccurrence = false;
-	}
-      }
-      if (newOccurrence) nbOccurrence++;
-    }
-  }
-  return (nbOccurrence/_nbLine);
-}
-
-
-
 void DataSetC::loadFile(const string& fileName)
 {
   
@@ -135,12 +87,15 @@ void DataSetC::loadFile(const string& fileName)
 	if (matrice[i].back() > Cols) Cols = matrice[i].back();
 	if (matrice[i].front() < start_index) start_index = matrice[i].front();
       }
+      
+      /*
       if (_data != NULL) {
 	for (unsigned int i = 0; i < _nbLine; ++i) {
 	  delete [] (_data[i]);
 	}
 	if (_nbLine != 0) delete [] (_data);
       }
+      */
       
       _nbLine = (unsigned int) Rows;
       _nbCol = (unsigned int) Cols;
@@ -149,12 +104,14 @@ void DataSetC::loadFile(const string& fileName)
       for (unsigned int i = 0; i < _nbLine; ++i) {
 	_data[i] = new char[_nbCol];
       }
+      
       for (unsigned int i = 0; i < _nbLine; ++i){
 	for (unsigned int j = 0; j < _nbCol; ++j) _data[i][j] = '0';
 	for (unsigned int it = 0; it < matrice[i].size(); ++it){
 	  _data[i][matrice[i][it]-start_index] = '1';
 	}
       }
+      
     }
     f.close();
   } else {

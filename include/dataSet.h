@@ -87,25 +87,6 @@ public:
    */
   void print(std::ostream & flux) const;
   
-  
-  /**
-   * Prend un ItemSet en paramètre et retourne sa fréquence d'apparition dans le tableau
-   * @param item : Un ItemSet
-   * @return La fréquence entre 0 et 1 de l'ItemSet
-   * @author Johan Defaye
-   */
-  float freqItemSet(const ItemSet & item) const;
-  
-  
-    /**
-   * Prend un vecteur de char en paramètre et retourne sa fréquence d'apparition dans le tableau
-   * @param v : Un vecteur de char
-   * @return La fréquence entre 0 et 1 du vecteur de char
-   * @author Johan Defaye
-   */
-  float freqItemSet(const std::vector<char> & v) const;
-  
-  
   /**
    * Lit un fichier de donnée dont le nom est passé en paramètre et remplie les données du tableau avec
    * @param fileName : Chemin d'accès du fichier de donnée
