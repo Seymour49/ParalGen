@@ -30,7 +30,7 @@ public:
    * * * * * * * */
   ~FreqEval();
   
-   /* * * * * * 
+  /* * * * * * 
    * METHODS *
    * * * * * */
   
@@ -39,18 +39,18 @@ public:
  * données de même type passés en paramètres.
  * @param ItemSet* individu à évaluer
  * @param DataSet* jeu de données
- * @author Ugo Rayer
+ * @author Ugo Rayer, Johan Defaye
  */
-  float execute(ItemSet* ind, DataSet* data);
+  void execute(ItemSet* ind, DataSet* data);
 
 /**
  * Méthode évaluant un individu de type itemSetC vis à vis d'un jeu de 
  * données de même type passés en paramètres.
  * @param ItemSetC* individu à évaluer
  * @param DataSetC* jeu de données
- * @author Ugo Rayer
+ * @author Ugo Rayer, Johan Defaye
  */
-  float execute(ItemSetC* ind, DataSetC* data);
+  void execute(ItemSetC* ind, DataSetC* data);
   
 
 };

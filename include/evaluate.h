@@ -37,7 +37,7 @@ public:
  * @param DataSet* jeu de données
  * @author Ugo Rayer
  */
-  virtual float execute(ItemSet* ind, DataSet* data) = 0;
+  virtual void execute(ItemSet* ind, DataSet* data) = 0;
 
 /**
  * Méthode évaluant un individu de type itemSetC vis à vis d'un jeu de 
@@ -46,7 +46,7 @@ public:
  * @param DataSetC* jeu de données
  * @author Ugo Rayer
  */
-  virtual float execute(ItemSetC* ind, DataSetC* data) = 0;
+  virtual void execute(ItemSetC* ind, DataSetC* data) = 0;
     
 };
 

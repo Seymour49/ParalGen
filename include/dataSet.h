@@ -72,6 +72,8 @@ public:
    * @author Johan Defaye
    */
   unsigned int getNbCol() const {return _nbCol;}
+  
+  char getDataAt(unsigned row, unsigned col) const { return this->at(row).at(col); }
 
   
   /* * * * * *
