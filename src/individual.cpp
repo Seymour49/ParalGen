@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void Individual::setScore(int s)
+void Individual::setScore(float s)
 {
   _score = s;
 }
