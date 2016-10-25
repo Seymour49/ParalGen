@@ -133,7 +133,7 @@ void GeneticAlgo::incAgePop()
 
 void GeneticAlgo::run()
 {
-  unsigned int iteration = 0;
+  /*unsigned int iteration = 0;
   int alea;
   vector<unsigned int> 
   initRandomPop();
@@ -146,7 +146,7 @@ void GeneticAlgo::run()
     else {
       
     }
-  }
+  }*/
 }
 
 
