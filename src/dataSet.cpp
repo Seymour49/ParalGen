@@ -14,10 +14,8 @@ vector< string >& explode2(const string& str)
 }
 
 
-
 DataSet::DataSet(): _nbLine(0), _nbCol(0)
 {}
-
 
 
 DataSet::DataSet(unsigned int nbLine): _nbLine(nbLine), _nbCol(0)
@@ -29,7 +27,6 @@ DataSet::DataSet(unsigned int nbLine): _nbLine(nbLine), _nbCol(0)
     at(i) = v;
   }
 }
-
 
 
 DataSet::DataSet(const DataSet& data): vector<vector<char>>(data), _nbLine(data.getNbLine()), _nbCol(data.getNbCol())
@@ -45,54 +42,6 @@ void DataSet::print(ostream& flux) const
     flux << endl;
   }
 }
-
-
-
-float DataSet::freqItemSet(const ItemSet& item) const
-{
-  float nbOccurrence = 0;
-  
-  if (item.getSize() != _nbCol) {
-    throw string("Erreur ! L'itemSet ne correspond pas au fichier de donnée");
-  }
-  else {
-    bool newOccurrence;
-    for (unsigned int i = 0; i < _nbLine; ++i) {
-      newOccurrence = true;
-      for (unsigned int j = 0; ((j < _nbCol)&&newOccurrence); ++j) {
-	if (item.getBitset()[j] == '1')  {
-	  if (this->at(i).at(j) != '1') newOccurrence = false;
-	}
-      }
-      if (newOccurrence) nbOccurrence++;
-    }
-  }
-  return (nbOccurrence/_nbLine);
-}
-
-
-float DataSet::freqItemSet(const vector< char >& v) const
-{
-  float nbOccurrence = 0;
-  
-  if (v.size() != _nbCol) {
-    throw string("Erreur ! L'itemSet ne correspond pas au fichier de donnée");
-  }
-  else {
-    bool newOccurrence;
-    for (unsigned int i = 0; i < _nbLine; ++i) {
-      newOccurrence = true;
-      for (unsigned int j = 0; (j < _nbCol)&&(newOccurrence); ++j) {
-	if (v[j] == '1') {
-	  if (this->at(i).at(j) != '1') newOccurrence = false;
-	}
-      }
-      if (newOccurrence) nbOccurrence++;
-    }
-  }
-  return (nbOccurrence/_nbLine);
-}
-
 
 
 void DataSet::loadFile(const string& fileName)

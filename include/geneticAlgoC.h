@@ -2,7 +2,12 @@
 #define GENETICALGOC_H
 
 #include "individual.h"
-#include "dataSetC.h"
+#include "dataSet.h"
+#include "randomMutator.h"
+#include "uniformCross.h"
+#include "multiPointCross.h"
+#include "classicCross.h"
+#include "evaluate.h"
 #include <vector>
 #include <ctime>
 
@@ -23,6 +28,9 @@ private:
     DataSetC* _data;
     std::vector<Individual*> _population;
     float _seuilFrequence; // TODO Définir _seuilFrequence comme un argument à définir par l'utilisateur
+    Mutator* _mutator;
+    Cross* _cross;
+    Evaluate* _eval;
     
     
 public:
@@ -43,7 +51,7 @@ public:
   * @param pop : taille de la population à gérer
   * @author Ugo Rayer
   */
-  GeneticAlgoC(unsigned int it, unsigned int pop, float seuilFrequence);
+  GeneticAlgoC(unsigned int it, unsigned int pop, float seuilFrequence, Mutator* mut, Cross* cross, Evaluate* eval);
   
   /* * * * * * * * * 
    *   DESTRUCTOR  *

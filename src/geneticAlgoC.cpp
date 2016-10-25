@@ -7,7 +7,8 @@ GeneticAlgoC::GeneticAlgoC():_nbIteration(10000),_taillePop(100), _seuilFrequenc
 {}
 
 
-GeneticAlgoC::GeneticAlgoC(unsigned int it, unsigned int pop, float seuilfrequence): _nbIteration(it), _taillePop(pop), _seuilFrequence(seuilfrequence)
+GeneticAlgoC::GeneticAlgoC(unsigned int it, unsigned int pop, float seuilfrequence, Mutator* mut, Cross* cross, Evaluate* eval):
+  _nbIteration(it), _taillePop(pop), _seuilFrequence(seuilfrequence), _mutator(mut), _cross(cross), _eval(eval)
 {}
 
 
@@ -45,7 +46,7 @@ void GeneticAlgoC::initRandomPop()
 	}
       
 	ItemSetC* it = new ItemSetC(tmp, _data->getNbCol());
-	it->setScore(_data->freqItemSet(*it));
+	_eval->execute(it,_data);
 	_population.push_back(it);
 	delete[] tmp;
     }
@@ -55,6 +56,7 @@ void GeneticAlgoC::initRandomPop()
 
 void GeneticAlgoC::initFreqPop()
 {
+  /*
   if ((_seuilFrequence > 0)&&(_seuilFrequence <= 1)) {
     unsigned int nbItem = _data->getNbCol();
     
@@ -105,6 +107,8 @@ void GeneticAlgoC::initFreqPop()
     else cerr << "Impossible d'initialiser une population de fréquent si il n'y a pas de jeu de donnée !" << endl;
   } 
   else cerr << "Le seuil de fréquence doit être compris entre 0 et 1 pour pouvoir initialiser une population de fréquent !" << endl; 
+
+  */
 }
 
 

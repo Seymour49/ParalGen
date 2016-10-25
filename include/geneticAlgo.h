@@ -7,6 +7,7 @@
 #include "uniformCross.h"
 #include "multiPointCross.h"
 #include "classicCross.h"
+#include "evaluate.h"
 #include <vector>
 #include <ctime>
 
@@ -29,6 +30,7 @@ private:
     float _seuilFrequence; // TODO Définir _seuilFrequence comme un argument à définir par l'utilisateur pour l'initFreqPop
     Mutator* _mutator;
     Cross* _cross;
+    Evaluate* _eval;
     
     
 public:
@@ -52,7 +54,7 @@ public:
   * @param cross : opérateur de croisement
   * @author Ugo Rayer
   */
-  GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence, Mutator* mut, Cross* cross);
+  GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence, Mutator* mut, Cross* cross, Evaluate* eval);
   
   /* * * * * * * * * 
    *   DESTRUCTOR  *
