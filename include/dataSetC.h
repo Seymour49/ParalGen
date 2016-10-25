@@ -81,6 +81,15 @@ public:
    * @author Johan Defaye
    */
   char ** getData() const {return _data;}
+  
+  /**
+   * Retourne l'élément à la colonne Col et la ligne Row passés en 
+   * paramètre.
+   * @param unsigned row
+   * @param unsigned col
+   * @author Ugo Rayer
+   */
+  char getDataAt(unsigned row, unsigned col) const { return _data[row][col];}
 
   
   /* * * * * *

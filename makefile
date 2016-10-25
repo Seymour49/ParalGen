@@ -4,6 +4,8 @@ LDFLAGS =
 EXEC = $(BUILD_DIR)/paralGen
 
 SRC =	main.cpp		\
+	freqEval.cpp		\
+	evaluate.cpp		\
 	randomMutator.cpp	\
 	mutator.cpp		\
 	uniformCross.cpp	\
@@ -32,6 +34,8 @@ $(EXEC): $(OBJ)
 	
 
 $(OBJ_DIR)/main.o: $(INC_DIR)/dataSet.h $(INC_DIR)/dataSetC.h $(INC_DIR)/cross.h $(INC_DIR)/classicCross.h $(INC_DIR)/multiPointCross.h $(INC_DIR)/uniformCross.h $(INC_DIR)/geneticAlgoC.h
+$(OBJ_DIR)/freqEval.o: $(INC_DIR)/evaluate.h
+$(OBJ_DIR)/evaluate.o: $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h $(INC_DIR)/dataSet.h $(INC_DIR)/dataSetC.h
 $(OBJ_DIR)/randomMutator.o: $(INC_DIR)/randomMutator.h $(INC_DIR)/mutator.h $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h
 $(OBJ_DIR)/mutator.o: $(INC_DIR)/mutator.h $(INC_DIR)/individual.h $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h
 $(OBJ_DIR)/uniformCross.o: $(INC_DIR)/uniformCross.h $(INC_DIR)/cross.h $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h
