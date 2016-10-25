@@ -82,6 +82,7 @@ void GeneticAlgoC::initFreqPop()
 	      item[i] = '0';
 	    }
 	  }
+	  else delete[] item;
 	}
       }
       for (unsigned int i = 0; i < size; ++i) {

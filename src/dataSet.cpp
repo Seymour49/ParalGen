@@ -132,7 +132,7 @@ void DataSet::loadFile(const string& fileName)
       for (int i = 0; i < Rows; ++i){
 	vector<char> line;
 	line.assign(_nbCol, '0');
-	for (unsigned int it = 0; it < matrice[i].size(); ++it){
+	for (unsigned int it = 0; it < matrice[i].size(); ++it) {
 	  line[matrice[i][it]-start_index] = '1';
 	}
 	at(i) = line;
