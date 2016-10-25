@@ -46,6 +46,7 @@ void GeneticAlgoC::initRandomPop()
       
 	ItemSetC* it = new ItemSetC(tmp, _data->getNbCol());
 	_population.push_back(it);
+	delete[] tmp;
     }
     
 }
