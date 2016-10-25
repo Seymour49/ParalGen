@@ -32,6 +32,11 @@ public:
    * * * * * */
   void setScore(int s);
   void setAge(int a);
+  
+/**
+  * Incrémente l'âge d'une unité
+  */
+  void incAge() {++_age;}
  
   /* * * * * * * * * * * * *
    * SURCHARGE D'OPÉRATEUR *

@@ -104,6 +104,12 @@ public:
   */
   void initFreqPop();
   
+/**
+  * Méthode permettant d'incrémenter l'âge de toute la population
+  * @author Johan Defaye
+  */
+  void incAgePop();
+  
   
   
 /**
