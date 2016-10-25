@@ -36,10 +36,11 @@ void GeneticAlgoC::initRandomPop()
     
     for(unsigned int i=0; i < _taillePop; ++i){
 	char * tmp = new char[_data->getNbCol()];
-	
+	alea = rand() % 99;
+	tmp[alea] = '1';
 	for(unsigned j=0; j < _data->getNbCol(); ++j){
-	    alea = rand() % 100;
-	    if( alea <= 50)
+	    alea = rand() % 99;
+	    if( alea < 5)
 	      tmp[j] = '1';
 	    else
 	      tmp[j] = '0';

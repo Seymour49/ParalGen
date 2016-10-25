@@ -26,7 +26,7 @@ private:
     unsigned int _nbIteration;
     unsigned int _taillePop;
     DataSet* _data;
-    std::vector<Individual*> _population;
+    std::vector<ItemSet*> _population;
     float _seuilFrequence; // TODO Définir _seuilFrequence comme un argument à définir par l'utilisateur pour l'initFreqPop
     Mutator* _mutator;
     Cross* _cross;

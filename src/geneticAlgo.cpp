@@ -35,13 +35,16 @@ void GeneticAlgo::initRandomPop()
     
     for(unsigned int i=0; i < _taillePop; ++i){
 	vector<char> tmp;
+	tmp.resize(_data->getNbCol());
 	
+	alea = rand() % 99;
+	tmp.at(alea) = '1';
 	for(unsigned j=0; j < _data->getNbCol(); ++j){
-	    alea = rand() % 100;
-	    if( alea <= 50)
-	      tmp.push_back('1');
+	    alea = rand() % 99;
+	    if( alea < 5)
+	      tmp.at(j) = '1';
 	    else
-	      tmp.push_back('0');
+	      tmp.at(j) = '0';
 	}
       
 	ItemSet* it = new ItemSet(tmp);
@@ -58,7 +61,7 @@ void GeneticAlgo::doMutationFor(unsigned int ind)
 	cerr << "Erreur, indice de l'individu hors de la population" << endl;
 	exit(EXIT_FAILURE);
     }else{
-	_population[ind] = _mutator->execute(dynamic_cast<ItemSet*>(_population[ind]));
+	_population[ind] = _mutator->execute(_population[ind]);
     }
 }
 
@@ -69,8 +72,8 @@ void GeneticAlgo::doCrossFor(unsigned int id1, unsigned int id2)
 	exit(EXIT_FAILURE);
     }
     else{
-	ItemSet* newI = _cross->execute(dynamic_cast<ItemSet*>(_population[id1]),
-					dynamic_cast<ItemSet*>(_population[id2]) );
+	ItemSet* newI = _cross->execute(_population[id1],
+					_population[id2] );
 	cout << "NOUVEL INDIVIDU A INSERER DANS LA POPULATION" << endl;
 	cout << *newI;
 	

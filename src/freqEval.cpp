@@ -36,7 +36,7 @@ void FreqEval::execute(ItemSet* ind, DataSet* data)
 	      if(newO) ++result;
 	  }
 	  result = result / nbRow;
-	  cout << "Resultat dans itemSet " << result << endl;
+
 	  ind->setScore(result);
     }
     
@@ -67,7 +67,7 @@ void FreqEval::execute(ItemSetC* ind, DataSetC* data)
 	      if(newO) ++result;
 	  }
 	  result = result / nbRow;
-	  cout << "Resultat dans itemSetC " << result << endl;
+	  
 	  ind->setScore(result);
 	
       }
