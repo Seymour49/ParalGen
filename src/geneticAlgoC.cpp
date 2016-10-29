@@ -1,4 +1,7 @@
 #include "../include/geneticAlgoC.h"
+#include <algorithm>
+
+#define toDigit(c) (c-'0')
 
 using namespace std;
 
@@ -57,59 +60,78 @@ void GeneticAlgoC::initRandomPop()
 
 void GeneticAlgoC::initFreqPop()
 {
-  /*
-  if ((_seuilFrequence > 0)&&(_seuilFrequence <= 1)) {
-    unsigned int nbItem = _data->getNbCol();
+    unsigned line = _data->getNbLine();
+    unsigned item = _data->getNbCol();
     
-    if (nbItem > 0) { // On vérifie que le jeu de donnée n'est pas vide
-      char ** tabItem =  new char*[_taillePop];
-      float * tabScore = new float[_taillePop];
-      unsigned int size = 0, size2; // Taille de la population courante
-      float eval = 0;
-      for (unsigned int i = 0; (i < nbItem)&&(size < _taillePop); ++i) {
-	char * item = new char[nbItem];
-	for (unsigned int j = 0; j < nbItem; ++j) {
-	  item[j] = '0';
+    vector<pair<int, float>*> itemOcc;
+    itemOcc.resize(item);
+    
+    for(unsigned i=0; i < item; ++i){
+	itemOcc[i] = new pair<int,float>(i,0);
+	
+	for(unsigned j=0; j < line; ++j){
+	    itemOcc[i]->second += toDigit( _data->getDataAt(j,i));
 	}
-	item[i] = '1';
-	eval = _data->freqItemSet(item, nbItem);
-	if ((eval >= _seuilFrequence)&&(size < _taillePop)) {
-	  tabItem[size] = item;
-	  tabScore[size] = eval;
-	  size++;
-	  size2 = size;
-	  for (unsigned int j = 0; (j < size2)&&(size < _taillePop); ++j) {
-	    item = tabItem[j];
-	    item[i] = '1';
-	    eval = _data->freqItemSet(item, nbItem);
-	    if (eval >= _seuilFrequence) {
-	      char * item2 = new char[nbItem];
-	      for (unsigned int k = 0; k < nbItem; ++k) item2[k] = item[k];
-	      tabItem[size] = item2;
-	      tabScore[size] = eval;
-	      size++;
-	    }
-	    item[i] = '0';
-	  }
-	}
-	else delete[] item;
-      }
-      cout << "size = " << size << endl << "_taillePop = " << _taillePop << endl;
-      for (unsigned int i = 0; i < size; ++i) {
-	ItemSetC * it = new ItemSetC(tabItem[i], nbItem);
-	it->setScore(tabScore[i]);
-	_population.push_back(it);
-      }
-      cout << _population.size() << endl;
-      for (unsigned int i = 0; i < _taillePop; ++i) delete[] tabItem[i];
-      delete[] tabItem;
-      delete[] tabScore;
     }
-    else cerr << "Impossible d'initialiser une population de fréquent si il n'y a pas de jeu de donnée !" << endl;
-  } 
-  else cerr << "Le seuil de fréquence doit être compris entre 0 et 1 pour pouvoir initialiser une population de fréquent !" << endl; 
+   
+//     sort(itemOcc.begin(), itemOcc.end(), descPair);
 
-  */
+    unsigned nbBrik = (item/10);
+    int brik[nbBrik];
+    unsigned nbCiment = (item/5);
+    int ciment[nbCiment];
+    int brikP = 0 ; int cimentP = 0;
+    for(unsigned i=0; i < item; ++i){
+	if(i <= nbBrik){
+	    brik[brikP] = itemOcc[i]->first;
+	    ++brikP;
+	}
+	else if( i > nbBrik && i <= (nbBrik+nbCiment) ){
+	    ciment[cimentP] = itemOcc[i]->first;
+	    ++cimentP;
+	}
+    }
+    
+    for(unsigned i=0; i < itemOcc.size(); ++i){
+	delete itemOcc[i];
+    }
+    
+    int selectedBrik;
+    int selectedCiment;
+    
+    int indBrik, indCiment;
+    // Correspond à la densité choisie. 
+    int max_bit = 5;
+    
+    while(_population.size() != _taillePop){
+	char* tmp = new char[item];
+	for(unsigned i=0; i < item; ++i) tmp[i] = '0';
+	
+	selectedBrik = rand() % max_bit;
+	selectedCiment = max_bit - selectedBrik;
+      
+	for(int i=0; i < selectedBrik; ++i){
+	    indBrik = rand() % (nbBrik -1);
+	    tmp[brik[indBrik]] = '1';
+	}
+	/*
+	 * Use of uninitialised value of size 8 detecté de manière aléatoire
+	 * dans la boucle for ci-dessous
+	 * TODO Trouver l'origine
+	 * 
+	 */
+	for(int j=0; j < selectedCiment; ++j){
+	    indCiment = rand() % (nbCiment) + nbBrik;
+	    tmp[ciment[indCiment]] = '1';
+	}
+	
+	ItemSetC* child = new ItemSetC(tmp,item);
+	delete[] tmp;
+	_eval->execute(child,_data);
+	_population.push_back(child);
+	
+    }
+   
 }
 
 
