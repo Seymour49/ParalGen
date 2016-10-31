@@ -8,6 +8,7 @@
 #include "multiPointCross.h"
 #include "classicCross.h"
 #include "evaluate.h"
+#include "initPop.h"
 #include <vector>
 #include <ctime>
 
@@ -26,11 +27,13 @@ private:
     unsigned int _nbIteration;
     unsigned int _taillePop;
     DataSetC* _data;
-    std::vector<Individual*> _population;
+    std::vector<ItemSetC*>* _population;
     float _seuilFrequence; // TODO Définir _seuilFrequence comme un argument à définir par l'utilisateur
     Mutator* _mutator;
     Cross* _cross;
     Evaluate* _eval;
+    InitPop* _init;
+    
     
     
 public:
@@ -51,7 +54,8 @@ public:
   * @param pop : taille de la population à gérer
   * @author Ugo Rayer
   */
-  GeneticAlgoC(unsigned int it, unsigned int pop, float seuilFrequence, Mutator* mut, Cross* cross, Evaluate* eval);
+  GeneticAlgoC(unsigned int it, unsigned int pop, float seuilFrequence,
+	       Mutator* mut, Cross* cross, Evaluate* eval, InitPop* init);
   
   /* * * * * * * * * 
    *   DESTRUCTOR  *
@@ -69,9 +73,19 @@ public:
   
   void setData(DataSetC* input);
   
+  std::vector<ItemSetC*>* getPopulation() const { return _population; }
+    
+  
   /* * * * * * 
    * METHODS *
    * * * * * */
+/**
+ *Méthode évaluant l'ensemble de la population et devant être appelée après
+ * l'initialisation de la population
+ * @author Ugo Rayer
+ */  
+  void EvalPop();
+  
   
 /** 
   * Méthode initialisant une population de manière totalement aléatoire.

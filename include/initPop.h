@@ -37,14 +37,14 @@ public:
    * ItemSet. Doit être redéfinie dans chaque sous-classes
    * @author Ugo Rayer
    */
-   virtual void execute(std::vector<ItemSet*>* pop,unsigned taillePop) = 0;
+   virtual void execute(std::vector<ItemSet*> *pop,unsigned taillePop) = 0;
       
 /**
   * Méthode effectuant le croisement entre deux itemsets de classe
   * ItemSetC. Doit être redéfinie dans chaque sous-classes
   * @author Ugo Rayer
   */
-  virtual void execute(std::vector<ItemSetC*> * pop,unsigned taillePop) = 0;
+  virtual void execute(std::vector<ItemSetC*>* pop,unsigned taillePop) = 0;
   
   
 };
