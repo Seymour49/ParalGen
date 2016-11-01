@@ -24,6 +24,9 @@ GeneticAlgoC::~GeneticAlgoC()
   for(unsigned int i=0; i < _population->size(); ++i){
       delete _population->at(i);
   }
+  _population->clear();
+  _population->shrink_to_fit();
+  delete _population;
 }
 
 
