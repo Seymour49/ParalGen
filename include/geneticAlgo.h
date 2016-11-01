@@ -7,7 +7,9 @@
 #include "uniformCross.h"
 #include "multiPointCross.h"
 #include "classicCross.h"
-#include "evaluate.h"
+#include "freqEval.h"
+#include "randomPop.h"
+#include "freqPop.h"
 #include <vector>
 #include <ctime>
 
@@ -26,11 +28,12 @@ private:
     unsigned int _nbIteration;
     unsigned int _taillePop;
     DataSet* _data;
-    std::vector<ItemSet*> _population;
+    std::vector<ItemSet*>* _population;
     float _seuilFrequence; // TODO Définir _seuilFrequence comme un argument à définir par l'utilisateur pour l'initFreqPop
     Mutator* _mutator;
     Cross* _cross;
     Evaluate* _eval;
+    InitPop* _init;
     
     
 public:
@@ -45,7 +48,8 @@ public:
   GeneticAlgo();
   
 /** 
-  * Constructeur prenant un nombre d'itérations, une taille de population, un seuil de fréquence et un opérateur de mutation et de croisement
+  * Constructeur prenant un nombre d'itérations, une taille de population, 
+  * un seuil de fréquence et un opérateur de mutation et de croisement
   * en paramètres.
   * @param it : nombre d'itérations de l'algorithme
   * @param pop : taille de la population à gérer
@@ -54,7 +58,8 @@ public:
   * @param cross : opérateur de croisement
   * @author Ugo Rayer
   */
-  GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence, Mutator* mut, Cross* cross, Evaluate* eval);
+  GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence, Mutator* mut,
+	      Cross* cross, Evaluate* eval, InitPop* init);
   
   /* * * * * * * * * 
    *   DESTRUCTOR  *
@@ -72,16 +77,29 @@ public:
   
   void setData(DataSet* input);
   
+  std::vector<ItemSet*>* getPopulation() const { return _population; }
+  
   /* * * * * * 
    * METHODS *
    * * * * * */
   
-/** 
-  * Méthode initialisant une population de manière totalement aléatoire.
-  * @author Ugo Rayer
-  */
-  void initRandomPop();
+/**
+ * Méthode évaluant l'ensemble de la population et devant être appelée après
+ * l'initialisation de la population
+ * @author Ugo Rayer
+ */  
+  void EvalPop();
   
+
+/**
+ * Méthode initialisation la population via la méthode passée 
+ * en paramètre de la classe
+ * Retourne une erreur si :
+ *  - vecteur non vide
+ * @author Ugo Rayer
+ */  
+  void initPop();
+
 /**
  * Méthode effectuant une mutation sur un individu de la population.
  * Prend en paramètre l'indice de l'individu dans la population.
@@ -89,7 +107,7 @@ public:
  * @param int indice de l'individu à muter
  * @author Ugo Rayer
  */
-  void doMutationFor(unsigned ind);
+  void doMutation(unsigned ind);
   
 /**
  * Méthode effectuant un croisement sur deux individus de la population.
@@ -100,14 +118,6 @@ public:
  * @author Ugo Rayer
  */
   void doCrossFor(unsigned id1, unsigned id2);
-  
-/** 
-  * Méthode initialisant une population de manière réfléchie.
-  * Nous allons chercher à instancier des individus représentant
-  * des itemsets composés d'item fréquents à l'aide d'un algorithme glouton
-  * @author Johan Defaye
-  */
-  void initFreqPop();
   
 /**
   * Méthode permettant d'incrémenter l'âge de toute la population
@@ -126,7 +136,14 @@ public:
  * Méthode d'affichage de la population utile pendant le dev.
  * @author Ugo Rayer
  */
+  void displayPopulationAt(unsigned ind);
+  
+  /**
+ * Méthode d'affichage de la population utile pendant le dev.
+ * @author Ugo Rayer
+ */
   void displayPopulation();
+
 
 };
 

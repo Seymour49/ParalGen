@@ -8,7 +8,8 @@
 #include "multiPointCross.h"
 #include "classicCross.h"
 #include "evaluate.h"
-#include "initPop.h"
+#include "randomPop.h"
+#include "freqPop.h"
 #include <vector>
 #include <ctime>
 
@@ -108,7 +109,12 @@ public:
  * @author Ugo Rayer
  */
   void doMutation(unsigned ind);
-  
+
+/**
+  * Méthode permettant d'incrémenter l'âge de toute la population
+  * @author Johan Defaye
+  */
+  void incAgePop();
   
 /**
  * Méthode d'affichage d'un individu 

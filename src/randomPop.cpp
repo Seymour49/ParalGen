@@ -20,7 +20,26 @@ RandomPop::~RandomPop()
 
 void RandomPop::execute(std::vector< ItemSet* >* pop, unsigned int taillePop)
 {
-
+    int alea;
+    
+    for(unsigned int i=0; i < taillePop; ++i){
+	vector<char> tmp;
+	tmp.resize(_nbItems);
+	
+	alea = rand() % 99;
+	tmp.at(alea) = '1';
+	for(unsigned j=0; j < _nbItems; ++j){
+	    alea = rand() % 99;
+	    if( alea < 5)
+	      tmp.at(j) = '1';
+	    else
+	      tmp.at(j) = '0';
+	}
+      
+	ItemSet* it = new ItemSet(tmp);
+	
+	pop->push_back(it);
+    }
 }
 
 

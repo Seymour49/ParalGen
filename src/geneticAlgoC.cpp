@@ -77,6 +77,14 @@ void GeneticAlgoC::doMutation(unsigned ind)
 }
 
 
+void GeneticAlgoC::incAgePop()
+{
+    for (unsigned int i = 0; i < _population->size(); ++i) {
+      _population->at(i)->incAge();
+    }
+}
+
+
 void GeneticAlgoC::displayPopulationAt(unsigned int ind)
 {
     if( _population->size() == 0 ){

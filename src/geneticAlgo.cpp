@@ -3,19 +3,28 @@
 using namespace std;
 
 GeneticAlgo::GeneticAlgo():_nbIteration(10000),_taillePop(100), _seuilFrequence(0.6)
-{}
+{
+    _population = new vector<ItemSet*>();
+}
 
 
-GeneticAlgo::GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence, Mutator* mut, Cross* cross, Evaluate* eval): _nbIteration(it),
-_taillePop(pop), _seuilFrequence(seuilFrequence), _mutator(mut), _cross(cross), _eval(eval)
-{}
+GeneticAlgo::GeneticAlgo(unsigned int it, unsigned int pop, float seuilFrequence,
+			 Mutator* mut, Cross* cross, Evaluate* eval, InitPop* init):
+			 _nbIteration(it),_taillePop(pop), _seuilFrequence(seuilFrequence),
+			 _mutator(mut), _cross(cross), _eval(eval),_init(init)
+{
+    _population = new vector<ItemSet*>();
+}
 
 
 GeneticAlgo::~GeneticAlgo()
 {
-  for(unsigned int i=0; i < _population.size(); ++i){
-      delete _population[i];
+  for(unsigned int i=0; i < _population->size(); ++i){
+      delete _population->at(i);
   }
+  _population->clear();
+  _population->shrink_to_fit();
+  delete _population;
 }
 
 
@@ -24,46 +33,49 @@ void GeneticAlgo::setData(DataSet* input){
 }
 
 
-/**
- * Méthode non-générique. Initialisation d'itemSet
- * et pas d'individus.
- */
-void GeneticAlgo::initRandomPop()
-{    
-    srand(time(NULL));
-    int alea;
-    
-    for(unsigned int i=0; i < _taillePop; ++i){
-	vector<char> tmp;
-	tmp.resize(_data->getNbCol());
-	
-	alea = rand() % 99;
-	tmp.at(alea) = '1';
-	for(unsigned j=0; j < _data->getNbCol(); ++j){
-	    alea = rand() % 99;
-	    if( alea < 5)
-	      tmp.at(j) = '1';
-	    else
-	      tmp.at(j) = '0';
-	}
-      
-	ItemSet* it = new ItemSet(tmp);
-	_eval->execute(it,_data);
-	_population.push_back(it);
+void GeneticAlgo::EvalPop()
+{
+    for(unsigned i=0; i < _population->size(); ++i){
+	_eval->execute(_population->at(i),_data);
     }
-    
 }
 
-void GeneticAlgo::doMutationFor(unsigned int ind)
+
+void GeneticAlgo::initPop()
 {
-    if(ind > (_taillePop-1) || ind < 0){
-      
-	cerr << "Erreur, indice de l'individu hors de la population" << endl;
+   if(_init == NULL){
+	cerr << "Erreur, initPop null" << endl;
 	exit(EXIT_FAILURE);
-    }else{
-	_population[ind] = _mutator->execute(_population[ind]);
+    }
+    else{
+	_init->execute(_population,_taillePop);
     }
 }
+
+
+void GeneticAlgo::doMutation(unsigned int ind)
+{
+    if( _population->size() == 0 ){
+	cerr << "Erreur population vide" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else if( _mutator == NULL){
+	cerr << "Méthode de mutation null" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else if( ind < 0  ){
+	cerr << "Erreur  sur indice" << endl;
+	exit(EXIT_FAILURE); 
+    }
+    else if( ind > (_population->size()-1) ){
+	cerr << "Erreur sur indice" << endl;
+	exit(EXIT_FAILURE); 
+    }
+    else{
+	_population->at(ind) = _mutator->execute(_population->at(ind));
+    }
+}
+
 
 void GeneticAlgo::doCrossFor(unsigned int id1, unsigned int id2)
 {
@@ -72,8 +84,8 @@ void GeneticAlgo::doCrossFor(unsigned int id1, unsigned int id2)
 	exit(EXIT_FAILURE);
     }
     else{
-	ItemSet* newI = _cross->execute(_population[id1],
-					_population[id2] );
+	ItemSet* newI = _cross->execute(_population->at(id1),
+					_population->at(id2) );
 	cout << "NOUVEL INDIVIDU A INSERER DANS LA POPULATION" << endl;
 	cout << *newI;
 	
@@ -83,55 +95,10 @@ void GeneticAlgo::doCrossFor(unsigned int id1, unsigned int id2)
 }
 
 
-void GeneticAlgo::initFreqPop()
-{
-  /*
-  if ((_seuilFrequence > 0)&&(_seuilFrequence <= 1)) { // On vérifie que le seuil de fréquence est correctement défini
-    unsigned int nbItem = _data->getNbCol();
-    
-    if (nbItem > 0) { // On vérifie que le jeu de donnée n'est pas vide
-      unsigned int size = 0; // Taille population courante
-      vector<pair< vector<char >, float> > listItem;
-      vector<char> item;
-      float eval = 0;
-      
-      for (unsigned int i = 0; (i < nbItem)&&(listItem.size() < _taillePop); ++i) {
-	item.assign(nbItem, '0');
-	item[i] = '1';
-	eval = _data->freqItemSet(item);
-	
-	if (eval >= _seuilFrequence) {
-	  listItem.push_back(make_pair(item, eval));
-	  size = listItem.size();
-	  
-	  for (unsigned int j = 0; (j < size)&&(listItem.size() < _taillePop); ++j) {
-	    item = listItem[j].first;
-	    item[i] = '1';
-	    eval = _data->freqItemSet(item);
-	    if (eval >= _seuilFrequence) listItem.push_back(make_pair(item, eval));
-	  }
-	  
-	}
-	
-      }
-      
-      for (unsigned int i = 0; i < listItem.size(); ++i) {
-	ItemSet * it = new ItemSet(listItem[i].first);
-	it->setScore(listItem[i].second);
-	_population.push_back(it);
-      }
-    }
-    else cerr << "Impossible d'initialiser une population de fréquent si il n'y a pas de jeu de donnée !" << endl;
-  } 
-  else cerr << "Le seuil de fréquence doit être compris entre 0 et 1 pour pouvoir initialiser une population de fréquent !" << endl; 
-  */
-}
-
-
 void GeneticAlgo::incAgePop()
 {
-  for (unsigned int i = 0; i < _population.size(); ++i) {
-    _population[i]->incAge();
+  for (unsigned int i = 0; i < _population->size(); ++i) {
+    _population->at(i)->incAge();
   }
 }
 
@@ -158,7 +125,27 @@ void GeneticAlgo::run()
 void GeneticAlgo::displayPopulation() {
     cout << "La population actuelle est la suivante : " << endl;
     
-    for(unsigned i=0; i<_population.size(); ++i){
-	_population[i]->print(cout);
+    for(unsigned i=0; i<_population->size(); ++i){
+	cout << *_population->at(i);
+    }
+}
+
+
+void GeneticAlgo::displayPopulationAt(unsigned ind)
+{
+    if( _population->size() == 0 ){
+	cerr << "Erreur population vide" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else if( ind < 0  ){
+	cerr << "Erreur  sur indice" << endl;
+	exit(EXIT_FAILURE); 
+    }
+    else if( ind > (_population->size()-1) ){
+	cerr << "Erreur sur indice" << endl;
+	exit(EXIT_FAILURE); 
+    }
+    else{
+	cout << *_population->at(ind);
     }
 }
