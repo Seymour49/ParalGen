@@ -51,12 +51,10 @@ void FreqPop::execute(std::vector< ItemSetC* >* pop, unsigned taillePop)
 	exit(EXIT_FAILURE);
     }
     else{
-	
 	unsigned line = _dataC->getNbLine();
 	unsigned item = _dataC->getNbCol();
       
 	vector<pair<int, float>*> itemOcc;
-	
 	
 	for(unsigned i=0; i < item; ++i){
 	    pair<int,float>* tmp = new pair<int,float>(i,0);
@@ -70,9 +68,9 @@ void FreqPop::execute(std::vector< ItemSetC* >* pop, unsigned taillePop)
 	sort(itemOcc.begin(), itemOcc.end(), descPair);
 
 	unsigned nbBrik = (item/10);
-	int brik[nbBrik];
+	int brik[nbBrik] = { };
 	unsigned nbCiment = (item/5);
-	int ciment[nbCiment];
+	int ciment[nbCiment] = { };
 	int brikP = 0 ; int cimentP = 0;
 	for(unsigned i=0; i < item; ++i){
 	    if(i <= nbBrik){
@@ -89,18 +87,18 @@ void FreqPop::execute(std::vector< ItemSetC* >* pop, unsigned taillePop)
 	    delete itemOcc[i];
 	}
 	
-	int selectedBrik;
-	int selectedCiment;
+	int selectedBrik = 0;
+	int selectedCiment = 0;
 	
-	int indBrik, indCiment;
+	int indBrik = 0;
+	int indCiment = 0;
 	// Correspond à la densité choisie. 
 	int max_bit = _density*100;
 	
-	  cout << taillePop << endl;
+	
 	while(pop->size() != taillePop){
 	    char* tmp = new char[item];
 	    for(unsigned i=0; i < item; ++i) tmp[i] = '0';
-	    
 	    selectedBrik = rand() % max_bit;
 	    selectedCiment = max_bit - selectedBrik;
 	  
@@ -108,14 +106,9 @@ void FreqPop::execute(std::vector< ItemSetC* >* pop, unsigned taillePop)
 		indBrik = rand() % (nbBrik -1);
 		tmp[brik[indBrik]] = '1';
 	    }
-	    /*
-	    * Use of uninitialised value of size 8 detecté de manière aléatoire
-	    * dans la boucle for ci-dessous
-	    * TODO Trouver l'origine
-	    */
-	    
+	   
 	    for(int j=0; j < selectedCiment; ++j){
-		indCiment = rand() % (nbCiment) + nbBrik;
+		indCiment = rand() % (nbCiment-1);
 		tmp[ciment[indCiment]] = '1';
 	    }
 	    
@@ -126,9 +119,6 @@ void FreqPop::execute(std::vector< ItemSetC* >* pop, unsigned taillePop)
 	    
 	}
 	
-    //     for(unsigned i=0; i < pop->size();++i){
-    // 	cout << *pop->at(i);
-    //     }
     }
 
 }

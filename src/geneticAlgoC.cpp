@@ -7,7 +7,9 @@ using namespace std;
 
 
 GeneticAlgoC::GeneticAlgoC():_nbIteration(10000),_taillePop(100), _seuilFrequence(0.6)
-{}
+{
+   _population = new vector<ItemSetC*>();
+}
 
 
 GeneticAlgoC::GeneticAlgoC(unsigned int it, unsigned int pop, float seuilfrequence, Mutator* mut, Cross* cross, Evaluate* eval, InitPop* init):
@@ -35,6 +37,12 @@ void GeneticAlgoC::EvalPop()
     _eval->execute(_population->at(i), _data);
 }
 
+void GeneticAlgoC::initPop()
+{
+    if(_init != NULL){
+	_init->execute(_population,_taillePop);
+    }
+}
 
 /**
  * Méthode non-générique. Initialisation d'itemSet

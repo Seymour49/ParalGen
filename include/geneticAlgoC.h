@@ -102,6 +102,8 @@ public:
   */
   void initFreqPop();
   
+  void initPop();
+  
   
   
 /**
