@@ -9,6 +9,7 @@
  * respond au nombre de bits allant être fixé à 1 lors de la construction d'un
  * individu. 
  * TODO Voir mise en place design pattern Template
+ * @var unsigned nombre de bits d'un individu
  * @var float density
  * @author Ugo Rayer
  * 
@@ -16,6 +17,7 @@
 
 class RandomPop : public InitPop {
 private: 
+  unsigned _nbItems;
   float _density;
   
 public:
@@ -26,9 +28,10 @@ public:
   
   /**
    * Constructeur par défaut. Fixe la density par défaut à 5%
+   * @param unsigned nombre d'Items
    * @author Ugo Rayer
    */
-  RandomPop();
+  RandomPop(unsigned nbI);
   
   
   /**
@@ -36,7 +39,7 @@ public:
    * @param float densité souhaitée
    * @author Ugo Rayer
    */
-  RandomPop(float density);
+  RandomPop(unsigned nbI, float density);
   
   
   /* * * * * * * *
@@ -55,10 +58,9 @@ public:
  *  - Problème lors de l'initialisation d'un individu
  * @param std::vector<ItemSet*>* pointeur sur le vecteur à remplir
  * @param unsigned taille de la population à créer
- * @param unsigned taille d'un individu
  * @author Ugo Rayer
  */
-  void execute(std::vector<ItemSet*>*pop, unsigned taillePop,unsigned tailleInd);
+  void execute(std::vector<ItemSet*>*pop, unsigned taillePop);
 
 /**
  * Rempli un vecteur d'ItemSetC initialement null d'un ensemble
@@ -68,10 +70,9 @@ public:
  *  - Problème lors de l'initialisation d'un individu
  * @param std::vector<ItemSetC*>* pointeur sur le vecteur à remplir
  * @param unsigned taille de la population à créer
- * @param unsigned taille d'un individu
  * @author Ugo Rayer
  */
-  void execute(std::vector<ItemSetC*>*pop,unsigned taillePop, unsigned tailleInd);  
+  void execute(std::vector<ItemSetC*>*pop,unsigned taillePop);  
   
 };
 

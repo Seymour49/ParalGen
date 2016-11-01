@@ -40,48 +40,61 @@ void GeneticAlgoC::EvalPop()
     _eval->execute(_population->at(i), _data);
 }
 
+
 void GeneticAlgoC::initPop()
 {
-    if(_init != NULL){
+    if(_init == NULL){
+	cerr << "Erreur, initPop null" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else{
 	_init->execute(_population,_taillePop);
     }
 }
 
-/**
- * Méthode non-générique. Initialisation d'itemSet
- * et pas d'individus.
- */
-void GeneticAlgoC::initRandomPop()
-{    
-    srand(time(NULL));
-    int alea;
-    
-    for(unsigned int i=0; i < _taillePop; ++i){
-	char * tmp = new char[_data->getNbCol()];
-	alea = rand() % 99;
-	tmp[alea] = '1';
-	for(unsigned j=0; j < _data->getNbCol(); ++j){
-	    alea = rand() % 99;
-	    if( alea < 5)
-	      tmp[j] = '1';
-	    else
-	      tmp[j] = '0';
-	}
-      
-	ItemSetC* it = new ItemSetC(tmp, _data->getNbCol());
-	_eval->execute(it,_data);
-	_population->push_back(it);
-	delete[] tmp;
-    }
-    
-}
 
-
-void GeneticAlgoC::initFreqPop()
+void GeneticAlgoC::doMutation(unsigned ind)
 {
-   
+    if( _population->size() == 0 ){
+	cerr << "Erreur population vide" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else if( _mutator == NULL){
+	cerr << "Méthode de mutation null" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else if( ind < 0  ){
+	cerr << "Erreur  sur indice" << endl;
+	exit(EXIT_FAILURE); 
+    }
+    else if( ind > (_population->size()-1) ){
+	cerr << "Erreur sur indice" << endl;
+	exit(EXIT_FAILURE); 
+    }
+    else{
+	_population->at(ind) = _mutator->execute(_population->at(ind));
+    }
 }
 
+
+void GeneticAlgoC::displayPopulationAt(unsigned int ind)
+{
+    if( _population->size() == 0 ){
+	cerr << "Erreur population vide" << endl;
+	exit(EXIT_FAILURE);
+    }
+    else if( ind < 0  ){
+	cerr << "Erreur  sur indice" << endl;
+	exit(EXIT_FAILURE); 
+    }
+    else if( ind > (_population->size()-1) ){
+	cerr << "Erreur sur indice" << endl;
+	exit(EXIT_FAILURE); 
+    }
+    else{
+	cout << *_population->at(ind);
+    }
+}
 
 void GeneticAlgoC::displayPopulation() {
     cout << "La population actuelle est la suivante : " << endl;

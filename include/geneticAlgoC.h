@@ -74,36 +74,48 @@ public:
   void setData(DataSetC* input);
   
   std::vector<ItemSetC*>* getPopulation() const { return _population; }
-    
+  
   
   /* * * * * * 
    * METHODS *
    * * * * * */
 /**
- *Méthode évaluant l'ensemble de la population et devant être appelée après
+ * Méthode évaluant l'ensemble de la population et devant être appelée après
  * l'initialisation de la population
  * @author Ugo Rayer
  */  
   void EvalPop();
   
-  
-/** 
-  * Méthode initialisant une population de manière totalement aléatoire.
-  * @author Ugo Rayer
-  */
-  void initRandomPop();
-  
-  
-/** 
-  * Méthode initialisant une population de manière réfléchie.
-  * Nous allons chercher à instancier des individus représentant
-  * des itemsets composés d'item fréquents.
-  * @author Johan Defaye
-  */
-  void initFreqPop();
-  
+
+/**
+ * Méthode initialisation la population via la méthode passée 
+ * en paramètre de la classe
+ * Retourne une erreur si :
+ *  - vecteur non vide
+ * @author Ugo Rayer
+ */  
   void initPop();
   
+  
+/**
+ * Méthode effectuant la mutation via la méthode en paramètre de classe
+ * selon un indice d'individu.
+ * Retourne une erreur si :
+ *  - indice en dehors de la population
+ *  - population vide
+ *  - mutateur null
+ * @param unsigned indice de l'individu à muter dans la population
+ * @author Ugo Rayer
+ */
+  void doMutation(unsigned ind);
+  
+  
+/**
+ * Méthode d'affichage d'un individu 
+ * @param unsigned indice de l'individu
+ * @author Ugo Rayer
+ */
+  void displayPopulationAt(unsigned ind);
   
   
 /**
