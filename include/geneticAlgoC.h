@@ -108,13 +108,28 @@ public:
  * @param unsigned indice de l'individu à muter dans la population
  * @author Ugo Rayer
  */
-  void doMutation(unsigned ind);
+ ItemSetC* doMutation(unsigned ind);
 
 /**
   * Méthode permettant d'incrémenter l'âge de toute la population
   * @author Johan Defaye
   */
   void incAgePop();
+  
+/**
+ * Fonction booléenne vérifiant si l'ItemSetC passé en paramètre est présent
+ * ou non dans la population.
+ * @param ItemSetC* individu à tester
+ * @return true si l'individu est dans la population, false sinon
+ * @author Ugo Rayer
+ */
+  bool isPartOfPop(ItemSetC* ind);
+  
+/**
+ * Méthode principale de l'algorithme. 
+ * @author Ugo Rayer
+ */
+  void run();
   
 /**
  * Méthode d'affichage d'un individu 

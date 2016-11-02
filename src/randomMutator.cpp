@@ -32,7 +32,7 @@ ItemSet* RandomMutator::execute(ItemSet* p1)
 	}
 	ItemSet* child = new ItemSet(tmp);
 	child->setAge(p1->getAge());
-	delete p1;
+
 	return child;
     }
 }
@@ -58,7 +58,6 @@ ItemSetC* RandomMutator::execute(ItemSetC* p1)
 	}
 	ItemSetC* child = new ItemSetC(tmp,p1->getSize());
 	child->setAge(p1->getAge());
-	delete p1;
 	delete[] tmp;
 	return child;
     }

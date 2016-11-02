@@ -79,7 +79,7 @@ void GeneticAlgo::doMutation(unsigned int ind)
 
 void GeneticAlgo::doCrossFor(unsigned int id1, unsigned int id2)
 {
-    if( (id1 < 0) || (id2 < 0) || (id1 > (_taillePop-1)) || (id2 > (_taillePop-1)) ){
+    if(  (id1 > (_taillePop-1)) || (id2 > (_taillePop-1)) ){
 	cerr << "Erreur, indices des parents hors de la population" << endl;
 	exit(EXIT_FAILURE);
     }

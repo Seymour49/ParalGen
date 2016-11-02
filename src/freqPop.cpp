@@ -82,11 +82,11 @@ void FreqPop::execute(std::vector< ItemSet* >* pop,unsigned taillePop)
 	    delete itemOcc[i];
 	}
 	
-	int selectedBrik = 0;
-	int selectedCiment = 0;
+	int selectedBrik;
+	int selectedCiment;
 	
-	int indBrik = 0;
-	int indCiment = 0;
+	int indBrik;
+	int indCiment;
 	// Correspond à la densité choisie. 
 	int max_bit = _density*100;
 	
