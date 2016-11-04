@@ -148,7 +148,7 @@ void GeneticAlgoC::run()
 	alea = rand()%100;
 	ItemSetC* child;
 	// 1% de chance qu'un individu aléatoire mute
-	if( alea < 100){
+	if( alea > 100){
 	    selectedItem = rand()% _population->size();
 
     	    child = doMutation(selectedItem);
@@ -197,22 +197,28 @@ void GeneticAlgoC::run()
 	    
 	    ItemSetC* tmp;
 	    tmp = _cross->execute(_population->at(b1),_population->at(b2));
+	    cout << "parent 1" << endl << *_population->at(b1);
+	    cout << "parent 2" << endl << *_population->at(b2);
+	    
+	    cout << "Enfant issu du cross" << endl << *tmp;
 	    
 	    select = rand()%1000;
-	    if( select < 500){
+	    if( select < 1000){
 		child = _mutator->execute(tmp);
 		++cpt;
 	    }
 	    else{
-		child = tmp;
+		child =  new ItemSetC(*tmp);
 	    }
 	    delete tmp;
+	    
 	    ++cpt;
 	}
 	
 	
 	// Vérifier si child n'appartient pas déjà à la population
 	if( !isPartOfPop(child) ){
+	    cout << "Insertion dans la population" << endl;
 	    _eval->execute(child,_data);
 	    
 	    // Sélection du moins bon parmi les 80% les plus vieux
@@ -249,6 +255,7 @@ void GeneticAlgoC::run()
 		delete scoreBoard[i];
 	}
 	else{
+	    cout << "Suppression de child" << endl;
 	    delete child;
 	}
 
