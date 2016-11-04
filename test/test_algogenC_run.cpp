@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
     
     RandomPop* pop1 = new RandomPop(dataC->getNbCol(),0.05);
     
-    GeneticAlgoC* genC = new GeneticAlgoC(5,10,0.3,mut,cross,eval,pop);
+    GeneticAlgoC* genC = new GeneticAlgoC(11,10,0.3,mut,cross,eval,pop);
     cout << "====================================" << endl;
     cout << "============  DEBUT RUN  ===========" << endl;
     cout << "====================================" << endl;

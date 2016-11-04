@@ -203,7 +203,7 @@ void GeneticAlgoC::run()
 	    cout << "Enfant issu du cross" << endl << *tmp;
 	    
 	    select = rand()%1000;
-	    if( select < 1000){
+	    if( select < 500){
 		child = _mutator->execute(tmp);
 		++cpt;
 	    }
