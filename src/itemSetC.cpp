@@ -1,5 +1,5 @@
 #include "../include/itemSetC.h"
-
+#include <string.h>
 
 using namespace std;
 
@@ -14,6 +14,7 @@ ItemSetC::ItemSetC(): Individual(), _nbItems(0)
 ItemSetC::ItemSetC(char* v, int nbI):Individual(),_nbItems(nbI)
 {
     _bitset = new char[_nbItems];
+
     for(unsigned i=0; i < _nbItems; ++i){
 	_bitset[i] = v[i];
     }
@@ -21,11 +22,12 @@ ItemSetC::ItemSetC(char* v, int nbI):Individual(),_nbItems(nbI)
 
 
 ItemSetC::ItemSetC(const ItemSetC& it):Individual(it), _nbItems(it._nbItems)
-{
+{	
     _bitset = new char[_nbItems];
-    for(unsigned i=0; i < _nbItems; ++i){
+   for(unsigned i=0; i < _nbItems; ++i){
 	_bitset[i] = it.getBitsetAt(i);
     }
+    
 }
 
 
@@ -46,6 +48,16 @@ void ItemSetC::setBitset(char* BS, unsigned size)
 	}
     }
 }
+
+
+void ItemSetC::flipBit(unsigned int ind)
+{
+    if( _bitset[ind] == '1')
+	_bitset[ind] = '0';
+    else
+	_bitset[ind] = '1';
+}
+
 
 
 vector< int > ItemSetC::getListItem() const

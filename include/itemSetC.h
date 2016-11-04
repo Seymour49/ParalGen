@@ -76,6 +76,7 @@ public:
 
   void setBitset(char* BS, unsigned size);
   
+  void flipBit(unsigned ind);
   
   /* * * * * * 
    * METHODS *

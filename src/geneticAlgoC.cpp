@@ -70,8 +70,8 @@ ItemSetC* GeneticAlgoC::doMutation(unsigned ind)
 	exit(EXIT_FAILURE); 
     }
     else{
-	ItemSetC* child = new ItemSetC(*_population->at(ind));
-	child = _mutator->execute(child);
+	ItemSetC* child;
+	child = _mutator->execute(_population->at(ind));
 	return child;
     }
 }
@@ -134,20 +134,25 @@ void GeneticAlgoC::run()
     // Evaluation de la population
     EvalPop();
     
+    // Variable de debugage
+    int cpt = 0;
+    
+    
     int alea;
     int selectedItem;
     // Début de la boucle centrale
     for(unsigned i=0; i < _nbIteration; ++i){
-	
 	// Incrémentation de l'âge de la population
 	incAgePop();
 	
 	alea = rand()%100;
 	ItemSetC* child;
 	// 1% de chance qu'un individu aléatoire mute
-	if( alea == 0){
+	if( alea < 100){
 	    selectedItem = rand()% _population->size();
-	    child = doMutation(selectedItem);
+
+    	    child = doMutation(selectedItem);
+	    ++cpt;
 	}
 	// Sinon, on sélectionne deux groupes de 3
 	else{
@@ -190,12 +195,21 @@ void GeneticAlgoC::run()
 		}
 	    }
 	    
-	    child = _cross->execute(_population->at(b1),_population->at(b2));
+	    ItemSetC* tmp;
+	    tmp = _cross->execute(_population->at(b1),_population->at(b2));
 	    
 	    select = rand()%1000;
-	    if( select < 500)
-		child = _mutator->execute(child);
+	    if( select < 500){
+		child = _mutator->execute(tmp);
+		++cpt;
+	    }
+	    else{
+		child = tmp;
+	    }
+	    delete tmp;
+	    ++cpt;
 	}
+	
 	
 	// Vérifier si child n'appartient pas déjà à la population
 	if( !isPartOfPop(child) ){
@@ -234,8 +248,12 @@ void GeneticAlgoC::run()
 	    for(unsigned i=0; i < scoreBoard.size(); ++i)
 		delete scoreBoard[i];
 	}
+	else{
+	    delete child;
+	}
+
     }
-    
+    cout << "Nombre d'opérations mut/cross : " << cpt << endl;
     sort(_population->begin(), _population->end(), ScoreIndDesc);
   
 }
