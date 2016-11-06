@@ -105,6 +105,13 @@ void GeneticAlgo::incAgePop()
 
 void GeneticAlgo::run()
 {
+    // Initialisation de la population
+    initPop();
+    
+    // Evaluation de la population
+    EvalPop();
+    
+  
   unsigned int iteration = 0;
   int alea;
   vector<unsigned int> 

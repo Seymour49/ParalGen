@@ -7,6 +7,7 @@ SRC =	main.cpp		\
 	randomPop.cpp		\
 	freqPop.cpp		\
 	initPop.cpp		\
+	closeEval.cpp		\
 	freqEval.cpp		\
 	evaluate.cpp		\
 	randomMutator.cpp	\
@@ -40,7 +41,8 @@ $(OBJ_DIR)/main.o: $(INC_DIR)/dataSet.h $(INC_DIR)/dataSetC.h $(INC_DIR)/classic
 $(OBJ_DIR)/randomPop.o: $(INC_DIR)/randomPop.h $(INC_DIR)/initPop.h
 $(OBJ_DIR)/freqPop.o: $(INC_DIR)/freqPop.h $(INC_DIR)/initPop.h $(INC_DIR)/dataSet.h $(INC_DIR)/dataSetC.h
 $(OBJ_DIR)/initPop.o: $(INC_DIR)/freqPop.h $(INC_DIR)/individual.h $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h
-$(OBJ_DIR)/freqEval.o: $(INC_DIR)/evaluate.h
+$(OBJ_DIR)/closeEval.o: $(INC_DIR)/closeEval.h $(INC_DIR)/evaluate.h
+$(OBJ_DIR)/freqEval.o: $(INC_DIR)/freqEval.h $(INC_DIR)/evaluate.h
 $(OBJ_DIR)/evaluate.o: $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h $(INC_DIR)/dataSet.h $(INC_DIR)/dataSetC.h
 $(OBJ_DIR)/randomMutator.o: $(INC_DIR)/randomMutator.h $(INC_DIR)/mutator.h $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h
 $(OBJ_DIR)/mutator.o: $(INC_DIR)/mutator.h $(INC_DIR)/individual.h $(INC_DIR)/itemSet.h $(INC_DIR)/itemSetC.h
