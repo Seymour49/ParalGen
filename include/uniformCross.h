@@ -55,7 +55,7 @@ public:
       enfant.resize(parent1.size());
       int alea;
       for(unsigned int i = 0; i < parent1.size(); ++i){
-	alea = rand()%2;
+	alea = rand() % 2;
 	if (alea == 0) enfant[i] = parent1[i];
 	else enfant[i] = parent2[i];
       }

@@ -60,6 +60,7 @@ void FreqEval::executeO(Individual< char >& ind)
 	bool newO;
 	unsigned nbCol = _data2->getNbCol();
 	unsigned nbRow = _data2->getNbLine();
+
 	
 	for (unsigned int i = 0; i < nbRow; ++i){
 	  

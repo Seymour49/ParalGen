@@ -4,6 +4,10 @@ LDFLAGS =
 EXEC = $(BUILD_DIR)/paralGen
 
 SRC =	main.cpp		\
+	randomPop.cpp		\
+	freqPop.cpp		\
+	initPop.cpp		\
+	closeEval.cpp		\
 	freqEval.cpp		\
 	evaluate.cpp		\
 	randomMutator.cpp	\
@@ -44,7 +48,6 @@ all: $(EXEC)
 
 $(EXEC): $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
-	
 
 $(OBJ_DIR)/main.o: $(INC_DIR)/dataSet.h $(INC_DIR)/dataSetO.h $(INC_DIR)/cross.h $(INC_DIR)/classicCross.h $(INC_DIR)/multiPointCross.h $(INC_DIR)/uniformCross.h $(INC_DIR)/geneticAlgo.h $(INC_DIR)/randomMutator.h $(INC_DIR)/freqEval.h $(INC_DIR)/randomPop.h $(INC_DIR)/freqPop.h
 $(OBJ_DIR)/freqEval.o: $(INC_DIR)/freqEval.h $(INC_DIR)/evaluate.h $(INC_DIR)/dataSet.h $(INC_DIR)/dataSetO.h

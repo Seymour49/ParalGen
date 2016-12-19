@@ -4,12 +4,14 @@
 #include "individual.h"
 #include "itemSet.h"
 #include "itemSetO.h"
+#include "dataSet.h"
+#include "dataSetO.h"
 #include "mutator.h"
 #include "cross.h"
+#include "indelPolicy.h"
+#include "selectPolicy.h"
 #include "evaluate.h"
 #include "initPop.h"
-#include "selectPolicy.h"
-#include "indelPolicy.h"
 
 #include <vector>
 
@@ -45,7 +47,8 @@ public:
    * * * * * * * * */
   
 /** 
-  * Constructeur prenant un nombre d'itérations, une taille de population, un seuil de fréquence et un opérateur de mutation et de croisement
+  * Constructeur prenant un nombre d'itérations, une taille de population, 
+  * un seuil de fréquence et un opérateur de mutation et de croisement
   * en paramètres.
   * @param ind : Type d'individu à manipuler
   * @param mut : opérateur de mutation
@@ -95,11 +98,21 @@ public:
   
   unsigned int getTaillePop() const { return _population.size(); }
       
+      
   /* * * * * * 
    * METHODS *
    * * * * * */
-
   
+
+/**
+ * Méthode initialisation la population via la méthode passée 
+ * en paramètre de la classe
+ * Retourne une erreur si :
+ *  - vecteur non vide
+ * @author Ugo Rayer
+ */  
+  void initPop();
+
 /**
  * Méthode effectuant une mutation sur un individu de la population.
  * Prend en paramètre l'indice de l'individu dans la population.
@@ -112,6 +125,7 @@ public:
     if (ind > (_population.size() - 1) || ind < 0) throw std::string("Erreur, indice de l'individu à muter hors de la population");
     else _mutator->execute(*_population[ind]);
   }
+
   
 /**
  * Méthode effectuant un croisement sur deux individus de la population.
@@ -128,6 +142,7 @@ public:
     else if ((indEnfant < 0) || (indEnfant > (_population.size() - 1))) throw std::string("Erreur, indice de l'enfant hors de la population");
     else _cross->execute(*(_population[indParent1]), *(_population[indParent2]), *(_population[indEnfant]));
   }
+
   
 /**
   * Méthode permettant d'incrémenter l'âge de toute la population
@@ -145,7 +160,7 @@ public:
    * Intialise la population en appelant la méthode d'exécution de l'attribut initPop
    * @author Johan Defaye
    */
-  void initPop()
+  void populate()
   {
     _initPop->execute(_population);
   }
@@ -167,8 +182,7 @@ public:
  * @author Johan Defaye
  */
   void run()
-  {
-  }
+  {}
   
 /**
  * Méthode d'affichage de la population utile pendant le dev.
@@ -181,6 +195,8 @@ public:
       std::cout << *(_population[i]) << std::endl;
     }
   }
+
+
 
 };
 

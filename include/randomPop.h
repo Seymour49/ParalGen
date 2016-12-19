@@ -56,21 +56,20 @@ public:
   void setNbItem(float nbItem) { _nbItem = nbItem;}
   
 
-
   /* * * * * * 
    * METHODS *
    * * * * * */
-/**
- * Rempli un vecteur d'individu initialement null avec des individus initialisés aléatoirement
- * Renvoie une erreur si :
- *  - vecteur non vide
- *  - Problème lors de l'initialisation d'un individu
- * @param pop : référence sur le vecteur à remplir
- * @author Ugo Rayer
- */
-  void execute(std::vector<Individual<char>*> & pop);
   
-
+  
+   /**
+    * Rempli un vecteur d'individu initialement null avec des individus initialisés aléatoirement
+    * Renvoie une erreur si :
+    *  - vecteur non vide
+    *  - Problème lors de l'initialisation d'un individu
+    * @param pop : référence sur le vecteur à remplir
+    * @author Ugo Rayer
+    */
+  void execute(std::vector<Individual<char>*> & pop);
   
 };
 

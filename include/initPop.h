@@ -6,6 +6,7 @@
 #include "individual.h"
 
 
+
 /**
  * Cette classe abstraite est la base du design-pattern Strategy appliqué
  * à la méthode d'initialisation de la population de notre algorithme. 
@@ -15,6 +16,7 @@
  * @author Ugo Rayer, Johan Defaye
  * 
  */
+
 template <typename T>
 class InitPop {
   
@@ -35,7 +37,7 @@ public:
    * @author Ugo Rayer
    */
    virtual void execute(std::vector<Individual<T>* > & pop) = 0;
-  
+
   
 };
 

@@ -1,6 +1,4 @@
 #include "../include/freqPop.h"
-#include <algorithm>
-#include <utility>
 
 #define toDigit(c) (c-'0')
 
@@ -74,7 +72,6 @@ void FreqPop::execute(std::vector< Individual< char >* >& pop)
 		++cimentP;
 	    }
 	}
-	
 	int selectedBrik;
 	int selectedCiment;
 	
@@ -170,11 +167,4 @@ void FreqPop::executeO(std::vector< Individual< char >* >& pop)
 	
       }
   }
-}
-
-
-
-FreqPop::~FreqPop()
-{
-  
 }

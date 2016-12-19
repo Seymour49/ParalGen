@@ -5,6 +5,8 @@
 #include "dataSet.h"
 #include "dataSetO.h"
 
+#include <algorithm>
+
 /**
  * Cette classe représente une implémentation de la fonction d'initialisation
  * de la population de notre algorithme génétique. La densité nécessaire cor-
@@ -19,8 +21,9 @@
  * mais cette classe n'est pas chargée de les détruire.
  * TODO: Ajouter en paramètre une liste des valeurs que peuvent prendre les items d'un individu ('0' et '1' dans notre cas)
  * TODO: Éviter de juste récupérer le pointeur sur les jeux de données (introspection)
+
  * @var float density
- * @author Ugo Rayer
+ * @author Ugo Rayer, Johan Defaye
  * 
  */
 
@@ -30,6 +33,7 @@ private:
   DataSet<char> * _data;
   DataSetO<char> * _dataO;
   float _density;
+
   
 public: 
   
@@ -86,8 +90,6 @@ public:
     
   void setDataO(DataSetO<char> * const dataO) { _dataO = dataO; }
   
-  
-  
 
   /* * * * * * 
    * METHODS *
@@ -114,13 +116,6 @@ public:
  */
   void executeO(std::vector<Individual<char> *> & pop);
   
-  
-  
-  /* * * * * * * *
-   * DESTRUCTOR  *
-   * * * * * * * */
-  
-    ~FreqPop();
   
 };
 #endif

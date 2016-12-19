@@ -83,7 +83,6 @@ public:
   float getFrequence() const { return _freq; }
   
   void setFrequence(float freq) {_freq = freq;}
-   
   
   /* * * * * * 
    * METHODS *
