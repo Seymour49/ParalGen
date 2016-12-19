@@ -1,132 +1,206 @@
-
 #include <iostream>
+#include <getopt.h>
+#include <string>
 
 #include "../include/dataSet.h"
-#include "../include/itemSet.h"
-#include "../include/itemSetC.h"
 #include "../include/dataSetC.h"
 #include "../include/classicCross.h"
 #include "../include/multiPointCross.h"
 #include "../include/uniformCross.h"
+#include "../include/randomMutator.h"
+#include "../include/freqEval.h"
+#include "../include/closeEval.h"
+#include "../include/freqPop.h"
+#include "../include/randomPop.h"
 #include "../include/geneticAlgo.h"
+#include "../include/geneticAlgoC.h"
 
 using namespace std;
 
+
+/*
+ * TODO
+ * 	Vérifier les paramètres manquants
+ * 		Politiques : select indel
+ * 	Revoir les includes
+ * 	Refaire la méthode run 
+ * 	Insertion modele en iles
+ * 
+ */
 int main(int argc, char **argv) {
-    
-    DataSet* data = new DataSet();
-    data->loadFile("./data/mushroom.dat");
-    
-    cout << "Nombre d'items : " << data->getNbCol() << endl;
-    GeneticAlgo gen(10000,20);
-    gen.setData(data);
-    
-    cout << "Items dans gen : " << gen.getDataSet()->getNbCol() << endl;
-    gen.initRandomPop();
-    
-    
-    gen.displayPopulation();
-    
-    delete data;
-    /*
+
     srand(time(NULL));
-    char* tmp = new char[15];
-    vector<char> vtmp, vtmp2;
-    int alea = 0;
-    for(int i=0; i < 15; ++i){
-	alea = rand() % 100;
-	if( alea < 50){
-	  tmp[i] = '1';
-	  vtmp.push_back('1');
-	}else{
-	  tmp[i] = '0';
-	  vtmp.push_back('0');
+    
+    /*
+     * Gestion des arguments
+     */
+    
+    /* Valeurs par défaut	*/
+    unsigned int nbGeneration = 10000;
+    unsigned int taillePop = 100;
+    string dataFile = "./data/mushroom.dat";
+    float evalSeuilF = 0.6;
+    float initSeuilF = 0.5;
+    float probaM = 0.005;
+    float probaC = 0.8;
+    unsigned int nbPivots = 2;
+    
+    
+    Mutator* mut = NULL;
+    Cross* cross = NULL;
+    Evaluate* eval = NULL;
+    InitPop* pop = NULL;
+
+    
+    static int mut_flag = 0;
+    static int cross_flag =0;
+    static int eval_flag = 0;
+    static int pop_flag = 0;
+    
+    while(1){
+	int opt;
+	
+	/* long_options structure */
+	static struct option long_options[] = {
+	    /* flags, (i.e pas de version courte)	*/
+	    
+	    // Mutateurs
+	    {"randMut", no_argument, &mut_flag, 0},
+	    
+	    // Croisements
+	    {"monoPCross", no_argument, &cross_flag, 0},
+	    {"multiPCross", required_argument,&cross_flag, 1},
+	    {"uCross", no_argument, &cross_flag, 2},
+	    
+	    // Evaluations
+	    {"freqEval", no_argument, &eval_flag, 0},
+	    {"closeEval", required_argument, &eval_flag, 1},
+	    
+	    // InitPop
+	    {"randPop", no_argument, &pop_flag, 0},
+	    {"freqPop", required_argument, &pop_flag, 1},
+	    {"irandPop", no_argument, &pop_flag, 2},
+	    
+	    
+	    /* Options avec versions courtes */
+	    {"sizePop", required_argument, 0, 'n'},
+	    {"datafile", required_argument, 0, 'd'},
+	    {"nbGen", required_argument, 0, 'g'},
+	    {"probaC", required_argument, 0, 'c'},
+	    {"probaM", required_argument, 0, 'm'},
+	   
+	  
+	    {0,0,0,0}
+	};
+      
+	// getopt_long récupère l'option ici
+	int option_index = 0;
+	
+	opt = getopt_long(argc,argv, "n:d:g:c:m:", long_options, &option_index);
+      
+	if( opt == -1) // Fin des options
+	    break;
+	
+	switch(opt){
+	  
+	    // Gestion des flags
+	    case 0:
+		if( long_options[option_index].flag == &cross_flag &&
+		    string(long_options[option_index].name).compare("multiPCross") == 0){
+		  
+		    nbPivots = atoi(optarg);
+		    break;
+		}
+		else if( long_options[option_index].flag == &eval_flag &&
+			 string(long_options[option_index].name).compare("closeEval") == 0){
+		      
+		    evalSeuilF = atof(optarg);
+		    break;
+		}
+		else if( long_options[option_index].flag == &pop_flag &&
+			 string(long_options[option_index].name).compare("freqPop") == 0){
+		    initSeuilF = atof(optarg);
+		    break;
+		}
+		
+	  
+	    case 'n':
+		taillePop = atoi(optarg);
+		break;
+	    case 'd':
+		dataFile = string(optarg);
+		break;
+	    case 'g':
+		nbGeneration = atoi(optarg);
+		break;
+	    case 'c':
+		probaC = atof(optarg);
+		break;
+	    case 'm':
+		probaM = atof(optarg);
+		break;
+	      
 	}
-    }	
-    char* tmp2 = new char[15];
-
-    for(int i=0; i < 15; ++i){
-	alea = rand() % 100;
-	if( alea < 50){
-	  vtmp2.push_back('1');
-	  tmp2[i] = '1';
-	}else{
-	  tmp2[i] = '0';
-	  vtmp2.push_back('0');
-	}
-    }    
+      
+    }
+    
+    // TODO à voir
+    DataSetC* dataC = new DataSetC();
+    dataC->loadFile(dataFile);    
+    switch(mut_flag){
+	case 0:
+	    mut = new RandomMutator();
+	    break;      
+    }
+    
+    switch(cross_flag){
+	case 0:
+	    cross = new ClassicCross(0);
+	    break;
+	case 1:
+	    cross = new MultiPointCross(NULL,nbPivots);
+	    break;
+	case 2:
+	    cross = new UniformCross();
+	    break;
+    }
+    
+    switch(eval_flag){
+	case 0:
+	    eval = new FreqEval();
+	    break;
+	case 1:
+	    eval = new CloseEval(evalSeuilF);
+	    break;      
+    }
+    
+    switch(pop_flag){
+	case 0:
+	    pop = new RandomPop(dataC->getNbCol());
+	    break;
+	case 1:
+	    pop = new FreqPop(initSeuilF,dataC);
+	    break;
+	case 2:
+	    cout << "TODO add declaration" << endl;
+	    break;      
+    }
     
     
-    cout << "Itemset via vector" << endl;
-    cout << "Allocation statique" << endl;
-    ItemSet it(vtmp);
-    ItemSet it2(vtmp2);
-    cout << it << it2;
-    
-    cout << "Alloccation dynamique" << endl;
-    ItemSet* dit = new ItemSet(vtmp);
-    ItemSet* dit2= new ItemSet(vtmp2);
-    cout << "======DIT======"<< endl <<  *dit	
-         << "======DIT2=====" << endl<< *dit2;
-	 
-    cout << "ItemsetC via char*" << endl;
-    cout << "Allocation statique" << endl;
-    ItemSetC itc(tmp,15);
-    ItemSetC itc2(tmp2,15);
-    cout << itc << itc2;
-
-    cout << "Allocation dynamique" << endl;
-    ItemSetC *ditc = new ItemSetC(tmp,15);
-    ItemSetC *ditc2 = new ItemSetC(tmp2,15);
-    cout << "======DITC======"<< endl <<  *ditc
-         << "======DITC2=====" << endl<< *ditc2;
-    
-    cout << "====================================" << endl;
-    cout << "Tests sur methodes de croisement." << endl;
-    size_t pivot = 7;
-    ClassicCross* tcross = new ClassicCross(pivot);
-
-    ItemSetC* child = tcross->execute(ditc,ditc2);
-    cout << "Enfant du cross classique de ditc, ditc2" << endl;
-    cout << *child;
-
-    ItemSet* child2 = tcross->execute(dit, dit2);
-    cout << "Enfant du cross classique de dit, dit2" << endl;
-    cout << *child2;
-    
-    size_t* pivots = new size_t[3];
-    for(unsigned i=0; i < 3; ++i)
-      pivots[i] = (i+1)*4;
-    
-    cout << "Jusqu'ici tout va bien" << endl;
-    
-    MultiPointCross* mpcross = new MultiPointCross(pivots,3);
-    
-    ItemSetC* child3 = mpcross->execute(ditc,ditc2);
-    cout << "Enfant du cross multipoint de ditc, ditc2" << endl;
-    cout << *child3;
-    
-    ItemSet* child4 = mpcross->execute(dit,dit2);
-    cout << "Enfant du cross multipoint de dit, dit2" << endl;
-    cout << *child4;
+    GeneticAlgoC* genC = new GeneticAlgoC(taillePop,nbGeneration,evalSeuilF,mut,cross,eval,pop);
     
     
-    UniformCross* ucross = new UniformCross();
-    ItemSetC* child5 = ucross->execute(ditc,ditc2);
-    cout << "Enfant du cross uniforme sur ditc, ditc2" << endl;
-    cout << *child5;
-    
-    ItemSet* child6 = ucross->execute(dit,dit2);
-    cout << "Enfant du cross uniforme sur dit, dit2" << endl;
-    cout << *child6;
-    
-    delete tcross; delete ucross; delete mpcross;
-    delete child; delete child2; delete child3; delete child4; 
-    delete child5; delete child6;
-    delete dit; delete dit2; delete ditc; delete ditc2;
-    delete[] tmp; delete[] tmp2; delete[] pivots;
+   /* genC->setData(dataC);
+    genC->run();    
+    genC->displayPopulation();
+   */ 
+    delete mut; 
+    delete cross;
+    delete eval; 
+    delete pop;   
+    delete dataC;
+    delete genC;
     
     
-    */
   return 0;
 }
