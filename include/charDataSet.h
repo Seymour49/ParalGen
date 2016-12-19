@@ -89,7 +89,7 @@ public:
  * @return un pointeur sur un vecteur contenant chaque mot de str
  * @author Ugo Rayer
  */
-std::vector< std::string > explode(const std::string& str);
+std::vector< std::string > explode2(const std::string& str);
 
 
 #endif

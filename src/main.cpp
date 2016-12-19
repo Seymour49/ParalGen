@@ -32,7 +32,7 @@ int main(int argc, char **argv)
   
     /* * * * * * TEST CHARDATASET ET CHARDATASETO * * * * */
     
-//   CharDataSet monDataSet, monDataSet2(10, 10), monDataSet3(monDataSet2), monDataSet4;
+//   CharDataSetO monDataSet, monDataSet2(10, 10), monDataSet3(monDataSet2), monDataSet4;
 //   
 //   cout << monDataSet << endl;
 //   
@@ -40,11 +40,15 @@ int main(int argc, char **argv)
 //   
 //   cout << monDataSet3 << endl;
 //   
-//   monDataSet.loadFile("./data/test.dat");
+//   try {
+//     monDataSet.loadFile("./data/testCloture.dat");
+//   } catch (string exception) {
+//     cerr << exception << endl;
+//   }
 //   
 //   monDataSet4 = monDataSet;
 //   
-//   cout << monDataSet4 << endl;
+//   cout << monDataSet << endl;
 
   /* * * * * * TEST ITEMSET ET ITEMSETO * * * * */
   
@@ -126,28 +130,31 @@ int main(int argc, char **argv)
 
   /* * * * * * TEST CLOSEEVAL * * * * */
   
-//   CharDataSetO monDataSetO;
-//   CharDataSet monDataSet;
-//   
-//   monDataSet.loadFile("./data/mushroom.dat");
-//   monDataSetO.loadFile("./data/mushroom.dat");
-//   
-//   CloseEval monEval(0.15, &monDataSet);
-//   
-//   vector<char> v(119, '0');
-//   v[0] = '1';
-//   
-//   ItemSet<char> monItemSet(v);
-//   
-//   try {
-//     cout << monItemSet << endl;
-//     
-//     monEval.execute( monItemSet);
-//     
-//     cout << monItemSet << endl;
-//   } catch (string exception) {
-//     cerr << exception << endl;
-//   }
+  CharDataSetO monDataSetO;
+  CharDataSet monDataSet;
+  
+  monDataSet.loadFile("./data/testCloture.dat");
+  monDataSetO.loadFile("./data/testCloture.dat");
+  
+  CloseEval monEval(0.34, &monDataSet);
+//   FreqEval monEval(&monDataSet);
+  vector<char> v(4, '0');
+  v[0] = '1';
+  v[1] = '0';
+  v[2] = '0';
+  v[3] = '0';
+  
+  ItemSet<char> monItemSet(v);
+  
+  try {
+    cout << monItemSet << endl;
+    
+    monEval.execute( monItemSet);
+    
+    cout << monItemSet << endl;
+  } catch (string exception) {
+    cerr << exception << endl;
+  }
   
 
   /* * * * * * TEST FREQPOP * * * * */
@@ -425,79 +432,79 @@ int main(int argc, char **argv)
   
   //UniformCross<char> monCross;
   //ClassicCross<char> monCross(30);
-  vector <unsigned int > v1;
-  v1.push_back(10); v1.push_back(50); v1.push_back(75);
-  MultiPointCross<char> monCross(v1);
-  
-  CharDataSetO monDataSetO;
-  CharDataSet monDataSet;
-  
-  monDataSet.loadFile("./data/mushroom.dat");
-  monDataSetO.loadFile("./data/mushroom.dat");
-  
-  FreqPop maPop(&monDataSet, &monDataSetO);
-  //RandomPop maPop(monDataSet.getNbCol());
-  
-  vector<char> v;
-  v.push_back('0');
-  v.push_back('1');
-  RandomMutator<char> monMutator(v);
-  
-  ItemSetO<char> monItem;
-  
-  FreqEval monEval(&monDataSet, &monDataSetO);
-  
-  RandomSelect<char> monSelect;
-  
-  FitnessIDPolicy<char> monInsert;
-  
-  GeneticAlgo<char> monAlgoGen((Individual<char> *)&monItem, (Mutator<char> *)&monMutator, (Cross<char> *)&monCross, (Evaluate<char> *)&monEval ,(InitPop<char> *)&maPop, (SelectPolicy<char> *)&monSelect, (IndelPolicy<char> *)&monInsert, 5);
-  
-  try {
-    
-    cout << endl << endl << "PHASE 1" << endl << endl;
-    
-    cout << "TAILLE = " << monAlgoGen.getTaillePop() << endl;
-    
-    cout << "NB ITÉRATION = " << monAlgoGen.getNbIteration() << endl;
-    
-    monAlgoGen.displayPopulation();
-  
-    cout << endl << endl << "PHASE 2" << endl << endl;
-    
-    monAlgoGen.populate();
-        
-    monAlgoGen.displayPopulation();
-    
-    cout << endl << endl << "PHASE 3" << endl << endl;
-    
-    monAlgoGen.evalPop();
-    
-    monAlgoGen.displayPopulation();
-    
-    cout << endl << endl << "PHASE 4" << endl << endl;
-    
-    monAlgoGen.doCrossFor(0,1,2);
-    
-    monAlgoGen.displayPopulation();
-    
-    cout << endl << endl << "PHASE 5" << endl << endl;
-    
-    monAlgoGen.doMutationFor(0);
-    
-    monAlgoGen.displayPopulation();
-    
-    cout << endl << endl << "PHASE 6" << endl << endl;
-    
-    monAlgoGen.incAgePop();
-    
-    monAlgoGen.displayPopulation();
-    
-  } catch (string exception) {
-    
-    cerr << exception << endl;
-    
-  }
+//   vector <unsigned int > v1;
+//   v1.push_back(10); v1.push_back(50); v1.push_back(75);
+//   MultiPointCross<char> monCross(v1);
+//   
+//   CharDataSetO monDataSetO;
+//   CharDataSet monDataSet;
+//   
+//   monDataSet.loadFile("./data/mushroom.dat");
+//   monDataSetO.loadFile("./data/mushroom.dat");
+//   
+//   FreqPop maPop(&monDataSet, &monDataSetO);
+//   //RandomPop maPop(monDataSet.getNbCol());
+//   
+//   vector<char> v;
+//   v.push_back('0');
+//   v.push_back('1');
+//   RandomMutator<char> monMutator(v);
+//   
+//   ItemSetO<char> monItem;
+//   
+//   FreqEval monEval(&monDataSet, &monDataSetO);
+//   
+//   RandomSelect<char> monSelect;
+//   
+//   FitnessIDPolicy<char> monInsert;
+//   
+//   GeneticAlgo<char> monAlgoGen((Individual<char> *)&monItem, (Mutator<char> *)&monMutator, (Cross<char> *)&monCross, (Evaluate<char> *)&monEval ,(InitPop<char> *)&maPop, (SelectPolicy<char> *)&monSelect, (IndelPolicy<char> *)&monInsert, 5);
+//   
+//   try {
+//     
+//     cout << endl << endl << "PHASE 1" << endl << endl;
+//     
+//     cout << "TAILLE = " << monAlgoGen.getTaillePop() << endl;
+//     
+//     cout << "NB ITÉRATION = " << monAlgoGen.getNbIteration() << endl;
+//     
+//     monAlgoGen.displayPopulation();
+//   
+//     cout << endl << endl << "PHASE 2" << endl << endl;
+//     
+//     monAlgoGen.populate();
+//         
+//     monAlgoGen.displayPopulation();
+//     
+//     cout << endl << endl << "PHASE 3" << endl << endl;
+//     
+//     monAlgoGen.evalPop();
+//     
+//     monAlgoGen.displayPopulation();
+//     
+//     cout << endl << endl << "PHASE 4" << endl << endl;
+//     
+//     monAlgoGen.doCrossFor(0,1,2);
+//     
+//     monAlgoGen.displayPopulation();
+//     
+//     cout << endl << endl << "PHASE 5" << endl << endl;
+//     
+//     monAlgoGen.doMutationFor(0);
+//     
+//     monAlgoGen.displayPopulation();
+//     
+//     cout << endl << endl << "PHASE 6" << endl << endl;
+//     
+//     monAlgoGen.incAgePop();
+//     
+//     monAlgoGen.displayPopulation();
+//     
+//   } catch (string exception) {
+//     
+//     cerr << exception << endl;
+//     
+//   }
   
   return EXIT_SUCCESS;
 }

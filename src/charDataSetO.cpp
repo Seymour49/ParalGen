@@ -29,19 +29,82 @@ CharDataSetO::CharDataSetO(const CharDataSetO& data): DataSetO< char >(data)
 void CharDataSetO::loadFile(const string& fileName)
 {
   
-  if ((_nbLine == 0)&&(_nbCol == 0)) {
-    ifstream f(fileName.c_str());
-    vector< vector<int> > matrice;
+  if ((_nbLine != 0)||(_nbCol != 0)) {
+    for (unsigned int i = 0; i < _nbLine; ++i) delete []_data[i];
+    delete [] _data;
+  }
     
-    if(!f){
-      throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
+  ifstream f(fileName.c_str());
+  
+  if(!f) throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
+  else {
+    
+    string line;
+    bool isCSV = true;
+    vector<string> tokens;
+    bool firstLineRead = false;
+    
+    // On lit la première ligne du fichier et si elle n'est composé que de '0' et de '1' on applique le traitement d'un fichier csv
+    
+    while (!firstLineRead) { // Tant qu'on lit des lignes vides on continue
+      getline(f, line);
+    
+      if (!line.empty()) {
+	tokens = explode(line);
+	// Traitement
+	for (unsigned int i = 0; (i < tokens.size())&&(isCSV); ++i){
+	  if (tokens[i].size() != 1) isCSV = false;
+	  else if ((tokens[i][0] != '0') && (tokens[i][0] != '1')) isCSV = false;
+	}
+	firstLineRead = true;
+      }
     }
-    else {
-      string line;
-      while(getline(f,line)){
+    
+    if (isCSV) { // Lecture de matrice composé exclusivement de '0' et de '1'
+      vector <char> tmp;
+      vector< vector<char> > matrice;
+      unsigned int nbCol;
+      for (unsigned int i = 0; i < tokens.size(); ++i) {
+	if (tokens[i].size() != 1) throw string("Erreur, format du jeu de donnée à lire non conforme !");
+	else tmp.push_back(tokens[i][0]);
+      }
+      matrice.push_back(tmp);
+      nbCol = tmp.size();
+      while (getline(f,line)){
+	if (!line.empty()) {
+	  tmp.clear();
+	  tokens = explode(line);
+	  for (unsigned int i = 0; i < tokens.size(); ++i) {
+	    if (tokens[i].size() != 1) throw string("Erreur, format de jeu de donnée à lire non conforme !");
+	    else {
+	      tmp.push_back(tokens[i][0]);
+	    }
+	  }
+	  if (tmp.size() != nbCol) throw string("Erreur, format de jeu de donnée à lire non conforme !");
+	  else matrice.push_back(tmp);
+	}
+      }
+      _nbCol = nbCol;
+      _nbLine = matrice.size();
+
+      _data = new char *[_nbLine];
+      for (unsigned int i = 0; i < _nbLine; ++i) {
+	_data[i] = new char[_nbCol];
+	for (unsigned int j = 0; j < _nbCol; ++j) _data[i][j] = matrice[i][j];
+      }
+    }
+    else { // Lecture d'un fichier basique de transaction
+      vector< vector<int> > matrice;
+      vector<int> row;
+      for (unsigned int i = 0; i < tokens.size(); ++i){
+	row.push_back(atoi(tokens[i].c_str()));
+      }
+      matrice.push_back(row);
+      
+      while (getline(f,line)){
 	if (!line.empty()) {
 	  vector<string> tokens = explode(line);
-	  vector<int> row;
+	  row.clear();
 	  // Traitement
 	  for (unsigned int i = 0; i < tokens.size(); ++i){
 	    row.push_back(atoi(tokens[i].c_str()));
@@ -49,16 +112,16 @@ void CharDataSetO::loadFile(const string& fileName)
 	  matrice.push_back(row);
 	}
       }
-      int Cols = 0;
-      int Rows = matrice.size();
+      unsigned int Cols = 0;
+      unsigned int Rows = matrice.size();
       int start_index = 1; // indice du premier item
-      for (int i = 0; i < Rows; ++i){ // Recherche du nombre maximum d'item et de l'indice du premier item
-	if (matrice[i].back() > Cols) Cols = matrice[i].back();
+      for (unsigned int i = 0; i < Rows; ++i){ // Recherche du nombre maximum d'item et de l'indice du premier item
+	if (matrice[i].back() > (int)Cols) Cols = matrice[i].back();
 	if (matrice[i].front() < start_index) start_index = matrice[i].front();
       }
       
-      _nbLine = (unsigned int) Rows;
-      _nbCol = (unsigned int) Cols;
+      _nbLine = Rows;
+      _nbCol = Cols;
       
       _data = new char*[_nbLine];
       for (unsigned int i = 0; i < _nbLine; ++i) {
@@ -71,11 +134,9 @@ void CharDataSetO::loadFile(const string& fileName)
 	  _data[i][matrice[i][it]-start_index] = '1';
 	}
       }
-      
     }
-    f.close();
-  } 
-  else throw string("Impossible de charger plusieurs fois les données d'un fichier sur un même CharDataSetO !");
+  }
+  f.close();
 }
 
 

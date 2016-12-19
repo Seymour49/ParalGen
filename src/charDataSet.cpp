@@ -26,28 +26,81 @@ CharDataSet::CharDataSet(const CharDataSet& data): DataSet< char >(data)
 
 void CharDataSet::loadFile(const string& fileName)
 {
-  if ((_nbLine == 0)&&(_nbCol == 0)) {
-    ifstream f(fileName.c_str());
-    vector< vector<int> > matrice;
+  if ((_nbLine != 0)||(_nbCol != 0)) {
+    for (unsigned int i = 0; i < this->size(); ++i) this->at(i).clear();
+    this->clear();
+  }
     
-    if(!f){	    
-      throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
-    }
-    else {
-      
-      // Test pour savoir s'il s'agit d'un fichier csv ou non
-      
-      string line;
-      
-      // On lit la première ligne du fichier et si elle n'est composé que de '0' et de '1'
-      // On applique le traitement d'un fichier csv
-      
+  ifstream f(fileName.c_str());
+  
+  if(!f) throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
+  else {
+    
+    // Test pour savoir s'il s'agit d'un fichier csv ou non
+    
+    string line;
+    bool isCSV = true;
+    vector<string> tokens;
+    bool firstLineRead = false;
+    
+    // On lit la première ligne du fichier et si elle n'est composé que de '0' et de '1' on applique le traitement d'un fichier csv
+    
+    while (!firstLineRead) { // Tant qu'on lit des lignes vides on continue
       getline(f, line);
+    
+      if (!line.empty()) {
+	tokens = explode2(line);
+	// Traitement
+	for (unsigned int i = 0; (i < tokens.size())&&(isCSV); ++i){
+	  if (tokens[i].size() != 1) {
+	    isCSV = false;
+	  }
+	  else if ((tokens[i][0] != '0') && (tokens[i][0] != '1')){
+	    isCSV = false;
+	  }
+	}
+	firstLineRead = true;
+      }
+    }
+    
+    
+    if (isCSV) { // Lecture de matrice composé exclusivement de '0' et de '1'
+      vector <char> tmp;
+      for (unsigned int i = 0; i < tokens.size(); ++i) {
+	if (tokens[i].size() != 1) throw string("Erreur, format du jeu de donnée à lire non conforme !");
+	else tmp.push_back(tokens[i][0]);
+      }
+      this->push_back(tmp);
+      while (getline(f,line)){
+	if (!line.empty()) {
+	  tmp.clear();
+	  tokens = explode2(line);
+	  for (unsigned int i = 0; i < tokens.size(); ++i) {
+	    if (tokens[i].size() != 1) throw string("Erreur, format de jeu de donnée à lire non conforme !");
+	    else {
+	      tmp.push_back(tokens[i][0]);
+	    }
+	  }
+	  this->push_back(tmp);
+	}
+      }
+      
+      _nbLine = this->size();
+      if (_nbLine != 0) _nbCol = this->at(0).size();
+      else _nbCol = 0;
+    }
+    else { // Lecture d'un fichier basique de transaction
+      vector< vector<int> > matrice;
+      vector<int> row;
+      for (unsigned int i = 0; i < tokens.size(); ++i){
+	row.push_back(atoi(tokens[i].c_str()));
+      }
+      matrice.push_back(row);
       
       while (getline(f,line)){
 	if (!line.empty()) {
-	  vector<string> tokens = explode2(line);
-	  vector<int> row;
+	  tokens = explode2(line);
+	  row.clear();
 	  // Traitement
 	  for (unsigned int i = 0; i < tokens.size(); ++i){
 	    row.push_back(atoi(tokens[i].c_str()));
@@ -69,13 +122,13 @@ void CharDataSet::loadFile(const string& fileName)
       for (int i = 0; i < Rows; ++i){
 	this->at(i).assign(_nbCol, '0');
 	for (unsigned int it = 0; it < matrice[i].size(); ++it) {
-	  this->at(i).at(matrice[i][it]-start_index) = '1';
+	  this->at(i).at(matrice[i][it] - start_index) = '1';
 	}
       }
     }
-    f.close();
   }
-  else throw string("Impossible de charger plusieurs fois les données d'un fichier sur un même CharDataSet !"); 
+  
+  f.close();
 }
 
 
@@ -98,7 +151,7 @@ CharDataSet& CharDataSet::operator=(const CharDataSet& c)
 }
 
 
-vector< string > explode(const string& str)
+vector< string > explode2(const string& str)
 {
   istringstream split(str);
   vector< string > tokens;
