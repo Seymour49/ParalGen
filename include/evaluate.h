@@ -2,10 +2,7 @@
 #define EVALUATE_H
 
 #include <iostream>
-#include "itemSet.h"
-#include "itemSetC.h"
-#include "dataSet.h"
-#include "dataSetC.h"
+#include "individual.h"
 
 /**
  * Cette classe abstraite est la base du design-pattern Strategy appliqué à 
@@ -17,6 +14,7 @@
  * 
  */
 
+template <typename T>
 class Evaluate {
 
 public:
@@ -31,22 +29,13 @@ public:
    * * * * * */
   
 /**
- * Méthode évaluant un individu de type itemSet vis à vis d'un jeu de 
- * données de même type passés en paramètres.
- * @param ItemSet* individu à évaluer
- * @param DataSet* jeu de données
- * @author Ugo Rayer
+ * Méthode évaluant un individu 
+ * Modifie l'attribut score d'un individu
+ * @param ind: individu à évaluer
+ * @author Ugo Rayer, Johan Defaye
  */
-  virtual void execute(ItemSet* ind, DataSet* data) = 0;
+  virtual void execute(Individual<T> & ind) = 0;
 
-/**
- * Méthode évaluant un individu de type itemSetC vis à vis d'un jeu de 
- * données de même type passés en paramètres.
- * @param ItemSetC* individu à évaluer
- * @param DataSetC* jeu de données
- * @author Ugo Rayer
- */
-  virtual void execute(ItemSetC* ind, DataSetC* data) = 0;
     
 };
 

@@ -4,19 +4,14 @@
 #include <iostream>
 #include "cross.h"
 
-/* Inclusion des différentes structures de données pour lesquelles la
- * méthode execute()
- */
-#include "itemSet.h"
-#include "itemSetC.h"
-
 /**
  * Croisement uniforme entre deux individus. Chaque bit de l'enfant à 50%
  * de chances de provenir du parent1 ou du parent 2.
  * @author Ugo 
  */
 
-class UniformCross : public Cross {
+template <typename T>
+class UniformCross : public Cross<T> {
 public:
   
   /* * * * * * * *
@@ -24,46 +19,48 @@ public:
    * * * * * * * */
   
 /**
- * Constructeur par défaut et unique.
+ * Constructeur par défaut
  * @author Ugo Rayer
  */
-  UniformCross();
+  UniformCross() {}
   
-  /* * * * * * * *
-   * DESTRUCTOR  *
-   * * * * * * * */
+  
 /**
- * Redéfinition du destructeur virtuel
+ * Constructeur par recopie
+ * @author Ugo Rayer
  */
-  ~UniformCross();
+  UniformCross(const UniformCross<T> & u) {}
+
   
   /* * * * * *
    * METHODS *
    * * * * * */
   
-/**
- * Croisement uniforme entre deux individus de type ItemSet via vector.
- * Renvoie une erreur si :
- * - Parent null
- * - Parents de taille différentes
- * @param ItemSet parent1
- * @param ItemSet parent2
- * @return ItemSet enfant
- * @author Ugo Rayer, Johan Defaye
- */  
-  ItemSet* execute(ItemSet* p1, ItemSet* p2);
   
 /**
- * Croisement uniforme entre deux individus de type ItemSetC via char*.
+ * Croisement multipoint entre deux individus de type Individual<T>
  * Renvoie une erreur si :
- * - Parent null
+ * - Un des parent vide
+ * - Pivot trop grand (TODO voir utilisation de modulo(p1.size())
  * - Parents de taille différentes
- * @param ItemSetC parent1
- * @param ItemSetC parent2
- * @return ItemSetC enfant
+ * @param parent1 : parent1
+ * @param parent2 : parent2
+ * @param efant : Enfant résultant du croisement de parent1 et parent2
  * @author Ugo Rayer, Johan Defaye
- */  
-  ItemSetC* execute(ItemSetC* p1, ItemSetC* p2);
+ */
+  void execute(const Individual<T> & parent1, const Individual<T> & parent2, Individual<T> & enfant) {
+    if( parent1.size() == 0 || parent2.size() == 0) throw std::string("Erreur, un des individu parent est vide");
+    else if( parent1.size() != parent2.size() ) throw std::string("Erreur, individus parents de taille différente");
+    else {
+      enfant.resize(parent1.size());
+      int alea;
+      for(unsigned int i = 0; i < parent1.size(); ++i){
+	alea = rand()%2;
+	if (alea == 0) enfant[i] = parent1[i];
+	else enfant[i] = parent2[i];
+      }
+    } 
+  }
   
 };
 

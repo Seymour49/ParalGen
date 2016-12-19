@@ -3,8 +3,6 @@
 
 #include <iostream>
 #include "individual.h"
-#include "itemSet.h"
-#include "itemSetC.h"
 
 /**
  * Cette classe abstraite est la base du design-pattern Strategy appliqué
@@ -12,11 +10,10 @@
  * méthode virtuelle pure execute devant être redéfinie par les sous-classes 
  * représentant une implémentation de la méthode de croisement entre deux 
  * individus.
- * TODO Refactorisation lors de la mise en place du design-pattern Template
  * @author Ugo Rayer
  * 
  */
-
+template <typename T>
 class Cross {
   
 public:
@@ -30,19 +27,13 @@ public:
    * METHODS *
    * * * * * */
   
-  /**
-   * Méthode effectuant le croisement entre deux itemsets de classe
-   * ItemSet. Doit être redéfinie dans chaque sous-classes
-   * @author Ugo Rayer
-   */
-   virtual ItemSet* execute(ItemSet* p1, ItemSet* p2) = 0;
-      
+  
 /**
-  * Méthode effectuant le croisement entre deux itemsets de classe
-  * ItemSetC. Doit être redéfinie dans chaque sous-classes
-  * @author Ugo Rayer
-  */
-  virtual ItemSetC* execute(ItemSetC* p1, ItemSetC* p2) = 0;
+ * Méthode effectuant le croisement entre deux individus de classe Individual ou de ses classes filles. 
+ * Doit être redéfinie dans chaque sous-classe
+ * @author Johan Defaye
+ */
+  virtual void execute(const Individual<T> & parent1, const Individual<T> & parent2, Individual<T> & enfant) = 0;
   
 };
 

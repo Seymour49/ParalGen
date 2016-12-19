@@ -1,5 +1,5 @@
-#ifndef DATASET_H
-#define DATASET_H
+#ifndef DATASETO_H
+#define DATASETO_H
 
 #include <vector>
 #include <string>
@@ -10,27 +10,33 @@
 /**
  * Class abstraite représentant un tableau de donnée à deux dimension
  * Le tableau est stocké en tant que vecteur de vecteur
- * Chaque ligne représente une transaction et chaque colonne un item
  * @author Johan Defaye
  */
 template <typename T>
-class DataSet : public std::vector< std::vector< T > > {
+class DataSetO {
   
   
 protected:
   
   unsigned int _nbLine; // Nombre de ligne du tableau
   unsigned int _nbCol;  // Nombre de colonne du tableau
-  
+  T ** _data;
   
 public:
   
-  DataSet(unsigned int nbLine, unsigned int nbCol):_nbLine(nbLine), _nbCol(nbCol)
+  DataSetO(unsigned int nbLine, unsigned int nbCol):_nbLine(nbLine), _nbCol(nbCol)
   {}
   
-  DataSet(const DataSet<T> & d):std::vector<std::vector<T> >(d), _nbLine(d.getNbLine()), _nbCol(d.getNbCol())
-  {}
-  
+  DataSetO(const DataSetO<T> & d):_nbLine(d.getNbLine()), _nbCol(d.getNbCol())
+  {
+    _data = new T*[_nbLine];
+    for (unsigned int i = 0; i < _nbLine; ++i) {
+      _data[i] = new T[_nbCol];
+      for (unsigned int j = 0; j < _nbCol; ++j) {
+	_data[i][j] = d.getDataAt(i,j);
+      }
+    }
+  }
   
   /* * * * * * *
    * ACCESSORS *
@@ -57,10 +63,10 @@ public:
    * @param col : indice de colonne
    * @author Ugo Rayer
    */
-  const T& getDataAt(unsigned row, unsigned col) const 
+  T getDataAt(unsigned row, unsigned col) const 
   {
     if ((row < 0) || (row >= _nbLine) || (col < 0) || (col >= _nbCol)) throw std::string("Erreur, indice non conforme"); 
-    else return this->at(row).at(col);
+    else return _data[row][col];
   }
 
   
@@ -91,34 +97,60 @@ public:
   {
     for (unsigned int i = 0; i < _nbLine; ++i) {
       for (unsigned int j = 0; j < _nbCol; ++j) {
-	flux << this->at(i).at(j) << " ";
+	flux << _data[i][j] << " ";
       }
       flux << std::endl;
     }
   }
   
+/**
+  * Opérateur d'accès qui permet d'accéder à la ième ligne du tableau
+  * @param indice : Indice de la ligne à accéder
+  * @return Un tableau à une dimension repésentant une ligne du tableau à deux dimensions 
+  * @author Johan Defaye
+  */
+   T* operator[] (unsigned int indice)
+   {
+     return _data[indice];
+   }
+    
+/**
+  * Opérateur d'accès qui permet d'accéder à la ième ligne du tableau sans possibilité de la modifier
+  * @param indice : Indice de la ligne à accéder
+  * @return Un tableau à une dimension repésentant une ligne du tableau à deux dimensions 
+  * @author Johan Defaye
+  */
+  const T* operator[] (unsigned int indice) const
+  {
+    return _data[indice];
+  }
   
-  virtual DataSet<T>& operator=(const DataSet<T> & data)
+  
+  virtual DataSetO<T>& operator=(const DataSetO<T> & data)
   {
     _nbCol = data.getNbCol();
     _nbLine = data.getNbLine();
-    this->resize(_nbLine);
+    _data = new T*[_nbLine];
     for (unsigned int i = 0; i < _nbLine; ++i) {
-      this->at(i).resize(_nbCol);
+      _data[i] = new T[_nbCol];
       for (unsigned int j = 0; j < _nbCol; ++j) {
-	this->at(i).at(j) = data.getDataAt(i,j);
+	_data[i][j] = data[i][j];
       }
     }
     return *this;
   }
   
-  
   /* * * * * * * *
    * DESTRUCTOR  *
    * * * * * * * */
   
-  virtual ~DataSet()
-  {}
+  virtual ~DataSetO() 
+  {
+    for (unsigned int i = 0; i < _nbLine; ++i) {
+      delete [] (_data[i]);
+    }
+    if (_nbLine != 0) delete [] (_data);
+  }
   
 };
 
@@ -135,7 +167,7 @@ public:
  * @author Johan Defaye
  */
 template <typename T>
-std::ostream & operator<<(std::ostream & flux, const DataSet< T > & data)
+std::ostream & operator<<(std::ostream & flux, const DataSetO< T > & data)
 {
   data.print(flux);
   return flux;

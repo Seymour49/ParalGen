@@ -1,26 +1,14 @@
-#include "../include/dataSetC.h"
+#include "../include/charDataSetO.h"
 
 using namespace std;
 
 
-vector< string >& explode(const string& str)
-{
-  istringstream split(str);
-  vector< string >* tokens = new vector<string>;
-
-  for(string each; getline(split, each, ' '); tokens->push_back( each.c_str()) );
-
-  return *tokens;
-}
-
-
-
-DataSetC::DataSetC(): _nbLine(0), _nbCol(0)
+CharDataSetO::CharDataSetO(): DataSetO< char >(0,0)
 {}
 
 
 
-DataSetC::DataSetC(unsigned int nbTransaction, unsigned int nbItem): _nbLine(nbTransaction), _nbCol(nbItem)
+CharDataSetO::CharDataSetO(unsigned int nbTransaction, unsigned int nbItem): DataSetO< char >(nbTransaction,nbItem)
 {
   _data = new char*[_nbLine];
   for (unsigned int i = 0; i < _nbLine; ++i) {
@@ -33,51 +21,32 @@ DataSetC::DataSetC(unsigned int nbTransaction, unsigned int nbItem): _nbLine(nbT
 
 
 
-DataSetC::DataSetC(const DataSetC& data): _nbLine(data.getNbLine()), _nbCol(data.getNbCol())
-{
-  _data = new char*[_nbLine];
-  for (unsigned int i = 0; i < _nbLine; ++i) {
-    _data[i] = new char[_nbCol];
-    for (unsigned int j = 0; j < _nbCol; ++j) {
-      _data[i][j] = data.getData()[i][j];
-    }
-  }
-}
+CharDataSetO::CharDataSetO(const CharDataSetO& data): DataSetO< char >(data)
+{}
 
 
-void DataSetC::print(ostream& flux) const
-{
-  for (unsigned int i = 0; i < _nbLine; ++i) {
-    for (unsigned int j = 0; j < _nbCol; ++j) {
-      flux << _data[i][j] << " ";
-    }
-    flux << endl;
-  }
-}
 
-
-void DataSetC::loadFile(const string& fileName)
+void CharDataSetO::loadFile(const string& fileName)
 {
   
   if ((_nbLine == 0)&&(_nbCol == 0)) {
     ifstream f(fileName.c_str());
     vector< vector<int> > matrice;
     
-    if(!f){	    
+    if(!f){
       throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
     }
     else {
       string line;
       while(getline(f,line)){
 	if (!line.empty()) {
-	  vector<string>& tokens = explode(line);
+	  vector<string> tokens = explode(line);
 	  vector<int> row;
 	  // Traitement
 	  for (unsigned int i = 0; i < tokens.size(); ++i){
 	    row.push_back(atoi(tokens[i].c_str()));
 	  }
 	  matrice.push_back(row);
-	  delete(&tokens);
 	}
       }
       int Cols = 0;
@@ -87,15 +56,6 @@ void DataSetC::loadFile(const string& fileName)
 	if (matrice[i].back() > Cols) Cols = matrice[i].back();
 	if (matrice[i].front() < start_index) start_index = matrice[i].front();
       }
-      
-      /*
-      if (_data != NULL) {
-	for (unsigned int i = 0; i < _nbLine; ++i) {
-	  delete [] (_data[i]);
-	}
-	if (_nbLine != 0) delete [] (_data);
-      }
-      */
       
       _nbLine = (unsigned int) Rows;
       _nbCol = (unsigned int) Cols;
@@ -114,25 +74,48 @@ void DataSetC::loadFile(const string& fileName)
       
     }
     f.close();
-  } else {
-    cerr << "Impossible de charger plusieurs fois les données d'un fichier sur un même DataSetC !" << endl;
-  }
+  } 
+  else throw string("Impossible de charger plusieurs fois les données d'un fichier sur un même CharDataSetO !");
 }
 
 
-DataSetC::~DataSetC()
+CharDataSetO& CharDataSetO::operator=(const CharDataSetO& c)
 {
+  // Suppression des anciennes données
+  if (_nbLine != 0) {
+    if (_nbCol != 0) {
+      for (unsigned int i = 0; i < _nbLine; ++i) {
+	delete [] _data[i];
+      }
+    }
+    delete [] _data;
+  }
+  // Ajustement de la nouvelle taille
+  _nbLine = c.getNbLine();
+  _nbCol = c.getNbCol();
+  
+  // Copie des données
+  _data = new char*[_nbLine];
   for (unsigned int i = 0; i < _nbLine; ++i) {
-    delete [] (_data[i]);
+    
+    _data[i] = new char[_nbCol];
+    
+    for (unsigned int j = 0; j < _nbCol; ++j) {
+      _data[i][j] = c[i][j];
+    }
+    
   }
-  if (_nbLine != 0) delete [] (_data);
+  return *this;
 }
 
 
 
-
-ostream& operator<<(ostream& flux, const DataSetC& data)
+vector< string > explode(const string& str)
 {
-  data.print(flux);
-  return flux;
+  istringstream split(str);
+  vector< string > tokens;
+
+  for(string each; getline(split, each, ' '); tokens.push_back( each.c_str()) );
+
+  return tokens;
 }

@@ -4,8 +4,6 @@
 #include <iostream>
 
 #include "individual.h"
-#include "itemSet.h"
-#include "itemSetC.h"
 
 /**
  * Cette classe abstraite est la base du design-pattern Strategy appliqué
@@ -13,13 +11,15 @@
  * seule méthode virtuelle pure execute() devant être redéfinie par les sous-
  * classes de Mutator représentant une implémentation de la méthode de mutation
  * d'un individu.
- * TODO Refactorisation lors de la mise en place du design-pattern Template
  * @author Ugo Rayer
  * 
  */
-
+template <typename T>
 class Mutator {
 public:
+  
+  
+  
   
    /* * * * * * * *
    * DESTRUCTOR  *
@@ -32,20 +32,13 @@ public:
   
   /**
    * Méthode effectuant la mutation d'un individu passé en paramètre
-   * ItemSet. Doit être redéfinie dans chaque sous-classes
-   * @param ItemSet* individu à muter
-   * @author Ugo Rayer
+   * Doit être redéfinie dans chaque sous-classes
+   * @param ind : individu à muter
+   * @author Ugo Rayer, Johan Defaye
    */
-   virtual ItemSet* execute(ItemSet* p1) = 0;
+   virtual void execute(Individual<T> & ind) = 0;
+   
       
-  /**
-   * Méthode effectuant la mutation d'un individu passé en paramètre
-   * ItemSet. Doit être redéfinie dans chaque sous-classes
-   * @param ItemSetC* individu à muter
-   * @author Ugo Rayer
-  */
-  virtual ItemSetC* execute(ItemSetC* p1) = 0;
-  
 };
 
 #endif
