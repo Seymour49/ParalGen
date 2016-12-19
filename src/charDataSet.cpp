@@ -34,7 +34,16 @@ void CharDataSet::loadFile(const string& fileName)
       throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
     }
     else {
+      
+      // Test pour savoir s'il s'agit d'un fichier csv ou non
+      
       string line;
+      
+      // On lit la première ligne du fichier et si elle n'est composé que de '0' et de '1'
+      // On applique le traitement d'un fichier csv
+      
+      getline(f, line);
+      
       while (getline(f,line)){
 	if (!line.empty()) {
 	  vector<string> tokens = explode2(line);
@@ -89,8 +98,7 @@ CharDataSet& CharDataSet::operator=(const CharDataSet& c)
 }
 
 
-
-vector< string > explode2(const string& str)
+vector< string > explode(const string& str)
 {
   istringstream split(str);
   vector< string > tokens;

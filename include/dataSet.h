@@ -77,6 +77,7 @@ public:
   virtual void loadFile(const std::string & fileName) =0;
   
   
+  
   /* * * * * * * * * * * * *
    * OPERATOR OVERLOADING  *
    * * * * * * * * * * * * */
