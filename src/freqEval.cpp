@@ -28,7 +28,6 @@ FreqEval::FreqEval(const FreqEval& f)
 
 void FreqEval::execute(Individual< char >& ind)
 {
-    cout << "taille du jdd : " << _data1->getNbCol() << endl;
     if (_data1 == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé");
     else if (_data1->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide");
     else if( ind.size() != _data1->getNbCol() ) throw string("Erreur, le nombre d'item de l'individu est différent du nombre d'item du jeu de donnée");

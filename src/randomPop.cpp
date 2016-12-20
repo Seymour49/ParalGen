@@ -29,7 +29,13 @@ void RandomPop::execute(vector< Individual<char>* >& pop)
 	    (*pop[i])[j] = '1';
 	  else
 	    (*pop[i])[j] = '0';
-      }	
+      }
     }
   }
+}
+
+
+void RandomPop::executeO(std::vector< Individual< char >* >& pop)
+{
+    throw string("A implémenter");
 }

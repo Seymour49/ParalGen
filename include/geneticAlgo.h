@@ -161,8 +161,20 @@ public:
    */
   void populate()
   {
-      _initPop->execute(_population);
-       std::cout << "pop size : "<<_population.size() << std::endl;
+    try{
+      _initPop->executeO(_population);
+      
+    }
+    catch(std::string E1){
+	try{
+	  std::cerr << E1 << std::endl;
+	  _initPop->execute(_population);  
+
+	}
+	catch(std::string Excep){
+	    std::cerr << Excep << std::endl;
+	}
+    }
   }
   
   /**
@@ -171,9 +183,20 @@ public:
    */
   void evalPop()
   {
+    
     for (unsigned int i = 0; i < _population.size(); ++i) {
-      std::cout << "taille ind i" << i << " : " << _population[i]->size() << std::endl;
-      _eval->execute(*(_population[i]));
+      
+      try{      
+	  _eval->executeO(*(_population[i]));
+      }
+      catch(std::string E1){
+	  try{
+	      _eval->execute(*(_population[i]));
+	  }
+	  catch(std::string Excep){
+	      std::cerr << Excep << std::endl;
+	  }
+      }
     }
   }
   
@@ -191,7 +214,7 @@ public:
 	  
 	  // Evaluation de la population
 	  evalPop();
-	  
+	      
 	  // Début de la boucle centrale
 	  unsigned i=0;
 	  while( i < _nbIteration ){
@@ -247,8 +270,20 @@ public:
 	      delete tmp2;
 	      
 	      // Evaluation des offsprings
-	      _eval->execute(*os1);
-	      _eval->execute(*os2);
+	      
+	      try{
+		  _eval->executeO(*os1);
+		  _eval->executeO(*os2);
+	      }
+	      catch(std::string Ex1){
+		try{
+		    _eval->execute(*os1);
+		    _eval->execute(*os2);
+		}
+		catch(std::string Ex2){
+		    std::cerr << Ex1 << " then " << Ex2 << std::endl;
+		}
+	      }
 	      
 	      _insert->execute(*os1, _population);
 	      _insert->execute(*os2, _population);
@@ -257,9 +292,7 @@ public:
 	      delete os1;
 	      delete os2;
 	      incAgePop();
-// 	      displayPopulation();
-	      ++i;      
-	      
+	      ++i;      	      
 	  }
       }
       catch(std::string Exception){

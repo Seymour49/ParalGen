@@ -37,6 +37,8 @@ public:
    * @author Ugo Rayer
    */
    virtual void execute(std::vector<Individual<T>* > & pop) = 0;
+   
+   virtual void executeO(std::vector<Individual<T>* >&pop);
 
   
 };

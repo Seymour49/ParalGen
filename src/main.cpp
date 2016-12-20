@@ -47,12 +47,12 @@ int main(int argc, char **argv)
     
     /* Valeurs par défaut	*/
     unsigned int nbGeneration = 100;
-    unsigned int taillePop = 20;
+    unsigned int taillePop = 25;
     string dataFile = "./data/mushroom.dat";
-    float evalSeuilF = 0.6;
-    float initSeuilF = 0.5;
-    float probaM = 0.5;
-    float probaC = 0.5;
+    float evalSeuilF = 0;
+    float initSeuilF = 0.8;
+    float probaM = 1;
+    float probaC = 0;
     unsigned int nbPivots = 2;
     unsigned int participants = 4;
     
@@ -211,6 +211,7 @@ int main(int argc, char **argv)
 	    case 0:
 		data = new CharDataSetO();
 		data->loadFile(dataFile);
+		cout << "data profiling : cols : "<<data->getNbCol()<<" lines : " << data->getNbLine() << endl;
 		break;
 	
 	    case 1:
@@ -291,7 +292,9 @@ int main(int argc, char **argv)
 	}
 	
 	cout << "DEBUT RUN" << endl;
+	
 	algo->run();
+	algo->displayPopulation();
 	cout << "FIN RUN" << endl;
 	      	   
     }

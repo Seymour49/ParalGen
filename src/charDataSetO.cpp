@@ -124,7 +124,6 @@ void CharDataSetO::loadFile(const string& fileName)
       
       _nbLine = Rows;
       _nbCol = Cols;
-      
       _data = new char*[_nbLine];
       for (unsigned int i = 0; i < _nbLine; ++i) {
 	_data[i] = new char[_nbCol];
@@ -139,6 +138,7 @@ void CharDataSetO::loadFile(const string& fileName)
     }
   }
   f.close();
+   
 }
 
 

@@ -71,6 +71,9 @@ public:
     */
   void execute(std::vector<Individual<char>*> & pop);
   
+  
+  void executeO(std::vector<Individual<char>*> &pop);
+  
 };
 
 #endif
