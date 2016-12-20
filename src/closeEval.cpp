@@ -20,7 +20,7 @@ CloseEval::CloseEval(float freq, DataSet<char>* const data1, DataSetO<char>* con
 {}
 
 
-CloseEval::CloseEval(const CloseEval& c): _freq(c.getFrequence())
+CloseEval::CloseEval(const CloseEval& c): _freq(c.getFrequence()), _itemFreq(c.getItemFreq()), _itemFreqO(c.getItemFreqO())
 {
   *_data1 = *(c.getData());
   *_data2 = *(c.getDataO());
@@ -44,7 +44,7 @@ void CloseEval::execute(Individual< char >& ind)
       
 	newO = true;	    
 	for (unsigned int j = 0; ((j < nbCol)&&newO); ++j) {
-	    if( ((ind[j] == '1') && (_data1->getDataAt(i,j) == '0')) ){
+	    if( ((ind[j] != '0') && (_data1->getDataAt(i,j) == '0')) ){
 		newO = false;		    
 	    }
 	}
@@ -56,61 +56,59 @@ void CloseEval::execute(Individual< char >& ind)
     
     /* Calcul des items fréquents pour ne tester que les sur-ensembles
       * potentiellement fréquents
+      * Si le calcul a déjà été réalisé pour ce jeu de donnée, on passe à la suite
       */
-    vector<pair<int,float>> itemFreq;
-    for (unsigned int i = 0; i < nbCol; ++i) {
-      pair<int, float> tmp(i, 0.0);
-      
-      for (unsigned int j = 0; j < nbRow; ++j) {
-	    tmp.second += toDigit( _data1->getDataAt(j,i) );
-      }
-      
-      tmp.second = tmp.second /nbRow;
-      if( tmp.second > _freq ){
-	  itemFreq.push_back(tmp);
+    if (_itemFreq.empty()) {
+      for (unsigned int i = 0; i < nbCol; ++i) {
+	float tmp = 0.0;
+	
+	for (unsigned int j = 0; j < nbRow; ++j) {
+	      tmp += toDigit( _data1->getDataAt(j,i) );
+	}
+	
+	tmp = tmp /nbRow;
+	if( tmp > _freq ){
+	    _itemFreq.push_back(i);
+	}
       }
     }
       
     bool isClosed = true;
     float res = 0.0;
     // Tant qu'on a pas détecté de surensemble fréquent on continue
-    for (unsigned int i = 0; (i < itemFreq.size()&&isClosed); ++i) {
+    for (unsigned int i = 0; (i < _itemFreq.size()&&isClosed); ++i) {
       
-      // Si itemFreq[i] == 0 dans individu, on fixe à 1 dans un clone
+      // Si l'item de l'individu à tester à l'indice itemFreq[i] == 0 dans individu, on fixe à 1 dans un clone
       // et on évalue la fréquence
-      if( ind[itemFreq[i].first] == '0') {
+      if( ind[_itemFreq[i]] == '0') {
 
-	vector<char> v = ind.get();
-
-	for (unsigned int j = 0; j < v.size(); ++j) {
-	  if (v[j] == '0') v[j] = '1';
-	  else v[j] = '0';
-	}
+	ind[_itemFreq[i]] = '1';
 
 	bool occ;
 	for (unsigned int j = 0; j < nbRow; ++j) {
   
 	  occ = true;	    
 	  for (unsigned int k = 0; ((k < nbCol)&&occ); ++k) {
-	      if( ((v[k] == '1') && (_data1->getDataAt(j, k) == '0')) ) {
-		  occ = false;		    
-	      }
+	    if( ((ind[k] != '0') && (_data1->getDataAt(j, k) == '0')) ) {
+		occ = false;		    
+	    }
 	  }
 	  if (occ) ++res;
 	}
 	res = res / nbRow;
 	
-	// si res > seuil, nonClos, sinon on augmente i
+	// si res > seuil, nonClos
 	if ( res > _freq ){
 	    isClosed = false;
 	}
+	
+	ind[_itemFreq[i]] = '0';
       }
       
     }
-
     
-    if ( isClosed)
-      ind.setScore(result+1.0);
+    if ( isClosed) // Si clos on augmentre le score de 1
+      ind.setScore(result + 1.0);
     else
       ind.setScore(result);
   }
@@ -146,44 +144,39 @@ void CloseEval::executeO(Individual< char >& ind)
     
     /* Calcul des items fréquents pour ne tester que les sur-ensembles
       * potentiellement fréquents
+      * Si le calcul a déjà été réalisé pour ce jeu de donnée, on passe à la suite
       */
-    vector<pair<int,float>> itemFreq;
-    for (unsigned int i = 0; i < nbCol; ++i) {
-      pair<int, float> tmp(i, 0.0);
-      
-      for (unsigned int j = 0; j < nbRow; ++j) {
-	    tmp.second += toDigit( _data2->getDataAt(j,i) );
-      }
-      
-      tmp.second = tmp.second /nbRow;
-      
-      if( tmp.second > _freq ){
-	  itemFreq.push_back(tmp);
+    
+    if (_itemFreqO.empty()) {
+      for (unsigned int i = 0; i < nbCol; ++i) {
+	float tmp = 0.0;
+	
+	for (unsigned int j = 0; j < nbRow; ++j) {
+	      tmp += toDigit( _data2->getDataAt(j,i) );
+	}
+	
+	tmp = tmp /nbRow;
+	
+	if( tmp > _freq ){
+	    _itemFreqO.push_back(i);
+	}
       }
     }
-      
-      
+
     bool isClosed = true;
     float res = 0.0;
     // Tant qu'on a pas détecté de surensemble fréquent on continue
-    for (unsigned int i = 0; (i < itemFreq.size()&&isClosed); ++i) {
-      
-      // Si itemFreq[i] == 0 dans individu, on fixe à 1 dans un clone
-      // et on évalue la fréquence
-      if( ind[itemFreq[i].first] == '0') {
+    for (unsigned int i = 0; (i < _itemFreqO.size()&&isClosed); ++i) {
+      // Si itemFreq[i] == 0 dans individu, on fixe à 1 et on évalue la fréquence
+      if (ind[_itemFreqO[i]] == '0') {
 	
-	vector<char> v = ind.get();
-	for (unsigned int j = 0; j < v.size(); ++j) {
-	  if (v[j] == '0') v[j] = '1';
-	  else v[j] = '0';
-	}
-	
+	ind[_itemFreqO[i]] = '1';
 	bool occ;
 	for (unsigned int j = 0; j < nbRow; ++j) {
   
 	  occ = true;	    
 	  for (unsigned int k = 0; ((k<nbCol)&&occ); ++k) {
-	      if( ((v[k] == '1') && (_data2->getDataAt(j, k) == '0')) ) {
+	      if( ((ind[k] != '0') && (_data2->getDataAt(j, k) == '0')) ) {
 		  occ = false;		    
 	      }
 	  }
@@ -191,16 +184,18 @@ void CloseEval::executeO(Individual< char >& ind)
 	}
 	res = res / nbRow;
 	
-	// si res > seuil, nonClos, sinon on augmente i
+	// si res > seuil, nonClos
 	if ( res > _freq ){
 	    isClosed = false;
 	}
+	ind[_itemFreqO[i]] = '0';
+	
       }
-      
     }
-    
-    if ( isClosed)
-      ind.setScore(result+1.0);
+        
+    if ( isClosed) {
+      ind.setScore(result + 1.0); // Si clos on augmentre le score de 1
+    }
     else
       ind.setScore(result);
   }
