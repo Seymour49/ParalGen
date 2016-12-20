@@ -25,7 +25,7 @@
 #include "../include/randomSelect.h"
 #include "../include/closeEval.h"
 
-#define DEBUG 0
+#define DEBUG_PARAM 1
 
 using namespace std;
 
@@ -51,13 +51,43 @@ int main(int argc, char **argv)
     unsigned int nbGeneration = 100;
     unsigned int taillePop = 25;
     string dataFile = "./data/mushroom.dat";
-    float evalSeuilF = 0;
-    float initSeuilF = 0.8;
-    float probaM = 1;
-    float probaC = 0;
+    float evalSeuilF = 0.6;
+    float initSeuilF = 0.3;
+    float probaM = 0.5;
+    float probaC = 0.5;
     unsigned int nbPivots = 2;
     unsigned int participants = 4;
     
+    
+#if DEBUG_PARAM
+  cout 	<< "==================================="<< endl
+	<< "======= Valeurs par défaut ========"<< endl
+	<< "==================================="<< endl
+	<< "Taille pop : " << taillePop << endl
+	<< "Generation : " << nbGeneration << endl
+	<< "Data : " << dataFile << endl 
+	<< "Eval Seuil : " << evalSeuilF << endl 
+	<< "Init Seuil : " << initSeuilF << endl 
+	<< "Proba Mut : " << probaM << endl 
+	<< "Proba Cross : " << probaC << endl 
+	<< "nbPivots MPC : " << nbPivots << endl 
+	<< "nbPart tournoi : " << participants << endl;
+	
+  cout 	<< "==================================="<< endl
+	<< "======= Méthodes par défaut ======="<< endl
+	<< "==================================="<< endl
+	<< "Croisement Monopoint" << endl
+	<< "Mutation aléatoire" << endl 
+	<< "Evaluation par fréquence" << endl 
+	<< "Randomized Population" << endl 
+	<< "Selecting best for cross" << endl
+	<< "Selecting worst for delete" << endl 
+	<< "Optimized itemset on char" << endl;
+	
+  cout 	<< "==================================="<< endl
+	<< "==================================="<< endl
+	<< "==================================="<< endl;	
+#endif
     static int mut_flag = 0;	// RandomMutator
     static int cross_flag =0;	// Monopoint
     static int eval_flag = 0;	// FreqEval
@@ -153,6 +183,8 @@ int main(int argc, char **argv)
 		      participants = atoi(optarg);
 		      break;		  
 		}
+		else if(long_options[option_index].flag != 0)
+		      break;
 		
 	  
 	    case 'n':
@@ -191,22 +223,33 @@ int main(int argc, char **argv)
       
 	DataSetO<char>* data = NULL;
 	DataSet<char>* data2 = NULL;
+	
 	switch(mut_flag){
 	  case 0:
+#if DEBUG_PARAM
+    cout << "Mutation aléatoire avec proba de " << probaM << endl;
+#endif
 	      mut = new RandomMutator<char>(v);
 	      break;
 	}
 	
 	switch(cross_flag){
 	  case 0:
-#if DEBUG
+#if DEBUG_PARAM
+    cout << "Croisement Monopoint avec proba " << probaC<< endl;
 #endif
 	      cross = new ClassicCross<char>();
 	      break;
 	  case 1:
+#if DEBUG_PARAM
+    cout <<"Croisement Multipoints avec " << nbPivots<< " pivots et proba " << probaC << endl;
+#endif
 	      cross = new MultiPointCross<char>(nbPivots);
 	      break;
 	  case 2:
+#if DEBUG_PARAM
+    cout << "Croisement uniforme avec proba " << probaC << endl;
+#endif
 	      cross = new UniformCross<char>();
 	      break;		
 	}
@@ -215,10 +258,15 @@ int main(int argc, char **argv)
 	    case 0:
 		data = new CharDataSetO();
 		data->loadFile(dataFile);
-		cout << "data profiling : cols : "<<data->getNbCol()<<" lines : " << data->getNbLine() << endl;
+#if DEBUG_PARAM
+    cout << "dataO profiling : cols : "<<data->getNbCol()<<" lines : " << data->getNbLine() << endl;
+#endif
 		break;
 	
 	    case 1:
+#if DEBUG_PARAM
+    cout << "data profiling : cols : "<<data->getNbCol()<<" lines : " << data->getNbLine() << endl;
+#endif
 		data2 = new CharDataSet();
 		data2->loadFile(dataFile);
 		break;     
@@ -226,12 +274,18 @@ int main(int argc, char **argv)
 	
 	switch(eval_flag){
 	    case 0:
+#if DEBUG_PARAM
+    cout << "Evaluation par fréquence"<< endl;
+#endif
 		if( ind_flag == 0)
 		    eval = new FreqEval(data);
 		else if( ind_flag == 1)
 		    eval = new FreqEval(data2);
 		break;
 	    case 1:
+#if DEBUG_PARAM
+    cout << "Evaluation biobjective frequence/clôture"<< endl;
+#endif
 		if( ind_flag == 0)
 		    eval = new CloseEval(evalSeuilF,data);
 		else if(ind_flag == 1)
@@ -241,18 +295,27 @@ int main(int argc, char **argv)
 
 	switch(pop_flag){
 	    case 0:
+#if DEBUG_PARAM
+    cout << "Randomized population's initialisation"<< endl;
+#endif
 	      if( ind_flag == 0)
 		  pop = new RandomPop(data->getNbCol());
 	      else if(ind_flag == 1)
 		  pop = new RandomPop(data2->getNbCol());
 	      break;
 	    case 1:
+#if DEBUG_PARAM
+    cout << "Frequent Items population's initialisation"<< endl;
+#endif
 	      if( ind_flag == 0)
 		  pop = new FreqPop(data, initSeuilF);
 	      else if(ind_flag == 1)
 		  pop = new FreqPop(data2, initSeuilF);
 	      break;
-	    case 2:
+	    case 2:	      
+#if DEBUG_PARAM
+    cout << "Population's initialisation by augmentation"<< endl;
+#endif
 	      if( ind_flag == 0)
 		  pop = new IRandomPop(data);
 	      else if(ind_flag == 1)
@@ -262,21 +325,36 @@ int main(int argc, char **argv)
 	
 	switch(select_flag){
 	    case 0:
+#if DEBUG_PARAM
+    cout << "Best select for reproducing"<< endl;
+#endif
 		select = new BestSelect<char>();
 		break;
 	    case 1:
+#if DEBUG_PARAM
+    cout << "Random select for reproducing"<< endl;
+#endif
 		select = new RandomSelect<char>();
 		break;
 	    case 2:
+#if DEBUG_PARAM
+    cout << "Tournament selection for reproducing between " << participants << " participants"<< endl;
+#endif
 		select = new TournamentSelect<char>(participants);
 		break;
 	}
 	
 	switch(id_flag){
 	    case 0:
+#if DEBUG_PARAM
+    cout << "Suppression des plus mauvais"<< endl;
+#endif
 		indel = new FitnessIDPolicy<char>();
 		break;
 	    case 1:
+#if DEBUG_PARAM
+    cout << "Suppression des plus vieux"<< endl;
+#endif
 		indel = new AgeIDPolicy<char>();
 		break;		
 	}
@@ -284,13 +362,18 @@ int main(int argc, char **argv)
 	GeneticAlgo<char>* algo = NULL;
 	
 	if(ind_flag == 0){
+#if DEBUG_PARAM
+    cout << "Itemset optimisé"<< endl;
+#endif
 		  ItemSetO<char> isT1;
 		  algo = new GeneticAlgo<char>((Individual<char> *)&isT1,(Mutator<char> *)mut,
 						(Cross<char> *)cross,(Evaluate<char> *)eval,
 						(InitPop<char> *)pop, (SelectPolicy<char> *)select,
 						(IndelPolicy<char> *)indel,taillePop,nbGeneration,probaM,probaC);
 	}else if(ind_flag == 1){
-	    
+#if DEBUG_PARAM
+    cout << "Itemset classique"<< endl;
+#endif
 		  ItemSet<char>isT2;
 		  algo = new GeneticAlgo<char>((Individual<char> *)&isT2,(Mutator<char> *)mut,
 						(Cross<char> *)cross,(Evaluate<char> *)eval,
@@ -300,11 +383,12 @@ int main(int argc, char **argv)
 	
 	cout << "DEBUT RUN" << endl;
 	
-	algo->run();
+	//algo->run();
+	algo->populate();
+	algo->evalPop();
 	algo->displayPopulation();
 	cout << "FIN RUN" << endl;
 	
-	cout << "Gestion mémoire" << endl;
 	delete mut;
 	delete cross;
 	delete eval;

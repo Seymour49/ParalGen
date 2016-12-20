@@ -38,6 +38,7 @@ void IRandomPop::execute(std::vector< Individual< char >* >& pop)
 	
 	for(unsigned i=0; i < pop.size(); ++i){
 	    int tr = rand() % line;
+	    cout << "tr tirée : " << tr << endl;
 	    pop[i]->resize(item);
 	    for(unsigned j=0; j < item; ++j)
 		(*pop[i])[j] = _data->getDataAt(tr,j);
@@ -61,6 +62,7 @@ void IRandomPop::executeO(std::vector< Individual< char >* >& pop)
 	
 	for(unsigned i=0; i < pop.size(); ++i){
 	    int tr = rand() % line;
+	    cout << "tr tirée : " << tr << endl;
 	    pop[i]->resize(item);
 	    for(unsigned j=0; j < item; ++j)
 		(*pop[i])[j] = _dataO->getDataAt(tr,j);
