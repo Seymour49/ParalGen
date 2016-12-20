@@ -296,6 +296,17 @@ int main(int argc, char **argv)
 	algo->run();
 	algo->displayPopulation();
 	cout << "FIN RUN" << endl;
+	
+	cout << "Gestion mémoire" << endl;
+	delete mut;
+	delete cross;
+	delete eval;
+	delete pop;
+	delete select;
+	delete indel;
+	delete data;
+	delete data2;
+	delete algo;
 	      	   
     }
  
