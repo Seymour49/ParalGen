@@ -24,6 +24,8 @@ protected:
   
 public:
   
+  DataSetO():_nbLine(0),_nbCol(0){}
+  
   DataSetO(unsigned int nbLine, unsigned int nbCol):_nbLine(nbLine), _nbCol(nbCol)
   {}
   

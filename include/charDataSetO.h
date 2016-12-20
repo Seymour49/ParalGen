@@ -56,7 +56,7 @@ public:
 };
 
 
-std::vector< std::string > explode(const std::string& str);
+std::vector< std::string > explode2(const std::string& str);
 
 
 

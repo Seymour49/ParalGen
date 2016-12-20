@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "cross.h"
 
 
@@ -16,7 +17,6 @@ template <typename T>
 class MultiPointCross : public Cross<T> {
 private:
   unsigned int _nbPivots;
-  unsigned int * _pivots;
 public:
   
   /* * * * * * * *
@@ -31,22 +31,9 @@ public:
  * @param nbPivots : nombre de pivots dans le tableau
  * @author Ugo Rayer
  */
- MultiPointCross(const unsigned int * pivots, unsigned int nbPivots): _nbPivots(nbPivots)
+ MultiPointCross(unsigned int nbPivots): _nbPivots(nbPivots)
  {
-   _pivots = new unsigned int[_nbPivots];
-   for (unsigned int i = 0; i < _nbPivots; ++i) _pivots[i] = pivots[i];
- }
  
-/**
- * Constructeur nécessitant un vecteurd de unsigned int (ie un ensemble 
- * de pivots).
- * @param v : vecteur contenant des pivots
- * @author Johan Defaye
- */
- MultiPointCross(const std::vector<unsigned int> & v): _nbPivots(v.size())
- {
-   _pivots = new unsigned int[_nbPivots];
-   for (unsigned int i = 0; i < _nbPivots; ++i) _pivots[i] = v[i];
  }
  
  
@@ -55,10 +42,8 @@ public:
   * @param mpc : Un autre opérateur de croisement multi point
   * @author Johan Defaye
   */
- MultiPointCross(const MultiPointCross<T> & mpc): _nbPivots(mpc.getNbPivots())
+ MultiPointCross(const MultiPointCross<T> & mpc): _nbPivots(mpc._nbPivots)
  {
-   _pivots = new unsigned int[_nbPivots];
-   for (unsigned int i = 0; i < _nbPivots; ++i) _pivots[i] = mpc.getPivots()[i];
  }
  
  
@@ -68,7 +53,6 @@ public:
  
  unsigned int getNbPivots() const { return _nbPivots; }
  
- unsigned int * getPivots() const { return _pivots; }
  
  
  /* * * * * * * *
@@ -81,7 +65,6 @@ public:
  */
   ~MultiPointCross()
   {
-    delete [] _pivots;
   }
   
    /* * * * * *
@@ -102,19 +85,36 @@ public:
  */
   void execute(const Individual<T> & parent1, const Individual<T> & parent2, Individual<T> & enfant) {
     
-    if( _pivots == NULL ) throw std::string("Erreur, aucun indices de pivots n'ont été définis");
-    
-    else if( _nbPivots > parent1.size() ) throw std::string("Erreur, trop de pivots");
-    
-    else if( _pivots[0] == 0 || _pivots[_nbPivots-1] > (parent1.size() -2) ) throw std::string("Erreur, pivots trop grand et/ou trop petit");
-    
+    if( _nbPivots > parent1.size() ) throw std::string("Erreur, trop de pivots");
+        
     else if (parent1.size() != parent2.size()) throw std::string("Erreur, les individus parents n'ont pas la même taille");
     
+    else if( parent1.size() <= 2 || parent2.size() <= 2) throw std::string("Parents de taille <= 2");
+    
     else{
+      
+      // Sélection aléatoires des pivots
+      int lim = parent1.size() -2;
+      unsigned indice[lim];
+      for(int i=0; i < lim; ++i)
+	  indice[i] = i+1;
+      
+      std::vector<int> _pivots;
+      
+      for(unsigned k = 0; k < _nbPivots; ++k){
+	  int alea = rand()%lim;
+	  _pivots.push_back(indice[alea]);
+	  
+	  indice[alea] = indice[lim-1];
+	  --lim;	
+      }
+      
+      std::sort(_pivots.begin(), _pivots.end());
+      
       enfant.resize(parent1.size());
       unsigned j = 0; // indice du pivot courant
       bool b=true; // Vrai si l'individu fils récupère les données du parent1 et faux si il récupère les données du parent2
-      for(unsigned int i = 0; i < parent1.size(); ++i){
+      for( int i = 0; i < (int)parent1.size(); ++i){
 	
 	if (b) enfant[i] = parent1[i];
 	else  enfant[i] = parent2[i];

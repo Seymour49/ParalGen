@@ -36,8 +36,11 @@ private:
     IndelPolicy<T> * _insert;
     
     unsigned int _nbIteration;
+    float _probaM;
+    float _probaC;
     std::vector<Individual<T>*> _population;
         
+    unsigned int _typeFlag;
     
 public:
   
@@ -59,10 +62,12 @@ public:
   * @param taillePop : Taille de la population à manipuler
   * @param it : nombre d'itérations de l'algorithme
   * @param seuilFrequence : seuil minimum de fréquence
-  * @author Ugo Rayer
+  * @param probaM : probabilité de mutation
+  * @param probaC : probabilité de croisement
+  * @author Ugo Rayer, Johan Defaye
   */
-  GeneticAlgo(Individual<T> * const ind, Mutator<T>* const mut, Cross<T> * const cross, Evaluate<T> * const eval, InitPop<T> * const init, SelectPolicy<T> * const select, IndelPolicy<T> * const insert, unsigned int taillePop = 100, unsigned int it = 10000)
-  :_mutator(mut), _cross(cross), _eval(eval), _initPop(init), _select(select), _insert(insert), _nbIteration(it), _population(taillePop)
+  GeneticAlgo(Individual<T> * const ind, Mutator<T>* const mut, Cross<T> * const cross, Evaluate<T> * const eval, InitPop<T> * const init, SelectPolicy<T> * const select, IndelPolicy<T> * const insert, unsigned int taillePop = 100, unsigned int it = 10000, float pm = 0.005, float pc = 0.8)
+  :_mutator(mut), _cross(cross), _eval(eval), _initPop(init), _select(select), _insert(insert), _nbIteration(it),_probaM(pm), _probaC(pc), _population(taillePop)
   {
     if (ind != NULL) {
       ItemSet<T> * itemset = dynamic_cast<ItemSet<T> *>(ind);
@@ -72,11 +77,13 @@ public:
 	for (unsigned int i = 0; i < taillePop; ++i) {
 	  _population[i] = new ItemSet<T>;
 	}
+	_typeFlag = 0;
       }
       else if (itemsetO != NULL){
 	for (unsigned int i = 0; i < taillePop; ++i) {
 	  _population[i] = new ItemSetO<T>;
 	}
+	_typeFlag = 1;
       }
     }
   }
@@ -102,16 +109,7 @@ public:
   /* * * * * * 
    * METHODS *
    * * * * * */
-  
 
-/**
- * Méthode initialisation la population via la méthode passée 
- * en paramètre de la classe
- * Retourne une erreur si :
- *  - vecteur non vide
- * @author Ugo Rayer
- */  
-  void initPop();
 
 /**
  * Méthode effectuant une mutation sur un individu de la population.
@@ -136,11 +134,12 @@ public:
  * @param indEnfant  : indice de l'enfant
  * @author Ugo Rayer
  */
-  void doCrossFor(unsigned int indParent1, unsigned int indParent2, unsigned int indEnfant)
+  void doCrossFor(unsigned int indParent1, unsigned int indParent2, Individual<T> & ind)
   {
-    if( (indParent1 < 0) || (indParent2 < 0) || (indParent1 > (_population.size() - 1)) || (indParent2 > (_population.size() - 1)) ) throw std::string("Erreur, indices des parents hors de la population");
-    else if ((indEnfant < 0) || (indEnfant > (_population.size() - 1))) throw std::string("Erreur, indice de l'enfant hors de la population");
-    else _cross->execute(*(_population[indParent1]), *(_population[indParent2]), *(_population[indEnfant]));
+    if( (indParent1 < 0) || (indParent2 < 0) || (indParent1 > (_population.size() - 1)) || (indParent2 > (_population.size() - 1)) )
+      throw std::string("Erreur, indices des parents hors de la population");
+    else 
+      _cross->execute(*(_population[indParent1]), *(_population[indParent2]), ind);
   }
 
   
@@ -162,7 +161,8 @@ public:
    */
   void populate()
   {
-    _initPop->execute(_population);
+      _initPop->execute(_population);
+       std::cout << "pop size : "<<_population.size() << std::endl;
   }
   
   /**
@@ -172,6 +172,7 @@ public:
   void evalPop()
   {
     for (unsigned int i = 0; i < _population.size(); ++i) {
+      std::cout << "taille ind i" << i << " : " << _population[i]->size() << std::endl;
       _eval->execute(*(_population[i]));
     }
   }
@@ -179,10 +180,93 @@ public:
 /**
  * Méthode principale de la classe. Lance l'algorithme génétique avec un nombre d'itération 
  * et une taille de population définit dans le constructeur.
- * @author Johan Defaye
+ * @author Johan Defaye, Ugo Rayer
  */
   void run()
-  {}
+  {
+      try{
+	
+	  // Initialisation de la population
+	  populate();
+	  
+	  // Evaluation de la population
+	  evalPop();
+	  
+	  // Début de la boucle centrale
+	  unsigned i=0;
+	  while( i < _nbIteration ){
+	      
+	
+	      Individual<T>* os1 = NULL;
+	      Individual<T>* os2 = NULL;
+	      
+	      Individual<T>* tmp1 = NULL;
+	      Individual<T>* tmp2 = NULL;
+	      
+	      if( _typeFlag == 0){
+		  os1 = new ItemSet<T>();
+		  os2 = new ItemSet<T>();
+		  tmp1 = new ItemSet<T>();
+		  tmp2 = new ItemSet<T>();
+	      }
+	      else if(_typeFlag == 1){
+		  os1 = new ItemSetO<T>();
+		  os2 = new ItemSetO<T>();
+		  tmp1 = new ItemSet<T>();
+		  tmp2 = new ItemSet<T>();
+	      }
+	      
+	      std::pair<int,int> parents(_select->execute(_population));
+	      
+	      int alea = rand()% 1000;
+	      
+	      if( alea < _probaC*1000){
+		  _cross->execute(*_population[parents.first], *_population[parents.second], *tmp1);
+		  _cross->execute(*_population[parents.second],*_population[parents.first], *tmp2);
+
+	      }
+	      else{
+		  *tmp1 = *_population[parents.first]; 
+		  *tmp2 = *_population[parents.first];
+	      }
+	      
+	      alea = rand()%1000;
+	      if(alea < _probaM*1000){
+		  _mutator->execute(*tmp1);
+		  *os1 = *tmp1;
+		  
+		  _mutator->execute(*tmp2);
+		  *os2 = *tmp2;
+	      }
+	      else{
+		  *os1 = *tmp1;
+		  *os2 = *tmp2;
+	      }
+	      
+	      delete tmp1;
+	      delete tmp2;
+	      
+	      // Evaluation des offsprings
+	      _eval->execute(*os1);
+	      _eval->execute(*os2);
+	      
+	      _insert->execute(*os1, _population);
+	      _insert->execute(*os2, _population);
+	      
+	      
+	      delete os1;
+	      delete os2;
+	      incAgePop();
+// 	      displayPopulation();
+	      ++i;      
+	      
+	  }
+      }
+      catch(std::string Exception){
+	  std::cerr << Exception << std::endl;	
+      }
+    
+  }
   
 /**
  * Méthode d'affichage de la population utile pendant le dev.

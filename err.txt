@@ -1,0 +1,2 @@
+g++ -o obj/main.o -c src/main.cpp -Wall -O2 -std=c++11 -ggdb
+makefile:84 : la recette pour la cible « obj/main.o » a échouée

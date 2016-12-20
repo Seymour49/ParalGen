@@ -63,6 +63,7 @@ public:
   void execute(Individual<T> & ind) {
     if (ind.size() == 0) throw std::string("Erreur, l'individu à muter est vide ");
     else {
+      ind.setAge(0);
       int pivot = rand() % (ind.size());
       int indElement = rand() % (_listParam.size());
       while (_listParam[indElement] == ind[pivot]) {

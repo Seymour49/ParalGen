@@ -46,7 +46,7 @@ void CharDataSet::loadFile(const string& fileName)
       
       while (getline(f,line)){
 	if (!line.empty()) {
-	  vector<string> tokens = explode2(line);
+	  vector<string> tokens = explode(line);
 	  vector<int> row;
 	  // Traitement
 	  for (unsigned int i = 0; i < tokens.size(); ++i){

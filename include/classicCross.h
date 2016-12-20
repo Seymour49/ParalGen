@@ -10,8 +10,6 @@
  */
 template <typename T>
 class ClassicCross : public Cross<T> {
-private:
-  size_t _pivot;
 public:
   
   /* * * * * * * *
@@ -19,11 +17,10 @@ public:
    * * * * * * * */
   
 /**
- * Unique constructeur nécessitant un pivot.
- * @param size_t pivot
+ * Unique constructeur
  * @author Ugo Rayer
  */
-  ClassicCross(size_t pivot): _pivot(pivot)
+  ClassicCross()
   {}
   
   
@@ -32,16 +29,13 @@ public:
    * @param cc : Un autre operateur de croisement classique
    * @author Johan Defaye
    */
-  ClassicCross(const ClassicCross<T> & cc): _pivot(cc.getPivot())
+  ClassicCross(const ClassicCross<T> & cc)
   {}
   
   
   /* * * * * *
    * GETTER  *
    * * * * * */
-  
-  size_t getPivot() const { return _pivot; }
-  
 
   
   /* * * * * *
@@ -63,11 +57,12 @@ public:
     
     if ( parent1.size() != parent2.size()) throw std::string("Erreur, individus parents de tailles différentes");
     else {
+      unsigned int alea = rand() % parent1.size();
       enfant.resize(parent1.size());
-      for (unsigned int i = 0; i < _pivot; ++i) {
+      for (unsigned int i = 0; i < alea; ++i) {
 	  enfant[i] = parent1[i];
       }
-      for (unsigned int j =_pivot ; j < parent2.size(); ++j) {
+      for (unsigned int j = alea ; j < parent2.size(); ++j) {
 	  enfant[j] = parent2[j];
       }
     }
@@ -79,7 +74,6 @@ public:
    * * * * * * * * * * * * */
   
   ClassicCross<T> & operator=(const ClassicCross<T> & c) {
-    _pivot = c.getPivot();
     return *this;
   }
   

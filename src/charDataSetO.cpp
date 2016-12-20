@@ -40,7 +40,7 @@ void CharDataSetO::loadFile(const string& fileName)
       string line;
       while(getline(f,line)){
 	if (!line.empty()) {
-	  vector<string> tokens = explode(line);
+	  vector<string> tokens = explode2(line);
 	  vector<int> row;
 	  // Traitement
 	  for (unsigned int i = 0; i < tokens.size(); ++i){
@@ -110,7 +110,7 @@ CharDataSetO& CharDataSetO::operator=(const CharDataSetO& c)
 
 
 
-vector< string > explode(const string& str)
+vector< string > explode2(const string& str)
 {
   istringstream split(str);
   vector< string > tokens;
