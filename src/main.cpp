@@ -13,6 +13,7 @@
 #include "../include/randomMutator.h"
 #include "../include/freqEval.h"
 #include "../include/randomPop.h"
+#include "../include/irandomPop.h"
 #include "../include/freqPop.h"
 #include "../include/geneticAlgo.h"
 #include "../include/charDataSet.h"
@@ -252,8 +253,11 @@ int main(int argc, char **argv)
 		  pop = new FreqPop(data2, initSeuilF);
 	      break;
 	    case 2:
-	      cout << "TODO add declaration" << endl;
-	      break;      
+	      if( ind_flag == 0)
+		  pop = new IRandomPop(data);
+	      else if(ind_flag == 1)
+		  pop = new IRandomPop(data2);
+	      break;  
 	}
 	
 	switch(select_flag){

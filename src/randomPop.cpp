@@ -16,19 +16,29 @@ void RandomPop::execute(vector< Individual<char>* >& pop)
   if (pop.size() == 0) throw string("Erreur, population à initialiser vide");
   else if (_nbItem == 0) throw string("Erreur, le nombre d'item par individu n'est pas initalisé");
   else {
-    int alea;
-    float density = _density*100;
+    
+    
+    int indice[_nbItem];
+    for(int i=0; i < _nbItem; ++i)
+	indice[i] = i;
+    
     for (unsigned int i = 0; i < pop.size() ; ++i) {
-      pop[i]->resize(_nbItem);
-      alea = rand() % _nbItem;
+      int lim = _nbItem;
+      int nbBits = rand() % _nbItem;
       
-      (*pop[i])[alea] = '1';
+      pop[i]->resize(_nbItem);
+      
+      
       for (unsigned int j = 0; j < _nbItem; ++j) {
-	  alea = rand() % 100;
-	  if( alea < density)
-	    (*pop[i])[j] = '1';
-	  else
-	    (*pop[i])[j] = '0';
+	  (*pop[i])[j] = '0';
+	  
+	  int pos = rand() % lim;
+	  (*pop[i])[indice[pos]] = '1';
+	  int tmp = indice[pos];
+	  indice[pos] = indice[lim-1];
+	  indice[lim-1] = tmp;
+	  --lim;
+	 
       }
     }
   }
