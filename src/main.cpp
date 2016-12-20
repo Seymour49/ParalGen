@@ -179,7 +179,8 @@ int main(int argc, char **argv)
 		    break;
 		}
 		else if( long_options[option_index].flag == &select_flag &&
-			 string(long_options[option_index].name).compare("tournamentS") == 0 ){
+			 long_options[option_index].val == 2 ){
+		      cout << "test" << endl;
 		      participants = atoi(optarg);
 		      break;		  
 		}
