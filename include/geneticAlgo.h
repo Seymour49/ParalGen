@@ -167,12 +167,11 @@ public:
     }
     catch(std::string E1){
 	try{
-	  std::cerr << E1 << std::endl;
 	  _initPop->execute(_population);  
 
 	}
 	catch(std::string Excep){
-	    std::cerr << Excep << std::endl;
+	    std::cerr << E1 << " then " << Excep << std::endl;
 	}
     }
   }
@@ -194,7 +193,7 @@ public:
 	      _eval->execute(*(_population[i]));
 	  }
 	  catch(std::string Excep){
-	      std::cerr << Excep << std::endl;
+	      std::cerr << E1 << " then " <<Excep << std::endl;
 	  }
       }
     }

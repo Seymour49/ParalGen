@@ -24,6 +24,7 @@
 #include "../include/randomSelect.h"
 #include "../include/closeEval.h"
 
+#define DEBUG 0
 
 using namespace std;
 
@@ -197,6 +198,8 @@ int main(int argc, char **argv)
 	
 	switch(cross_flag){
 	  case 0:
+#if DEBUG
+#endif
 	      cross = new ClassicCross<char>();
 	      break;
 	  case 1:
