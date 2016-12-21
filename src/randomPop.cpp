@@ -19,7 +19,7 @@ void RandomPop::execute(vector< Individual<char>* >& pop)
     
     
     int indice[_nbItem];
-    for(int i=0; i < _nbItem; ++i)
+    for(unsigned int i=0; i < _nbItem; ++i)
 	indice[i] = i;
     
     for (unsigned int i = 0; i < pop.size() ; ++i) {
@@ -29,9 +29,10 @@ void RandomPop::execute(vector< Individual<char>* >& pop)
       pop[i]->resize(_nbItem);
       
       
-      for (unsigned int j = 0; j < _nbItem; ++j) {
+      for (unsigned int j = 0; j < _nbItem; ++j)
 	  (*pop[i])[j] = '0';
 	  
+      for(int j = 0; j < nbBits; ++j){
 	  int pos = rand() % lim;
 	  (*pop[i])[indice[pos]] = '1';
 	  int tmp = indice[pos];

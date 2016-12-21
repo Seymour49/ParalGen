@@ -35,6 +35,13 @@ private:
     SelectPolicy<T> * _select;
     IndelPolicy<T> * _insert;
     
+    /* Modèle en îles */
+    float* _tabMig;			// Tableau de _nbIsland float représentant les probabilité de migration
+    SelectPolicy<T>* _selectMig;
+    IndelPolicy<T>* _indelMig;
+    
+    /* Fin IM */
+    
     unsigned int _nbIteration;
     float _probaM;
     float _probaC;
@@ -42,19 +49,16 @@ private:
         
     unsigned int _typeFlag;
     
-    /* Gestion du modèle en île */
+    /* Reprise du modèle en île */
     
-    /*
+    
     unsigned int _nbIsland;		// Nombre d'iles 
     unsigned int _idIsland;		// Position de l'ile sur la map
     std::string _unitaryName;		// Nom générique d'une ile (ex "Node") -> Utile pour le filesystem
-    float* _tabMig;			// Tableau de _nbIsland float représentant les probabilité de migration
     unsigned _stepM;			// Nombre de générations entre deux migrations
     
     unsigned _nbMigrants;
-    SelectPolicy<T>* _selectMig;
     
-    IndelPolicy<T>* _indelM;
     
     
     // Méthodes
@@ -63,7 +67,7 @@ private:
     
     // void writeFile(File) -> Appel à _selectMid
     
-    */
+    
     
 public:
   
@@ -91,9 +95,13 @@ public:
   */
   GeneticAlgo(Individual<T> * const ind, Mutator<T>* const mut, Cross<T> * const cross, 
 	      Evaluate<T> * const eval, InitPop<T> * const init, SelectPolicy<T> * const select,
-	      IndelPolicy<T> * const insert, unsigned int taillePop = 100, unsigned int it = 10000, float pm = 0.005, float pc = 0.8)
-  :_mutator(mut), _cross(cross), _eval(eval), _initPop(init), _select(select), _insert(insert), _nbIteration(it),_probaM(pm), 
-  _probaC(pc), _population(taillePop)
+	      IndelPolicy<T> * const insert, float* tM,SelectPolicy<T> * const migS, IndelPolicy<T>* const migID,
+	      unsigned int taillePop = 100, unsigned int it = 10000,
+	      float pm = 0.005, float pc = 0.8, unsigned int nbI = 1, unsigned int id = 1,
+	      std::string name = "Node", unsigned int step = 10)
+  :_mutator(mut), _cross(cross), _eval(eval), _initPop(init), _select(select), _insert(insert),_tabMig(tM),
+   _selectMig(migS), _indelMig(migID), _nbIteration(it),_probaM(pm), _probaC(pc),
+  _population(taillePop),_nbIsland(nbI), _idIsland(id), _unitaryName(name), _stepM(step)
   {
     if (ind != NULL) {
       ItemSet<T> * itemset = dynamic_cast<ItemSet<T> *>(ind);

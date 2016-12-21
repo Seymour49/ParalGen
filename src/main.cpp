@@ -466,7 +466,11 @@ int main(int argc, char **argv)
 		  algo = new GeneticAlgo<char>((Individual<char> *)&isT1,(Mutator<char> *)mut,
 						(Cross<char> *)cross,(Evaluate<char> *)eval,
 						(InitPop<char> *)pop, (SelectPolicy<char> *)select,
-						(IndelPolicy<char> *)indel,taillePop,nbGeneration,probaM,probaC);
+						(IndelPolicy<char> *)indel, tabMig,
+						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
+						taillePop,nbGeneration,probaM,probaC,
+						nbIsland, idIsland, nameIsland,  stepM
+					      );
 	}else if(ind_flag == 1){
 #if DEBUG_PARAM
     cout << "Itemset classique"<< endl;
@@ -475,7 +479,11 @@ int main(int argc, char **argv)
 		  algo = new GeneticAlgo<char>((Individual<char> *)&isT2,(Mutator<char> *)mut,
 						(Cross<char> *)cross,(Evaluate<char> *)eval,
 						(InitPop<char> *)pop, (SelectPolicy<char> *)select,
-						(IndelPolicy<char> *)indel,taillePop,nbGeneration,probaM,probaC);	
+						(IndelPolicy<char> *)indel, tabMig,
+						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
+						taillePop,nbGeneration,probaM,probaC,
+						nbIsland, idIsland, nameIsland,  stepM
+					      );	
 	}
 	
 	cout << "DEBUT RUN" << endl;
