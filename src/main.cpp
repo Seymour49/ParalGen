@@ -58,6 +58,16 @@ int main(int argc, char **argv)
     unsigned int nbPivots = 2;
     unsigned int participants = 4;
     
+    unsigned int nbIsland = 1;
+    unsigned int idIsland = 1;
+    std::string nameIsland = "Node";
+    float* tabMig = NULL;
+    unsigned stepM = 1;
+    
+    unsigned nbMig = 2;
+    unsigned int migPart = 5;
+    
+    
     
 #if DEBUG_PARAM
   cout 	<< "==================================="<< endl
@@ -71,7 +81,12 @@ int main(int argc, char **argv)
 	<< "Proba Mut : " << probaM << endl 
 	<< "Proba Cross : " << probaC << endl 
 	<< "nbPivots MPC : " << nbPivots << endl 
-	<< "nbPart tournoi : " << participants << endl;
+	<< "nbPart tournoi : " << participants << endl
+	<< "nbIsland : " << nbIsland << endl 
+	<< "idIsland : " << idIsland << endl 
+	<< "nameIsland : " << nameIsland << endl 
+	<< "nbMig : " << nbMig << endl 
+	<< "migPart : " << migPart << endl;
 	
   cout 	<< "==================================="<< endl
 	<< "======= Méthodes par défaut ======="<< endl
@@ -82,7 +97,9 @@ int main(int argc, char **argv)
 	<< "Randomized Population" << endl 
 	<< "Selecting best for cross" << endl
 	<< "Selecting worst for delete" << endl 
-	<< "Optimized itemset on char" << endl;
+	<< "Optimized itemset on char" << endl
+	<< "Selecting best for migrating" << endl
+	<< "Deleting oldest to reveive migrants" << endl;
 	
   cout 	<< "==================================="<< endl
 	<< "==================================="<< endl
@@ -96,6 +113,8 @@ int main(int argc, char **argv)
     static int ind_flag = 0;	// ItemsetO
     static int select_flag = 0;	// bestSelect
     static int id_flag = 0;	// fitness ID
+    static int smig_flag = 0;	// bestSelect
+    static int dmig_flag = 0;	// OldID
     
     
     while(1){
@@ -138,6 +157,7 @@ int main(int argc, char **argv)
 	    {"fitnessID", no_argument, &id_flag, 0},
 	    {"ageID", no_argument, &id_flag, 1},
 	    
+	    
 	    /* Options avec versions courtes */
 	    {"sizePop", required_argument, 0, 'n'},
 	    {"datafile", required_argument, 0, 'd'},
@@ -145,6 +165,19 @@ int main(int argc, char **argv)
 	    {"probaC", required_argument, 0, 'c'},
 	    {"probaM", required_argument, 0, 'm'},
 	   
+	    // Modèle en îles
+	    {"nbIsland", required_argument, 0, 'l'},
+	    {"idIsland", required_argument, 0, 'i'},
+	    {"nameIsland", required_argument, 0, 'u'},
+	    {"nbMig", required_argument, 0, 'k'},
+	    {"probaMig", required_argument, 0, 't'},
+	    {"stepMig", required_argument, 0, 's'},
+	    
+	    {"bestMig", no_argument, &smig_flag, 0},
+	    {"TournamentMig", required_argument, &smig_flag, 1},
+
+	    {"oldestIDMig", no_argument, &dmig_flag, 0},
+	    {"worstIDMig", no_argument, &dmig_flag, 1},
 	  
 	    {0,0,0,0}
 	};
@@ -152,7 +185,7 @@ int main(int argc, char **argv)
 	// getopt_long récupère l'option ici
 	int option_index = 0;
 	
-	opt = getopt_long(argc,argv, "n:d:g:c:m:", long_options, &option_index);
+	opt = getopt_long(argc,argv, "n:d:g:c:m:l:i:u:t:s:k:", long_options, &option_index);
       
 	if( opt == -1) // Fin des options
 	    break;
@@ -180,9 +213,13 @@ int main(int argc, char **argv)
 		}
 		else if( long_options[option_index].flag == &select_flag &&
 			 long_options[option_index].val == 2 ){
-		      cout << "test" << endl;
 		      participants = atoi(optarg);
 		      break;		  
+		}
+		else if( long_options[option_index].flag == &smig_flag &&
+			 long_options[option_index].val == 1){
+		      migPart = atoi(optarg);
+		      break;
 		}
 		else if(long_options[option_index].flag != 0)
 		      break;
@@ -202,7 +239,34 @@ int main(int argc, char **argv)
 		break;
 	    case 'm':
 		probaM = atof(optarg);
-		break;      
+		break;
+	    case 'l':
+		nbIsland = atoi(optarg);
+		break;
+	    case 'i':
+		idIsland = atoi(optarg);
+		break;
+	    case 'u':
+		nameIsland = string(optarg);
+		break;
+	    case 'k':
+		nbMig = atoi(optarg);
+		break;
+	    case 's':
+		stepM = atoi(optarg);
+		break;
+	    case 't':		
+		string proba(optarg);
+		istringstream split(proba);
+		
+		vector<string> tokens;
+		for(string each; getline(split, each, ':'); tokens.push_back( each.c_str()) );
+		
+		tabMig = new float[nbIsland];
+		for(unsigned i=0; i < tokens.size(); ++i){
+		    tabMig[i] = atof(tokens[i].c_str());
+		}
+		break;
 	}
       
     }
@@ -224,6 +288,9 @@ int main(int argc, char **argv)
       
 	DataSetO<char>* data = NULL;
 	DataSet<char>* data2 = NULL;
+	
+	SelectPolicy<char>* migselect = NULL;
+	IndelPolicy<char>* migindel = NULL;
 	
 	switch(mut_flag){
 	  case 0:
@@ -358,6 +425,35 @@ int main(int argc, char **argv)
 #endif
 		indel = new AgeIDPolicy<char>();
 		break;		
+	}
+	
+	switch(smig_flag){
+	    case 0:
+#if DEBUG_PARAM
+    cout << "Selecting " << nbMig << " best for migration" << endl;
+#endif    
+		migselect = new BestSelect<char>();
+		break;
+		
+	    case 1:
+#if DEBUG_PARAM
+    cout << "tournament for " << nbMig << " best for migration between " << migPart << " participants"<< endl;
+#endif    
+		migselect = new TournamentSelect<char>(migPart);
+	}
+	
+	switch(dmig_flag){
+#if DEBUG_PARAM
+    cout << "Deleting oldest for receiving migrants" << endl;
+#endif    
+		migindel = new AgeIDPolicy<char>();
+		break;
+		
+	    case 1:
+#if DEBUG_PARAM
+    cout << "deleting worst before receiving migrants"<< endl;
+#endif    
+		migindel = new FitnessIDPolicy<char>();
 	}
 	
 	GeneticAlgo<char>* algo = NULL;
