@@ -1,0 +1,136 @@
+{"Node1": {
+	"init-param": {
+		"taillePop": 200,
+		"nbIteration": 10000,
+		"nbPairesParents":1,
+		"nbOffspringPPP":2,
+		"typeInd": { 
+			"structure": "ItemSet",
+			"typePrimitif": "char"},
+		"dataFile": "mushroom.dat",
+		"probaCroisement": 0.7,
+		"probaMutation": 0.005,
+		"algorithm_comp":{
+			"populate": { 
+				"method":"RandomPop",
+				"param":null},				      
+			"evaluate": { 
+				"method":"CloseEval",
+				"param":{
+					"seuilFrequence": 0.8}},
+			"crossover": {
+				"method":"Monopoint",
+				"param":null},
+			"mutator": {
+				"method":"Random",
+				"param":null},
+			"selectPolicy":{
+				"method":"bestSelect",
+				"param":null},
+			"indelPolicy":{
+				"method":"oldestIndel",
+				"param":null}}}},
+ "Node2": {
+	"init-param": {
+		"taillePop": 20,
+		"nbIteration": 100000,
+		"nbPairesParents":1,
+		"nbOffspringPPP":1,
+		"typeInd": { 
+			"structure": "ItemSetO",
+			"typePrimitif": "bool"},
+		"dataFile": "mushroom.dat",
+		"probaCroisement": 0.85,
+		"probaMutation": 0.0005,
+		"algorithm_comp":{
+			"populate": { 
+				"method":"freqPop",
+				"param": {
+					"FrequenceSeuil":0.4}},				      
+			"evaluate": { 
+				"method":"CloseEval",
+				"param":{
+					"seuilFrequence": 0.7}},
+			"crossover": {
+				"method":"Multipoint",
+				"param":null},
+			"mutator": {
+				"method":"Random",
+				"param":null},
+			"selectPolicy":{
+				"method":"RandomSelect",
+				"param":null},
+			"indelPolicy":{
+				"method":"fitnessIndel",
+				"param":null}}}},
+"Node3": {
+	"init-param": {
+		"taillePop": 2000000,
+		"nbIteration": 1000,
+		"nbPairesParents":25,
+		"nbOffspringPPP":2,
+		"typeInd": { 
+			"structure": "ItemSet",
+			"typePrimitif": "char"},
+		"dataFile": "mushroom.dat",
+		"seuilFrequence": 0.8,
+		"probaCroisement": 0.9,
+		"probaMutation": 0.01,
+		"algorithm_comp":{
+			"populate": { 
+				"method":"InflationPop",
+				"param":null},				      
+			"evaluate": { 
+				"method":"CloseEval",
+				"param":null},
+			"crossover": {
+				"method":"Uniform",
+				"param":null},
+			"mutator": {
+				"method":"Random",
+				"param":null},
+			"selectPolicy":{
+				"method":"Tournament",
+				"param":{
+					"nbParticipants":5000}},
+			"indelPolicy":{
+				"method":"Tournament",
+				"param":{
+					"nbParticipants":5000}}}}},
+"Node4": {
+	"init-param": {
+		"taillePop": 200,
+		"nbIteration": 10000,
+		"nbPairesParents":1,
+		"nbOffspringPPP":2,
+		"typeInd": { 
+			"structure": "ItemSet",
+			"typePrimitif": "char"},
+		"dataFile": "mushroom.dat",
+		"seuilFrequence": 0.8,
+		"probaCroisement": 0.7,
+		"probaMutation": 0.005,
+		"algorithm_comp":{
+			"populate": { 
+				"method":"RandomPop",
+				"param":null},				      
+			"evaluate": { 
+				"method":"CloseEval",
+				"param":null},
+			"crossover": {
+				"method":"Monopoint",
+				"param":null},
+			"mutator": {
+				"method":"Random",
+				"param":null},
+			"selectPolicy":{
+				"method":"bestSelect",
+				"param":null},
+			"indelPolicy":{
+				"method":"oldestIndel",
+				"param":null}}}}}
+
+
+
+
+

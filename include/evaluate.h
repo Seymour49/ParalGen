@@ -36,7 +36,7 @@ public:
  */
   virtual void execute(Individual<T> & ind) = 0;
 
-    
+  virtual void executeO(Individual<T> &ind);
 };
 
 #endif

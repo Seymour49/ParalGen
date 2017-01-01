@@ -35,12 +35,39 @@ private:
     SelectPolicy<T> * _select;
     IndelPolicy<T> * _insert;
     
+    /* Modèle en îles */
+    float* _tabMig;			// Tableau de _nbIsland float représentant les probabilité de migration
+    SelectPolicy<T>* _selectMig;
+    IndelPolicy<T>* _indelMig;
+    
+    /* Fin IM */
+    
     unsigned int _nbIteration;
     float _probaM;
     float _probaC;
     std::vector<Individual<T>*> _population;
         
     unsigned int _typeFlag;
+    
+    /* Reprise du modèle en île */
+    
+    
+    unsigned int _nbIsland;		// Nombre d'iles 
+    unsigned int _idIsland;		// Position de l'ile sur la map
+    std::string _unitaryName;		// Nom générique d'une ile (ex "Node") -> Utile pour le filesystem
+    unsigned _stepM;			// Nombre de générations entre deux migrations
+    
+    unsigned _nbMigrants;
+    
+    
+    
+    // Méthodes
+    // void checkFiles()
+    // void readFile(File) -> Appel à _indelM
+    
+    // void writeFile(File) -> Appel à _selectMid
+    
+    
     
 public:
   
@@ -66,8 +93,15 @@ public:
   * @param probaC : probabilité de croisement
   * @author Ugo Rayer, Johan Defaye
   */
-  GeneticAlgo(Individual<T> * const ind, Mutator<T>* const mut, Cross<T> * const cross, Evaluate<T> * const eval, InitPop<T> * const init, SelectPolicy<T> * const select, IndelPolicy<T> * const insert, unsigned int taillePop = 100, unsigned int it = 10000, float pm = 0.005, float pc = 0.8)
-  :_mutator(mut), _cross(cross), _eval(eval), _initPop(init), _select(select), _insert(insert), _nbIteration(it),_probaM(pm), _probaC(pc), _population(taillePop)
+  GeneticAlgo(Individual<T> * const ind, Mutator<T>* const mut, Cross<T> * const cross, 
+	      Evaluate<T> * const eval, InitPop<T> * const init, SelectPolicy<T> * const select,
+	      IndelPolicy<T> * const insert, float* tM,SelectPolicy<T> * const migS, IndelPolicy<T>* const migID,
+	      unsigned int taillePop = 100, unsigned int it = 10000,
+	      float pm = 0.005, float pc = 0.8, unsigned int nbI = 1, unsigned int id = 1,
+	      std::string name = "Node", unsigned int step = 10)
+  :_mutator(mut), _cross(cross), _eval(eval), _initPop(init), _select(select), _insert(insert),_tabMig(tM),
+   _selectMig(migS), _indelMig(migID), _nbIteration(it),_probaM(pm), _probaC(pc),
+  _population(taillePop),_nbIsland(nbI), _idIsland(id), _unitaryName(name), _stepM(step)
   {
     if (ind != NULL) {
       ItemSet<T> * itemset = dynamic_cast<ItemSet<T> *>(ind);
@@ -161,8 +195,19 @@ public:
    */
   void populate()
   {
-      _initPop->execute(_population);
-       std::cout << "pop size : "<<_population.size() << std::endl;
+    try{
+      _initPop->executeO(_population);
+      
+    }
+    catch(std::string E1){
+	try{
+	  _initPop->execute(_population);  
+
+	}
+	catch(std::string Excep){
+	    std::cerr << E1 << " then " << Excep << std::endl;
+	}
+    }
   }
   
   /**
@@ -171,9 +216,20 @@ public:
    */
   void evalPop()
   {
+    
     for (unsigned int i = 0; i < _population.size(); ++i) {
-      std::cout << "taille ind i" << i << " : " << _population[i]->size() << std::endl;
-      _eval->execute(*(_population[i]));
+      
+      try{      
+	  _eval->executeO(*(_population[i]));
+      }
+      catch(std::string E1){
+	  try{
+	      _eval->execute(*(_population[i]));
+	  }
+	  catch(std::string Excep){
+	      std::cerr << E1 << " then " <<Excep << std::endl;
+	  }
+      }
     }
   }
   
@@ -191,7 +247,7 @@ public:
 	  
 	  // Evaluation de la population
 	  evalPop();
-	  
+	      
 	  // Début de la boucle centrale
 	  unsigned i=0;
 	  while( i < _nbIteration ){
@@ -247,8 +303,20 @@ public:
 	      delete tmp2;
 	      
 	      // Evaluation des offsprings
-	      _eval->execute(*os1);
-	      _eval->execute(*os2);
+	      
+	      try{
+		  _eval->executeO(*os1);
+		  _eval->executeO(*os2);
+	      }
+	      catch(std::string Ex1){
+		try{
+		    _eval->execute(*os1);
+		    _eval->execute(*os2);
+		}
+		catch(std::string Ex2){
+		    std::cerr << Ex1 << " then " << Ex2 << std::endl;
+		}
+	      }
 	      
 	      _insert->execute(*os1, _population);
 	      _insert->execute(*os2, _population);
@@ -257,9 +325,7 @@ public:
 	      delete os1;
 	      delete os2;
 	      incAgePop();
-// 	      displayPopulation();
-	      ++i;      
-	      
+	      ++i;      	      
 	  }
       }
       catch(std::string Exception){

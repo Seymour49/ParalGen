@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <vector>
+#include <getopt.h>
 
 #include "../include/dataSet.h"
 #include "../include/itemSet.h"
@@ -12,6 +13,7 @@
 #include "../include/randomMutator.h"
 #include "../include/freqEval.h"
 #include "../include/randomPop.h"
+#include "../include/irandomPop.h"
 #include "../include/freqPop.h"
 #include "../include/geneticAlgo.h"
 #include "../include/charDataSet.h"
@@ -23,495 +25,487 @@
 #include "../include/randomSelect.h"
 #include "../include/closeEval.h"
 
+#define DEBUG_PARAM 1
 
 using namespace std;
+
+/*
+ * TODO
+ * 	Vérifier les paramètres manquants
+ * 		Politiques : select indel
+ * 	Revoir les includes
+ * 	Refaire la méthode run 
+ * 	Insertion modele en iles
+ * 
+ */
 
 int main(int argc, char **argv) 
 {
   srand(time(NULL));
-  
-    /* * * * * * TEST CHARDATASET ET CHARDATASETO * * * * */
+ 
+  /*
+     * Gestion des arguments
+     */
     
-//   CharDataSet monDataSet, monDataSet2(10, 10), monDataSet3(monDataSet2), monDataSet4;
-//   
-//   cout << monDataSet << endl;
-//   
-//   cout << monDataSet2 << endl;
-//   
-//   cout << monDataSet3 << endl;
-//   
-//   monDataSet.loadFile("./data/mushroom.dat");
-//   
-//   monDataSet4 = monDataSet;
-//   
-//   
-//  
-//   cout << monDataSet4 << endl;
-//   cout << "Nb ligne = " << monDataSet4.getNbLine() << endl;
-//   cout << "Nb colonne = " << monDataSet4.getNbCol() << endl;
-  
-  
-  /* * * * * * TEST ITEMSET ET ITEMSETO * * * * */
-  
-  
-//   vector<int> v(10, 0);
-//   int t[5];
-//   t[0] = 2; t[1] = 2; t[2] = 2; t[3] = 2; t[4] = 2;
-//   
-//   ItemSetO<int> monItemSet, monItemSet2(v), monItemSet3(t, 5), monItemSet4(monItemSet3), monItemSet5;
-//   
-//   cout << monItemSet << endl << monItemSet2 << endl << monItemSet3 << endl << monItemSet4 << endl;
-//   
-//   cout << monItemSet.size() << " " << monItemSet2.size() << " " << monItemSet3.size() << " " << monItemSet4.size() << endl;
-//   
-//   monItemSet4.resize(3);
-// 
-//   cout << monItemSet4.size() << endl;
-//   
-//   monItemSet2[1] = 3;
-//   
-//   monItemSet2.setAge(10);
-//   monItemSet2.setScore(3.5);
-//   
-//   cout << monItemSet2 << endl;
-//   
-//   vector<int> tmp(2, 9);
-//   monItemSet2.set(tmp);
-//   cout << monItemSet2 << endl;
-//   monItemSet5 = monItemSet2;
-//   
-//   cout << monItemSet5 << endl;
-
-  /* * * * * * TEST CLASSICCROSS * * * * */
-  
-//   ClassicCross<char> monClassicCross(5), monClassicCross2(monClassicCross);
-//   ClassicCross<char> tmp = monClassicCross;
-//   
-//   cout << tmp.getPivot() << " " << monClassicCross2.getPivot() << endl;
-//   
-//   vector<char> v(10, '0'), v2(10, '1');
-//   
-//   ItemSet<char> monItemSet(v), monItemSet2(v2), monItemSet3;
-//   
-//   cout << monItemSet3 << endl;
-//   
-//   monClassicCross.execute(monItemSet, monItemSet2, monItemSet3);
-//   
-//   cout << monItemSet3 << endl;
-
-  /* * * * * * TEST FREQEVAL * * * * */
-  
-//   CharDataSetO monDataSetO;
-//   CharDataSet monDataSet;
-//   
-//   monDataSet.loadFile("./data/mushroom.dat");
-//   monDataSetO.loadFile("./data/mushroom.dat");
-//   
-//   FreqEval monEval(&monDataSet, &monDataSetO);
-//   
-//   vector<char> v(119, '0');
-//   v[0] = '1';
-//   
-//   ItemSet<char> monItemSet(v);
-//   
-//   try {
-//     cout << monItemSet << endl;
-//     
-//     monEval.execute(monItemSet);
-//     
-//     cout << monItemSet << endl;
-//     
-//     monEval.execute(monItemSet);
-//     
-//     cout << monItemSet << endl;
-//   } catch (string exception) {
-//     cerr << exception << endl;
-//   }
-
-
-  /* * * * * * TEST CLOSEEVAL * * * * */
-  
-//   CharDataSetO monDataSetO;
-//   CharDataSet monDataSet;
-//   
-//   monDataSet.loadFile("./data/testCloture.dat");
-//   monDataSetO.loadFile("./data/testCloture.dat");
-//   
-//   CloseEval monEval(0.25, &monDataSet, &monDataSetO);
-// 
-//   //FreqEval monEval(&monDataSet, &monDataSetO);
-//   
-//   vector<char> v(4, '0');
-//   
-//   v[0] = '1';
-//   v[1] = '1';
-//   v[2] = '0';
-//   v[3] = '0';
-//   
-//   vector<char> v2(v);
-//   v2[3] = '1';
-//   
-//   ItemSet<char> monItemSet(v);
-//   for (int i = 0; i < 1000000; ++i) {
-//     try {
-//       //cout << monItemSet << endl;
-//       
-//       monEval.executeO(monItemSet);
-//       
-//       //cout << monItemSet << endl;
-//     } catch (string exception) {
-//       cerr << exception << endl;
-//     }
-//   }
-  
-
-  /* * * * * * TEST FREQPOP * * * * */
-  
-//   CharDataSetO monDataSetO;
-//   CharDataSet monDataSet;
-//   
-//   monDataSet.loadFile("./data/mushroom.dat");
-//   monDataSetO.loadFile("./data/mushroom.dat");
-// //   FreqPop maPop(&monDataSet, &monDataSetO);
-//   FreqPop maPop(&monDataSetO);
-//   maPop.setData(&monDataSet);
-//   vector< Individual<char> *> v;
-//   vector< ItemSet<char> > v1;
-//   v1.resize(100);
-//   for (unsigned int i = 0; i < v1.size(); ++i) {
-//     v.push_back(&v1[i]);
-//   }
-//   try {
-//     maPop.execute(v);
-//   } catch (string exception) {
-//     cerr << exception << endl;
-//   }
-//   for (unsigned int i = 0; i < v.size(); ++i) {
-//     cout << *(v[i]) << endl;
-//   }
-
-  /* * * * * * TEST MULTIPOINTCROSS * * * * */
-  
-//   unsigned int mesPivots[4];
-//   mesPivots[0] = 3; mesPivots[1] = 6; mesPivots[2] = 9; mesPivots[3] = 12;
-//   
-//   vector<unsigned int> mesPivots2;
-//   mesPivots2.push_back(3); mesPivots2.push_back(6); mesPivots2.push_back(9); mesPivots2.push_back(12);
-//   
-//   MultiPointCross<char> monCross(mesPivots, 4), monCross2(mesPivots2), monCross3(monCross2);
-//   
-//   unsigned int * mesPivots3 = monCross2.getPivots();
-//   
-//   for (unsigned int i = 0; i < monCross3.getNbPivots(); ++i) cout << mesPivots3[i] << " ";
-//   cout << endl;
-//   
-//   vector<char> v(15, '0'), v2(15, '1');
-//   
-//   ItemSet<char> monItem(v), monItem2(v2), monItem3;
-//   
-//   cout << monItem << endl << monItem2 << endl << monItem3 << endl;
-//   
-//   monCross.execute(monItem, monItem2, monItem3);
-//   
-//   cout << "Après cross" << endl << endl;
-//   
-//   cout << monItem << endl << monItem2 << endl << monItem3 << endl;
-  
-  /* * * * * * TEST RANDOMMUTATOR * * * * */
-  
-//   vector<char> v;
-//   v.push_back('0');
-//   v.push_back('1');
-//   v.push_back('2');
-//   RandomMutator<char> monMutator(v), monMutator2(monMutator);
-//   
-//   vector<char> v1 = monMutator.getListParam();
-//   vector<char> v2 = monMutator2.getListParam();
-//   
-//   for (unsigned int i = 0; i < v1.size(); ++i) cout << v1[i] << " ";
-//   cout << endl;
-//   for (unsigned int i = 0; i < v2.size(); ++i) cout << v2[i] << " ";
-//   cout << endl;
-//   
-//   vector<char> v3(10, '0');
-//   ItemSet<char> monItemSet(v3);
-//   ItemSet<char> monItemSet2;
-//   
-//   try {
-//     monMutator2.execute(monItemSet);
-//   } catch (string exception) {
-//     cerr << exception << endl;
-//   }
-//   
-//   cout << monItemSet << endl;
-
-  /* * * * * * TEST RANDOMPOP * * * * */
-  
-//   RandomPop monInitPop(15), monInitPop2(monInitPop);
-//   
-//   cout << monInitPop2.getDensity() << " " << monInitPop2.getNbItem() <<  endl;
-//   
-//   vector< Individual<char> *> v;
-//   vector< ItemSet<char> > v1;
-//   v1.resize(5);
-// 
-//   for (unsigned int i = 0; i < v1.size(); ++i) {
-//     v.push_back(&v1[i]);
-//   }
-//   
-//   monInitPop2.execute(v);
-//   
-//   for (unsigned int i = 0; i < v.size(); ++i) {
-//     cout << *(v[i]) << endl;
-//   }
-//   cout << endl << endl << endl;
-//   for (unsigned int i = 0; i < v1.size(); ++i) {
-//     cout << v1[i] << endl;
-//   }
-
-  /* * * * * * TEST UNIFORMCROSS * * * * */
-  
-//     UniformCross<char> monCross;
-//         
-//     vector<char> v(10, '0'), v2(10, '1');
-//     
-//     v2[0] = '0'; v2[1] = '0';
-//     
-//     ItemSetO<char> monItemSet(v), monItemSet2(v2), monItemSet3;
-//     
-//     cout << monItemSet3 << endl;
-//     
-//     monCross.execute(monItemSet, monItemSet2, monItemSet3);
-//     
-//     cout << monItemSet3 << endl;
-
-
-  /* * * * * * TEST AGEIDPOLICY * * * * */
-  
-//   AgeIDPolicy<char> maPolitiqueDajout;
-//   
-//   unsigned int sizePop = 5;
-//   vector<char> v1(10, 'a'), v2(10, 'b');
-//   
-//   vector< Individual<char> *> pop(sizePop);
-//   for (unsigned int i = 0; i < sizePop; ++i) {
-//     pop[i] = new ItemSet<char>(v1);
-//   }
-//   ItemSet<char> ind(v2);
-//   
-//   for (unsigned int i = 0; i < pop.size(); ++i) {
-//     pop[i]->setAge(i);
-//     cout << *(pop[i]) << endl;
-//   }
-//   
-//   cout << endl << ind << endl << endl << endl;
-//   
-//   try {
-//     maPolitiqueDajout.execute(ind, pop);
-//   } catch (string exception) {
-//     cerr << exception << endl;
-//   }
-//   
-//   for (unsigned int i = 0; i < pop.size(); ++i) {
-//     cout << *(pop[i]) << endl;
-//   }
-//   
-//   for (unsigned int i = 0; i < pop.size(); ++i) {
-//     delete pop[i];
-//   }
-//   
-
-
-  /* * * * * * TEST FITNESSIDPOLICY * * * * */
-  
-//   FitnessIDPolicy<char> maPolitiqueDajout;
-//   
-//   unsigned int sizePop = 5;
-//   vector<char> v1(10, 'a'), v2(10, 'b');
-//   
-//   vector< Individual<char> *> pop(sizePop);
-//   for (unsigned int i = 0; i < sizePop; ++i) {
-//     pop[i] = new ItemSet<char>(v1);
-//   }
-//   ItemSet<char> ind(v2);
-//   
-//   for (unsigned int i = 0; i < pop.size(); ++i) {
-//     pop[i]->setScore(i);
-//     cout << *(pop[i]) << endl;
-//   }
-//   
-//   cout << endl << ind << endl << endl << endl;
-//   try {
-//     maPolitiqueDajout.execute(ind, pop);
-//   } catch (string exception) {
-//     cerr << exception << endl;
-//   }
-//   
-//   for (unsigned int i = 0; i < pop.size(); ++i) {
-//     cout << *(pop[i]) << endl;
-//   }
-//   
-//   for (unsigned int i = 0; i < pop.size(); ++i) {
-//     delete pop[i];
-//   }
-
-
-  /* * * * * * TEST RANDOMSELECT * * * * */
-  
-//   unsigned int sizePop = 5;
-//   vector<char> v1(10, 'a');
-//   
-//   vector< Individual<char> *> pop(sizePop);
-//   for (unsigned int i = 0; i < sizePop; ++i) {
-//     pop[i] = new ItemSet<char>(v1);
-//   }
-//   
-//   RandomSelect<char> monSelect;
-//   
-//   try {
-//     monSelect.execute(pop);
-//   } catch (string exception) {
-//      cerr << exception << endl; 
-//   }
-//   pair<int, int> result = monSelect.execute(pop);
-//   
-//   cout << result.first << " : " << result.second << endl;
-//   
-//   for (unsigned int i = 0; i < pop.size(); ++i) {
-//     delete pop[i];
-//   }
-
-
-
-  /* * * * * * TEST TOURNAMENTSELECT * * * * */
-  
-//   unsigned int sizePop = 5;
-//   vector<char> v1(10, 'a');
-//   
-//   vector< Individual<char> *> pop(sizePop);
-//   for (unsigned int i = 0; i < sizePop; ++i) {
-//     pop[i] = new ItemSet<char>(v1);
-//   }
-//   
-//   TournamentSelect<char> monSelect(1);
-//   
-//   try {
-//     monSelect.execute(pop);
-//     pair<int, int> result = monSelect.execute(pop);
-//     cout << result.first << " : " << result.second << endl;
-//     
-//   } catch (string exception) {
-//      cerr << exception << endl; 
-//   }
-//   
-//   for (unsigned int i = 0; i < pop.size(); ++i) {
-//     delete pop[i];
-//   }
-
-
-  /* * * * * * TEST BESTSELECT * * * * */
-  
-//   unsigned int sizePop = 5;
-//   vector<char> v1(10, 'a');
-//   
-//   vector< Individual<char> *> pop(sizePop);
-//   for (unsigned int i = 0; i < sizePop; ++i) {
-//     pop[i] = new ItemSet<char>(v1);
-//     pop[i]->setScore(i);
-//   }
-//   
-//   BestSelect<char> monSelect;
-//   
-//   try {
-//     monSelect.execute(pop);
-//     pair<int, int> result = monSelect.execute(pop);
-//     cout << result.first << " : " << result.second << endl;
-//     
-//   } catch (string exception) {
-//      cerr << exception << endl; 
-//   }
-//   
-//   for (unsigned int i = 0; i < pop.size(); ++i) {
-//     delete pop[i];
-//   }
-
-
-  /* * * * * * TEST GENETICALGO * * * * */
-  
-  //UniformCross<char> monCross;
-  //ClassicCross<char> monCross(30);
-
-  MultiPointCross<char> monCross(3);
-  
-  CharDataSetO monDataSetO;
-  CharDataSet monDataSet;
-  
-  monDataSet.loadFile("./data/mushroom.dat");
-  monDataSetO.loadFile("./data/mushroom.dat");
-  
-  FreqPop maPop(&monDataSet, &monDataSetO);
-  //RandomPop maPop(monDataSet.getNbCol());
-  
-  vector<char> v;
-  v.push_back('0');
-  v.push_back('1');
-  RandomMutator<char> monMutator(v);
-  
-  ItemSetO<char> monItem;
-  
-  FreqEval monEval(&monDataSet, &monDataSetO);
-  
-  RandomSelect<char> monSelect;
-  
-  FitnessIDPolicy<char> monInsert;
-  
-  GeneticAlgo<char> monAlgoGen((Individual<char> *)&monItem, (Mutator<char> *)&monMutator, (Cross<char> *)&monCross, (Evaluate<char> *)&monEval ,(InitPop<char> *)&maPop, (SelectPolicy<char> *)&monSelect, (IndelPolicy<char> *)&monInsert, 5);
-  
-  try {
+    /* Valeurs par défaut	*/
+    unsigned int nbGeneration = 100;
+    unsigned int taillePop = 25;
+    string dataFile = "./data/mushroom.dat";
+    float evalSeuilF = 0.6;
+    float initSeuilF = 0.3;
+    float probaM = 0.5;
+    float probaC = 0.5;
+    unsigned int nbPivots = 2;
+    unsigned int participants = 4;
     
-    cout << endl << endl << "PHASE 1" << endl << endl;
+    unsigned int nbIsland = 1;
+    unsigned int idIsland = 1;
+    std::string nameIsland = "Node";
+    float* tabMig = NULL;
+    unsigned stepM = 1;
     
-    cout << "TAILLE = " << monAlgoGen.getTaillePop() << endl;
+    unsigned nbMig = 2;
+    unsigned int migPart = 5;
     
-    cout << "NB ITÉRATION = " << monAlgoGen.getNbIteration() << endl;
     
-    monAlgoGen.displayPopulation();
-  
-    cout << endl << endl << "PHASE 2" << endl << endl;
     
-    monAlgoGen.populate();
-        
-    monAlgoGen.displayPopulation();
+#if DEBUG_PARAM
+  cout 	<< "==================================="<< endl
+	<< "======= Valeurs par défaut ========"<< endl
+	<< "==================================="<< endl
+	<< "Taille pop : " << taillePop << endl
+	<< "Generation : " << nbGeneration << endl
+	<< "Data : " << dataFile << endl 
+	<< "Eval Seuil : " << evalSeuilF << endl 
+	<< "Init Seuil : " << initSeuilF << endl 
+	<< "Proba Mut : " << probaM << endl 
+	<< "Proba Cross : " << probaC << endl 
+	<< "nbPivots MPC : " << nbPivots << endl 
+	<< "nbPart tournoi : " << participants << endl
+	<< "nbIsland : " << nbIsland << endl 
+	<< "idIsland : " << idIsland << endl 
+	<< "nameIsland : " << nameIsland << endl 
+	<< "nbMig : " << nbMig << endl 
+	<< "migPart : " << migPart << endl;
+	
+  cout 	<< "==================================="<< endl
+	<< "======= Méthodes par défaut ======="<< endl
+	<< "==================================="<< endl
+	<< "Croisement Monopoint" << endl
+	<< "Mutation aléatoire" << endl 
+	<< "Evaluation par fréquence" << endl 
+	<< "Randomized Population" << endl 
+	<< "Selecting best for cross" << endl
+	<< "Selecting worst for delete" << endl 
+	<< "Optimized itemset on char" << endl
+	<< "Selecting best for migrating" << endl
+	<< "Deleting oldest to reveive migrants" << endl;
+	
+  cout 	<< "==================================="<< endl
+	<< "==================================="<< endl
+	<< "==================================="<< endl;	
+#endif
+    static int mut_flag = 0;	// RandomMutator
+    static int cross_flag =0;	// Monopoint
+    static int eval_flag = 0;	// FreqEval
+    static int pop_flag = 0;	// RandomPop
+    static int type_flag = 0;	// Char
+    static int ind_flag = 0;	// ItemsetO
+    static int select_flag = 0;	// bestSelect
+    static int id_flag = 0;	// fitness ID
+    static int smig_flag = 0;	// bestSelect
+    static int dmig_flag = 0;	// OldID
     
-    cout << endl << endl << "PHASE 3" << endl << endl;
     
-    monAlgoGen.evalPop();
+    while(1){
+	int opt;
+	
+	/* long_options structure */
+	static struct option long_options[] = {
+	    /* flags, (i.e pas de version courte)	*/
+	    
+	    // Mutateurs
+	    {"randMut", no_argument, &mut_flag, 0},
+	    
+	    // Croisements
+	    {"monoPCross", no_argument, &cross_flag, 0},
+	    {"multiPCross", required_argument,&cross_flag, 1},
+	    {"uCross", no_argument, &cross_flag, 2},
+	    
+	    // Evaluations
+	    {"freqEval", no_argument, &eval_flag, 0},
+	    {"closeEval", required_argument, &eval_flag, 1},
+	    
+	    // InitPop
+	    {"randPop", no_argument, &pop_flag, 0},
+	    {"freqPop", required_argument, &pop_flag, 1},
+	    {"irandPop", no_argument, &pop_flag, 2},
+	    
+	    {"itemsetO", no_argument, &ind_flag, 0},
+	    {"itemset", no_argument, &ind_flag, 1},
+	    
+	    // Type du bitset
+	    {"char", no_argument, &type_flag, 0},
+	    
+	    
+	    // Politique de selection
+	    {"bestS", no_argument, &select_flag, 0},
+	    {"randS", no_argument, &select_flag, 1},
+	    {"tournamentS", required_argument, &select_flag, 2},
+	    
+	    // ID politique
+	    {"fitnessID", no_argument, &id_flag, 0},
+	    {"ageID", no_argument, &id_flag, 1},
+	    
+	    
+	    /* Options avec versions courtes */
+	    {"sizePop", required_argument, 0, 'n'},
+	    {"datafile", required_argument, 0, 'd'},
+	    {"nbGen", required_argument, 0, 'g'},
+	    {"probaC", required_argument, 0, 'c'},
+	    {"probaM", required_argument, 0, 'm'},
+	   
+	    // Modèle en îles
+	    {"nbIsland", required_argument, 0, 'l'},
+	    {"idIsland", required_argument, 0, 'i'},
+	    {"nameIsland", required_argument, 0, 'u'},
+	    {"nbMig", required_argument, 0, 'k'},
+	    {"probaMig", required_argument, 0, 't'},
+	    {"stepMig", required_argument, 0, 's'},
+	    
+	    {"bestMig", no_argument, &smig_flag, 0},
+	    {"TournamentMig", required_argument, &smig_flag, 1},
+
+	    {"oldestIDMig", no_argument, &dmig_flag, 0},
+	    {"worstIDMig", no_argument, &dmig_flag, 1},
+	  
+	    {0,0,0,0}
+	};
+      
+	// getopt_long récupère l'option ici
+	int option_index = 0;
+	
+	opt = getopt_long(argc,argv, "n:d:g:c:m:l:i:u:t:s:k:", long_options, &option_index);
+      
+	if( opt == -1) // Fin des options
+	    break;
+	
+	switch(opt){
+	  
+	    // Gestion des flags
+	    case 0:
+		if( long_options[option_index].flag == &cross_flag &&
+		    string(long_options[option_index].name).compare("multiPCross") == 0){
+		  
+		    nbPivots = atoi(optarg);
+		    break;
+		}
+		else if( long_options[option_index].flag == &eval_flag &&
+			 string(long_options[option_index].name).compare("closeEval") == 0){
+		      
+		    evalSeuilF = atof(optarg);
+		    break;
+		}
+		else if( long_options[option_index].flag == &pop_flag &&
+			 string(long_options[option_index].name).compare("freqPop") == 0){
+		    initSeuilF = atof(optarg);
+		    break;
+		}
+		else if( long_options[option_index].flag == &select_flag &&
+			 long_options[option_index].val == 2 ){
+		      participants = atoi(optarg);
+		      break;		  
+		}
+		else if( long_options[option_index].flag == &smig_flag &&
+			 long_options[option_index].val == 1){
+		      migPart = atoi(optarg);
+		      break;
+		}
+		else if(long_options[option_index].flag != 0)
+		      break;
+		
+	  
+	    case 'n':
+		taillePop = atoi(optarg);
+		break;
+	    case 'd':
+		dataFile = string(optarg);
+		break;
+	    case 'g':
+		nbGeneration = atoi(optarg);
+		break;
+	    case 'c':
+		probaC = atof(optarg);
+		break;
+	    case 'm':
+		probaM = atof(optarg);
+		break;
+	    case 'l':
+		nbIsland = atoi(optarg);
+		break;
+	    case 'i':
+		idIsland = atoi(optarg);
+		break;
+	    case 'u':
+		nameIsland = string(optarg);
+		break;
+	    case 'k':
+		nbMig = atoi(optarg);
+		break;
+	    case 's':
+		stepM = atoi(optarg);
+		break;
+	    case 't':		
+		string proba(optarg);
+		istringstream split(proba);
+		
+		vector<string> tokens;
+		for(string each; getline(split, each, ':'); tokens.push_back( each.c_str()) );
+		
+		tabMig = new float[nbIsland];
+		for(unsigned i=0; i < tokens.size(); ++i){
+		    tabMig[i] = atof(tokens[i].c_str());
+		}
+		break;
+	}
+      
+    }
     
-    monAlgoGen.displayPopulation();
     
-    cout << endl << endl << "PHASE 4" << endl << endl;
+    vector<char> v;
+    v.push_back('0');
+    v.push_back('1');
+
     
-    monAlgoGen.doCrossFor(0,1, monItem);
-    
-    monAlgoGen.displayPopulation();
-    
-    cout << endl << endl << "PHASE 5" << endl << endl;
-    
-    monAlgoGen.doMutationFor(0);
-    
-    monAlgoGen.displayPopulation();
-    
-    cout << endl << endl << "PHASE 6" << endl << endl;
-    
-    monAlgoGen.incAgePop();
-    
-    monAlgoGen.displayPopulation();
-    
-  } catch (string exception) {
-    
-    cerr << exception << endl;
-    
-  }
-  
-  return EXIT_SUCCESS;
+    if(type_flag == 0){
+
+	Mutator<char>* mut = NULL;
+	Cross<char>* cross = NULL;
+	Evaluate<char>* eval = NULL;
+	InitPop<char>* pop = NULL;
+	SelectPolicy<char>* select = NULL;
+	IndelPolicy<char>* indel = NULL;
+      
+	DataSetO<char>* data = NULL;
+	DataSet<char>* data2 = NULL;
+	
+	SelectPolicy<char>* migselect = NULL;
+	IndelPolicy<char>* migindel = NULL;
+	
+	switch(mut_flag){
+	  case 0:
+#if DEBUG_PARAM
+    cout << "Mutation aléatoire avec proba de " << probaM << endl;
+#endif
+	      mut = new RandomMutator<char>(v);
+	      break;
+	}
+	
+	switch(cross_flag){
+	  case 0:
+#if DEBUG_PARAM
+    cout << "Croisement Monopoint avec proba " << probaC<< endl;
+#endif
+	      cross = new ClassicCross<char>();
+	      break;
+	  case 1:
+#if DEBUG_PARAM
+    cout <<"Croisement Multipoints avec " << nbPivots<< " pivots et proba " << probaC << endl;
+#endif
+	      cross = new MultiPointCross<char>(nbPivots);
+	      break;
+	  case 2:
+#if DEBUG_PARAM
+    cout << "Croisement uniforme avec proba " << probaC << endl;
+#endif
+	      cross = new UniformCross<char>();
+	      break;		
+	}
+	
+	switch(ind_flag){
+	    case 0:
+		data = new CharDataSetO();
+		data->loadFile(dataFile);
+#if DEBUG_PARAM
+    cout << "dataO profiling : cols : "<<data->getNbCol()<<" lines : " << data->getNbLine() << endl;
+#endif
+		break;
+	
+	    case 1:
+#if DEBUG_PARAM
+    cout << "data profiling : cols : "<<data->getNbCol()<<" lines : " << data->getNbLine() << endl;
+#endif
+		data2 = new CharDataSet();
+		data2->loadFile(dataFile);
+		break;     
+	}
+	
+	switch(eval_flag){
+	    case 0:
+#if DEBUG_PARAM
+    cout << "Evaluation par fréquence"<< endl;
+#endif
+		if( ind_flag == 0)
+		    eval = new FreqEval(data);
+		else if( ind_flag == 1)
+		    eval = new FreqEval(data2);
+		break;
+	    case 1:
+#if DEBUG_PARAM
+    cout << "Evaluation biobjective frequence/clôture"<< endl;
+#endif
+		if( ind_flag == 0)
+		    eval = new CloseEval(evalSeuilF,data);
+		else if(ind_flag == 1)
+		    eval = new CloseEval(evalSeuilF,data2);
+		break;      
+	}
+
+	switch(pop_flag){
+	    case 0:
+#if DEBUG_PARAM
+    cout << "Randomized population's initialisation"<< endl;
+#endif
+	      if( ind_flag == 0)
+		  pop = new RandomPop(data->getNbCol());
+	      else if(ind_flag == 1)
+		  pop = new RandomPop(data2->getNbCol());
+	      break;
+	    case 1:
+#if DEBUG_PARAM
+    cout << "Frequent Items population's initialisation"<< endl;
+#endif
+	      if( ind_flag == 0)
+		  pop = new FreqPop(data, initSeuilF);
+	      else if(ind_flag == 1)
+		  pop = new FreqPop(data2, initSeuilF);
+	      break;
+	    case 2:	      
+#if DEBUG_PARAM
+    cout << "Population's initialisation by augmentation"<< endl;
+#endif
+	      if( ind_flag == 0)
+		  pop = new IRandomPop(data);
+	      else if(ind_flag == 1)
+		  pop = new IRandomPop(data2);
+	      break;  
+	}
+	
+	switch(select_flag){
+	    case 0:
+#if DEBUG_PARAM
+    cout << "Best select for reproducing"<< endl;
+#endif
+		select = new BestSelect<char>();
+		break;
+	    case 1:
+#if DEBUG_PARAM
+    cout << "Random select for reproducing"<< endl;
+#endif
+		select = new RandomSelect<char>();
+		break;
+	    case 2:
+#if DEBUG_PARAM
+    cout << "Tournament selection for reproducing between " << participants << " participants"<< endl;
+#endif
+		select = new TournamentSelect<char>(participants);
+		break;
+	}
+	
+	switch(id_flag){
+	    case 0:
+#if DEBUG_PARAM
+    cout << "Suppression des plus mauvais"<< endl;
+#endif
+		indel = new FitnessIDPolicy<char>();
+		break;
+	    case 1:
+#if DEBUG_PARAM
+    cout << "Suppression des plus vieux"<< endl;
+#endif
+		indel = new AgeIDPolicy<char>();
+		break;		
+	}
+	
+	switch(smig_flag){
+	    case 0:
+#if DEBUG_PARAM
+    cout << "Selecting " << nbMig << " best for migration" << endl;
+#endif    
+		migselect = new BestSelect<char>();
+		break;
+		
+	    case 1:
+#if DEBUG_PARAM
+    cout << "tournament for " << nbMig << " best for migration between " << migPart << " participants"<< endl;
+#endif    
+		migselect = new TournamentSelect<char>(migPart);
+	}
+	
+	switch(dmig_flag){
+#if DEBUG_PARAM
+    cout << "Deleting oldest for receiving migrants" << endl;
+#endif    
+		migindel = new AgeIDPolicy<char>();
+		break;
+		
+	    case 1:
+#if DEBUG_PARAM
+    cout << "deleting worst before receiving migrants"<< endl;
+#endif    
+		migindel = new FitnessIDPolicy<char>();
+	}
+	
+	GeneticAlgo<char>* algo = NULL;
+	
+	if(ind_flag == 0){
+#if DEBUG_PARAM
+    cout << "Itemset optimisé"<< endl;
+#endif
+		  ItemSetO<char> isT1;
+		  algo = new GeneticAlgo<char>((Individual<char> *)&isT1,(Mutator<char> *)mut,
+						(Cross<char> *)cross,(Evaluate<char> *)eval,
+						(InitPop<char> *)pop, (SelectPolicy<char> *)select,
+						(IndelPolicy<char> *)indel, tabMig,
+						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
+						taillePop,nbGeneration,probaM,probaC,
+						nbIsland, idIsland, nameIsland,  stepM
+					      );
+	}else if(ind_flag == 1){
+#if DEBUG_PARAM
+    cout << "Itemset classique"<< endl;
+#endif
+		  ItemSet<char>isT2;
+		  algo = new GeneticAlgo<char>((Individual<char> *)&isT2,(Mutator<char> *)mut,
+						(Cross<char> *)cross,(Evaluate<char> *)eval,
+						(InitPop<char> *)pop, (SelectPolicy<char> *)select,
+						(IndelPolicy<char> *)indel, tabMig,
+						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
+						taillePop,nbGeneration,probaM,probaC,
+						nbIsland, idIsland, nameIsland,  stepM
+					      );	
+	}
+	
+	cout << "DEBUT RUN" << endl;
+	
+	//algo->run();
+	algo->populate();
+	algo->evalPop();
+	algo->displayPopulation();
+	cout << "FIN RUN" << endl;
+	
+	delete mut;
+	delete cross;
+	delete eval;
+	delete pop;
+	delete select;
+	delete indel;
+	delete data;
+	delete data2;
+	delete algo;
+	      	   
+    }
+ 
+    return EXIT_SUCCESS;
+
 }

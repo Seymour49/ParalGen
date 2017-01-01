@@ -40,12 +40,17 @@ int main(int argc, char **argv)
 //   
 //   cout << monDataSet3 << endl;
 //   
-//   monDataSet.loadFile("./data/test.dat");
+//   monDataSet.loadFile("./data/mushroom.dat");
 //   
 //   monDataSet4 = monDataSet;
 //   
+//   
+//  
 //   cout << monDataSet4 << endl;
-
+//   cout << "Nb ligne = " << monDataSet4.getNbLine() << endl;
+//   cout << "Nb colonne = " << monDataSet4.getNbCol() << endl;
+  
+  
   /* * * * * * TEST ITEMSET ET ITEMSETO * * * * */
   
   
@@ -129,24 +134,34 @@ int main(int argc, char **argv)
 //   CharDataSetO monDataSetO;
 //   CharDataSet monDataSet;
 //   
-//   monDataSet.loadFile("./data/mushroom.dat");
-//   monDataSetO.loadFile("./data/mushroom.dat");
+//   monDataSet.loadFile("./data/testCloture.dat");
+//   monDataSetO.loadFile("./data/testCloture.dat");
 //   
-//   CloseEval monEval(0.15, &monDataSet);
+//   CloseEval monEval(0.25, &monDataSet, &monDataSetO);
+// 
+//   //FreqEval monEval(&monDataSet, &monDataSetO);
 //   
-//   vector<char> v(119, '0');
+//   vector<char> v(4, '0');
+//   
 //   v[0] = '1';
+//   v[1] = '1';
+//   v[2] = '0';
+//   v[3] = '0';
+//   
+//   vector<char> v2(v);
+//   v2[3] = '1';
 //   
 //   ItemSet<char> monItemSet(v);
-//   
-//   try {
-//     cout << monItemSet << endl;
-//     
-//     monEval.execute( monItemSet);
-//     
-//     cout << monItemSet << endl;
-//   } catch (string exception) {
-//     cerr << exception << endl;
+//   for (int i = 0; i < 1000000; ++i) {
+//     try {
+//       //cout << monItemSet << endl;
+//       
+//       monEval.executeO(monItemSet);
+//       
+//       //cout << monItemSet << endl;
+//     } catch (string exception) {
+//       cerr << exception << endl;
+//     }
 //   }
   
 
@@ -425,9 +440,8 @@ int main(int argc, char **argv)
   
   //UniformCross<char> monCross;
   //ClassicCross<char> monCross(30);
-  vector <unsigned int > v1;
-  v1.push_back(10); v1.push_back(50); v1.push_back(75);
-  MultiPointCross<char> monCross(v1);
+
+  MultiPointCross<char> monCross(3);
   
   CharDataSetO monDataSetO;
   CharDataSet monDataSet;

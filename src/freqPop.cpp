@@ -6,19 +6,19 @@ using namespace std;
 
 
 
-FreqPop::FreqPop(DataSet<char> * const data, float density): _data(data), _dataO(NULL), _density(density)
+FreqPop::FreqPop(DataSet< char >*const data, float sF): _data(data), _dataO(NULL), _seuilF(sF)
 {}
 
 
-FreqPop::FreqPop(DataSetO<char> * const dataO, float density): _data(NULL), _dataO(dataO), _density(density)
+FreqPop::FreqPop(DataSetO<char> * const dataO, float sF): _data(NULL), _dataO(dataO), _seuilF(sF)
 {}
 
 
-FreqPop::FreqPop(DataSet< char > * const data, DataSetO< char > * const dataO, float density):_data(data), _dataO(dataO), _density(density)
+FreqPop::FreqPop(DataSet< char > * const data, DataSetO< char > * const dataO, float sF):_data(data), _dataO(dataO), _seuilF(sF)
 {}
 
 
-FreqPop::FreqPop(const FreqPop& f): _density(f.getDensity())
+FreqPop::FreqPop(const FreqPop& f): _seuilF(f.getseuilF())
 {}
 
 
@@ -48,20 +48,23 @@ void FreqPop::execute(std::vector< Individual< char >* >& pop)
 	
 	for(unsigned i=0; i < item; ++i){
 	    pair<int,float> tmp(i,0);
-	    itemOcc.push_back(tmp);
 	    
 	    for(unsigned j=0; j < line; ++j){
-		itemOcc[i].second += toDigit( _data->getDataAt(j,i));
+		tmp.second += toDigit( _data->getDataAt(j,i));
 	    }
+	    if( tmp.second >= _seuilF*line)
+		itemOcc.push_back(tmp);
 	}
       
+	cout << "DEBUG : Nombre items fréquents : " << itemOcc.size() << endl;
 	sort(itemOcc.begin(), itemOcc.end(), descPair);
 
-	unsigned nbBrik = (item/10);
+	unsigned nbBrik = (itemOcc.size()/5);
 	int brik[nbBrik] = { };
-	unsigned nbCiment = (item/5);
+	unsigned nbCiment = itemOcc.size() - nbBrik;
 	int ciment[nbCiment] = { };
 	int brikP = 0 ; int cimentP = 0;
+	
 	for(unsigned int i = 0; i < item; ++i){
 	    if(i <= nbBrik){
 		brik[brikP] = itemOcc[i].first;
@@ -71,27 +74,21 @@ void FreqPop::execute(std::vector< Individual< char >* >& pop)
 		ciment[cimentP] = itemOcc[i].first;
 		++cimentP;
 	    }
-	}
-	int selectedBrik;
-	int selectedCiment;
+	} 
 	
-	int indBrik;
-	int indCiment;
-	// Correspond à la densité choisie. 
-	int max_bit = _density*100;
 	for (unsigned int i = 0; i < pop.size(); ++i) {
 	    pop[i]->resize(item);
 	    for(unsigned int j = 0; j < item; ++j) (*pop[i])[j] = '0';
-	    selectedBrik = rand() % max_bit;
-	    selectedCiment = max_bit - selectedBrik;
+	    int selectedBrik = rand() % nbBrik;
+	    int selectedCiment = rand() % nbCiment;
 	  
 	    for (int j = 0; j < selectedBrik; ++j){
-		indBrik = rand() % (nbBrik -1);
+		int indBrik = rand() % (nbBrik -1);
 		(*pop[i])[brik[indBrik]] = '1';
 	    }
 	   
 	    for (int j = 0; j < selectedCiment; ++j){
-		indCiment = rand() % (nbCiment-1);
+		int indCiment = rand() % (nbCiment-1);
 		(*pop[i])[ciment[indCiment]] = '1';
 	    }
 	}
@@ -115,20 +112,23 @@ void FreqPop::executeO(std::vector< Individual< char >* >& pop)
       
       for (unsigned int i = 0; i < item; ++i){
 	  pair<int,float> tmp(i,0);
-	  itemOcc.push_back(tmp);
 	  
 	  for(unsigned int j = 0; j < line; ++j){
-	      itemOcc[i].second += toDigit( _dataO->getDataAt(j,i));
+	      tmp.second += toDigit( _dataO->getDataAt(j,i));
 	  }
+	  if( tmp.second >= _seuilF*line)
+	      itemOcc.push_back(tmp);
       }
     
+      cout << "DEBUG : Nombre items fréquents : " << itemOcc.size() << endl;
       sort(itemOcc.begin(), itemOcc.end(), descPair);
 
-      unsigned nbBrik = (item/10);
+      unsigned nbBrik = (itemOcc.size() / 5);
       int brik[nbBrik] = { };
-      unsigned nbCiment = (item/5);
+      unsigned nbCiment = itemOcc.size() - nbBrik;
       int ciment[nbCiment] = { };
       int brikP = 0 ; int cimentP = 0;
+      
       for(unsigned int i = 0; i < item; ++i){
 	  if(i <= nbBrik){
 	      brik[brikP] = itemOcc[i].first;
@@ -140,28 +140,22 @@ void FreqPop::executeO(std::vector< Individual< char >* >& pop)
 	  }
       }
       
-      int selectedBrik = 0;
-      int selectedCiment = 0;
-      
-      int indBrik = 0;
-      int indCiment = 0;
-      // Correspond à la densité choisie. 
-      int max_bit = _density*100;
       
       for (unsigned int i = 0; i < pop.size(); ++i) {
 	
 	pop[i]->resize(item);
 	for(unsigned int j = 0; j < item; ++j) (*pop[i])[j] = '0';
-	selectedBrik = rand() % max_bit;
-	selectedCiment = max_bit - selectedBrik;
+	
+	int selectedBrik = rand() % nbBrik;
+	int selectedCiment = rand() % nbCiment;
       
 	for(int j = 0; j < selectedBrik; ++j){
-	    indBrik = rand() % (nbBrik -1);
+	    int indBrik = rand() % (nbBrik -1);
 	    (*pop[i])[brik[indBrik]] = '1';
 	}
 	
 	for(int j = 0; j < selectedCiment; ++j){
-	    indCiment = rand() % (nbCiment-1);
+	    int indCiment = rand() % (nbCiment-1);
 	    (*pop[i])[ciment[indCiment]] = '1';
 	}
 	
