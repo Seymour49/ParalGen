@@ -253,6 +253,18 @@ public:
 	  while( i < _nbIteration ){
 	      
 	
+	      // Gestion du modèle en îles
+	    
+	      if( _nbIsland > 1 && (i%_stepM) == 0 ){
+		  // Selection des migrants et ecriture fichier
+		
+		
+		  // checkFiles
+		
+		  // Foreach file, traitement
+		
+	      }
+	      
 	      Individual<T>* os1 = NULL;
 	      Individual<T>* os2 = NULL;
 	      
@@ -279,7 +291,6 @@ public:
 	      if( alea < _probaC*1000){
 		  _cross->execute(*_population[parents.first], *_population[parents.second], *tmp1);
 		  _cross->execute(*_population[parents.second],*_population[parents.first], *tmp2);
-
 	      }
 	      else{
 		  *tmp1 = *_population[parents.first]; 
