@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     unsigned int idIsland = 1;
     std::string nameIsland = "Node";
     float* tabMig = NULL;
-    unsigned stepM = 1;
+    unsigned stepM = 10;
     
     unsigned nbMig = 2;
     unsigned int migPart = 5;
@@ -86,7 +86,8 @@ int main(int argc, char **argv)
 	<< "idIsland : " << idIsland << endl 
 	<< "nameIsland : " << nameIsland << endl 
 	<< "nbMig : " << nbMig << endl 
-	<< "migPart : " << migPart << endl;
+	<< "migPart : " << migPart << endl
+	<< "stepM : " << stepM << endl;
 	
   cout 	<< "==================================="<< endl
 	<< "======= Méthodes par défaut ======="<< endl
@@ -469,7 +470,7 @@ int main(int argc, char **argv)
 						(IndelPolicy<char> *)indel, tabMig,
 						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
 						taillePop,nbGeneration,probaM,probaC,
-						nbIsland, idIsland, nameIsland,  stepM
+						nbIsland, idIsland, nameIsland,  stepM, nbMig
 					      );
 	}else if(ind_flag == 1){
 #if DEBUG_PARAM
@@ -482,16 +483,24 @@ int main(int argc, char **argv)
 						(IndelPolicy<char> *)indel, tabMig,
 						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
 						taillePop,nbGeneration,probaM,probaC,
-						nbIsland, idIsland, nameIsland,  stepM
+						nbIsland, idIsland, nameIsland,  stepM, nbMig
 					      );	
 	}
 	
 	cout << "DEBUT RUN" << endl;
 	
-	//algo->run();
-	algo->populate();
-	algo->evalPop();
-	algo->displayPopulation();
+	algo->run();
+	//algo->populate();
+	//algo->evalPop();
+	//algo->displayPopulation();
+	
+	cout << "==================================" << endl;
+	cout << "==================================" << endl;
+	
+	//algo->processDir();
+	
+	cout << "==================================" << endl;
+	cout << "==================================" << endl;
 	cout << "FIN RUN" << endl;
 	
 	delete mut;
@@ -499,6 +508,9 @@ int main(int argc, char **argv)
 	delete eval;
 	delete pop;
 	delete select;
+	delete migselect;
+	delete migindel;
+	delete tabMig;
 	delete indel;
 	delete data;
 	delete data2;
