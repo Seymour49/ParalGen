@@ -155,7 +155,7 @@ $(json validate --schema-file=$JSONSCHEMA --document-file=$JSONFILE) &&
 	
 	
 	# Lancement des exécutions parallels
-	parallel :::: $CMDFILE
+	parallel --no-notice :::: $CMDFILE 
 
 
 }
