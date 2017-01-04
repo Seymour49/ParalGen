@@ -71,7 +71,7 @@
                     "type": "object",
                     "properties": {
                       "class": {
-                        "enum": ["itemSet", "itemSetO"]
+                        "enum": ["itemset", "itemsetO"]
                       },
                       "typePrimitif": {
                         "enum": ["char"] 
@@ -177,6 +177,7 @@
   },
   "required": [
     "migration",
+    "name",
     "tabAlgoGen"
   ]
 }

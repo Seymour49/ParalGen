@@ -141,7 +141,7 @@ $(json validate --schema-file=$JSONSCHEMA --document-file=$JSONFILE) &&
 		# Ecriture des ligne d'exécution avec les options courtes et les options longues
 		
 		tableauExecution[$i]="$EXE -k $nbMig -s $stepMig -i $identifiant -u $nom -n $taillePop -g $nbGeneration -d $jeuDeDonnee -c $probaCroisement -m $probaMutation -l $nbExec -t $proba --$typeIndividu --$typePrimitif --$populate $paramPopulate --$evaluation $paramEvaluation --$croisement $paramCroisement --$mutation $paramMutation --$selection $paramSelection --$inDel $paramInDel"
-
+		mkdir $nom$identifiant
 		
 	done
 	
