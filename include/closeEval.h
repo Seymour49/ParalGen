@@ -6,6 +6,7 @@
 #include "dataSetO.h"
 
 #include <algorithm>
+#include <vector>
 
 /**
  * Cette classe représente la fonction d'évaluation attendue pour notre
@@ -24,6 +25,8 @@ private:
   float _freq;
   DataSet<char> * _data1;
   DataSetO<char> * _data2;
+  std::vector<unsigned int> _itemFreq;
+  std::vector<unsigned int> _itemFreqO;
   
 public:
   
@@ -74,15 +77,23 @@ public:
   
   DataSet<char> * getData() const {return _data1;}
   
-  void setData(const DataSet<char> * data) { *_data1 = *data; }
+  void setData(const DataSet<char> * data) { *_data1 = *data; _itemFreq.clear(); }
   
   DataSetO<char> * getDataO() const {return _data2;}
   
-  void setDataO(const DataSetO<char> * dataO) { *_data2 = *dataO; }
+  void setDataO(const DataSetO<char> * dataO) { *_data2 = *dataO; _itemFreqO.clear(); }
   
   float getFrequence() const { return _freq; }
   
   void setFrequence(float freq) {_freq = freq;}
+  
+  std::vector<unsigned int> getItemFreq() const {return _itemFreq;}
+  
+  void setItemFreq(const std::vector<unsigned int> & itemFreq) {_itemFreq = itemFreq;}
+  
+  std::vector<unsigned int> getItemFreqO() const {return _itemFreqO;}
+  
+  void setItemFreqO(const std::vector<unsigned int> & itemFreqO) {_itemFreqO = itemFreqO;}
   
   /* * * * * * 
    * METHODS *

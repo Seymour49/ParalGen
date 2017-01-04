@@ -249,7 +249,7 @@ public:
  * Renvoie une erreur si les indices sont en dehors de la population.
  * @param indParent1 : indice du premier parent
  * @param indParent2 : indice du deuxième parent
- * @param indEnfant  : indice de l'enfant
+ * @param ind  : enfant
  * @author Ugo Rayer
  */
   void doCrossFor(unsigned int indParent1, unsigned int indParent2, Individual<T> & ind)
