@@ -14,8 +14,11 @@
 #include "initPop.h"
 
 #include <vector>
-#include <fstream>
-#include <algorithm>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <string.h>
 
 /**
  * Cette classe implémente un algorithme génétique
@@ -43,7 +46,7 @@ private:
     IndelPolicy<T>* _indelMig;
     
     /* Fin IM */
-    
+    unsigned int _tPop;
     unsigned int _nbIteration;
     float _probaM;
     float _probaC;
@@ -65,9 +68,9 @@ private:
     
     // Méthodes
     // void checkFiles()
-    // void readFile(File) -> Appel à _indelM
+    // void readFile(File) -> Appel à _indelMig
     
-    // void writeFile(File) -> Appel à _selectMid
+    // void writeFile(File) -> Appel à _selectMig
     
     
     
@@ -100,11 +103,12 @@ public:
 	      IndelPolicy<T> * const insert, float* tM,SelectPolicy<T> * const migS, IndelPolicy<T>* const migID,
 	      unsigned int taillePop = 100, unsigned int it = 10000,
 	      float pm = 0.005, float pc = 0.8, unsigned int nbI = 1, unsigned int id = 1,
-	      std::string name = "Node", unsigned int step = 10)
+	      std::string name = "Node", unsigned int step = 10, unsigned int nbMig = 2)
   :_mutator(mut), _cross(cross), _eval(eval), _initPop(init), _select(select), _insert(insert),_tabMig(tM),
-   _selectMig(migS), _indelMig(migID), _nbIteration(it),_probaM(pm), _probaC(pc),
-  _population(taillePop),_nbIsland(nbI), _idIsland(id), _unitaryName(name), _stepM(step)
+   _selectMig(migS), _indelMig(migID),_tPop(taillePop), _nbIteration(it),_probaM(pm), _probaC(pc),
+  _population(taillePop),_nbIsland(nbI), _idIsland(id), _unitaryName(name), _stepM(step),_nbMigrants(nbMig)
   {
+    
     if (ind != NULL) {
       ItemSet<T> * itemset = dynamic_cast<ItemSet<T> *>(ind);
       ItemSetO<T> * itemsetO = dynamic_cast<ItemSetO<T> *>(ind);
@@ -145,6 +149,84 @@ public:
   /* * * * * * 
    * METHODS *
    * * * * * */
+  
+  std::vector< std::string > explode(const std::string& str){
+    std::istringstream split(str);
+    std::vector<std::string > tokens;
+
+    for(std::string each; std::getline(split, each, ' '); tokens.push_back( each.c_str()) );
+    return tokens;
+  }
+  
+  int processDir(){
+      // Déterminer le nom du dossier
+      std::string dirname= _unitaryName;
+      dirname.append(std::to_string(_idIsland));
+
+      // Ouverture du dossier
+      DIR *dir = opendir(dirname.c_str());
+      struct dirent *d;
+      
+      if( dir == NULL){ // Not a directory or doesn't exist
+	std::cout << "Pas de dossier/ dossier vide" << std::endl;  
+	return -1;
+      }
+      while( (d = readdir(dir)) != NULL) {
+	  if( !strcmp(d->d_name, ".") || !strcmp(d->d_name, "..") )
+	  {}
+	  else{
+	      std::cout << "processing file : " << d->d_name << std::endl;
+	      std::string filepath = dirname+"/"+d->d_name;
+	      
+	      // Traitement du fichier courant
+	      
+	      std::ifstream f(filepath.c_str());
+	      
+	      if(!f) throw std::string("Erreur lors de l'ouverture du fichier " + filepath + "!");
+	      else{
+		  std::string line;
+		  
+		  while( std::getline(f,line)){		     
+		      
+		      if(!line.empty()) {
+			  std::vector<std::string> tokens;
+			  // extraction du bitset depuis le fichier
+			  tokens = explode(line);
+			  std::vector<T> bitset;
+			  for(unsigned int i=0; i < tokens.size(); ++i)
+			      bitset.push_back(*tokens[i].c_str()); // TODO typage de l'individu
+			  
+			  // DEBUG DISPLAY
+			  std::cout << "Bitset :";
+			  for(unsigned int i=0; i < bitset.size(); ++i)
+			      std::cout <<" " <<bitset[i];
+			  std::cout << std::endl;
+			  // END DD
+			  
+			  // Création de l'individu
+			  Individual<T>* newcomer = NULL;
+			  if( _typeFlag == 0){
+			      newcomer = new ItemSet<T>(bitset);
+			  }
+			  else {
+			      newcomer = new ItemSetO<T>(bitset);
+			  }
+			   _population.push_back(newcomer);
+		      }		      
+		  }
+		  f.close();
+		  // Suppression du fichier après traitement
+		  if( std::remove(filepath.c_str()) != 0)		      
+			throw std::string("Suppression impossible");
+		  
+	      }	      
+	  }
+      }
+	
+      closedir(dir);
+      
+      return 0;
+  }
 
 
 /**
@@ -303,14 +385,41 @@ public:
 	
 	      // Gestion du modèle en îles
 	    
-	      if( _nbIsland > 1 && (i%_stepM) == 0 ){
-		  // Selection des migrants et ecriture fichier
+	      if( _nbIsland > 1 && (i%_stepM) == 0 && i > 0){
+		  std::cout << "test passage. nbMigrants : " << _nbMigrants << std::endl;
+		  // on effectue _nbMigrants selections
+		  std::vector<std::vector<int>> migMat; 
+		  for(unsigned i = 0; i < _nbIsland; ++i){
+		      std::vector<int> migIle;
+		      migMat.push_back(migIle);
+		  }
+		  
+		  for(unsigned i = 0; i < _nbMigrants; ++i){
+		      std::pair<int,int> selected( _selectMig->execute(_population));
+		      std::cout <<"Selected " <<  selected.first<<":" << selected.second << std::endl;
+		      // Sélection de l'île
+		      int alea = rand() % 1000;
+		      int tmp = _tabMig[0] * 1000;
+		      
+		      int j = 0;
+		      while( tmp <= alea ){
+			std::cout << "alea : " << alea << ". tmp : " << tmp << ". j : " << j << std::endl;
+			  ++j;
+			  tmp += (_tabMig[j]*1000);			  
+		      }
+		      
+		      // Indice de l'île dans la variable j, individu dans selected.first
+		      std::cout << "Individu à migrer " << selected.first << " sur l'île " << j << std::endl ;
+		    
+		  }
 		
-		
-		  // checkFiles
-		
-		  // Foreach file, traitement
-		
+		  // Traitement du dossier pour insertion
+		  try{
+		    processDir();
+		  }
+		  catch( std::string Excep){
+		      std::cerr << Excep << std::endl;
+		  }
 	      }
 	      
 	      Individual<T>* os1 = NULL;
