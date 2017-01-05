@@ -137,6 +137,7 @@ public:
     for (unsigned int i = 0; i < _population.size(); ++i) {
       delete _population[i];
     }
+    delete[] _results;
   }
   
   /* * * * * * * * * 
@@ -336,21 +337,18 @@ public:
 	for (unsigned int i = n; i < _population.size(); ++i) {
 	  float newScore = _population[i]->getScore();
 	  unsigned int j = n - 1;
-	  std::cout << " i = " << i << std::endl;
 	  if (newScore > bestScore[0]) j = 0;
 	  else {
 	    while (newScore > bestScore[j]) {
 	      j--;
 	    }
+	    j++;
 	  }
-	  if ((j >= 0) && (j < (n - 1))) {
-	    std::cout << "j = " << j << std::endl;
+	  if ((j >= 0) && (j < n)) {
 	    for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
 	    bestScore.insert(bestScore.begin()+j, newScore);
 	    bestScore.pop_back();
-	    std::cout << std::endl <<"Après insertion" << std::endl;
 	    for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
-	    std::cout << std::endl;
 	  }
 	}
 	float average = 0.0;
@@ -381,7 +379,10 @@ public:
 	  
 	  // Evaluation de la population
 	  evalPop();
-	      
+	  char tmp = _idIsland + '0';
+	  std::string resultFileName = "result"+_unitaryName+tmp+".txt";
+	  
+	  writeBestScoreAverage(resultFileName, 10, 0);
 	  // Début de la boucle centrale
 	  unsigned i=0;
 	      int pass = 0;
@@ -563,11 +564,13 @@ public:
 	      ++i;
 	      
 	      // extraction du meilleur individus de la population
-	      std::vector<float> bestScore(_population.size());
+	  /*    std::vector<float> bestScore(_population.size());
 	      for (unsigned int i = 0; i < _population.size(); ++i) bestScore[i] = _population[i]->getScore();
 	      std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
 	  
 	      _results[i] = bestScore[0];
+	      */
+	      writeBestScoreAverage(resultFileName, 10, i);
 	  }
 	  
 	  exportResults();

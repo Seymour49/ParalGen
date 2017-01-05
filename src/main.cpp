@@ -494,6 +494,7 @@ int main(int argc, char **argv)
 // 	algo->populate();
 // 	algo->evalPop();
 	algo->displayPopulation();
+
 	cout << "FIN RUN" << endl;
 	
 	delete mut;
