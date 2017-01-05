@@ -205,10 +205,23 @@ void CloseEval::executeO(Individual< char >& ind)
       }
     }
         
-    if ( isClosed && (result >= _freq)) 
-      ind.setScore(result + 1.0); // Si clos on augmentre le score de 1
-    
-    else
-      ind.setScore(result);
+    bool vide = true;
+    unsigned int inc = 0;
+    while( vide && inc < ind.size()){
+	if( ind[inc] == '1')
+	  vide = false;
+	
+	++inc;      
+    }
+    if(!vide){
+	if ( isClosed && (result >= _freq)) 
+	  ind.setScore(result + 1.0); // Si clos on augmentre le score de 1
+	
+	else
+	  ind.setScore(result);
+    }
+    else{
+	ind.setScore(0);
+    }
   }
 }

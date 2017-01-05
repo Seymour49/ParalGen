@@ -364,12 +364,12 @@ public:
  */
   void run()
   {
-      float _results[_nbIteration];
+//       float _results[_nbIteration];
       try{
 	
 	  /* Gestion résultats */
-	  for(unsigned int i=0; i < _nbIteration; ++i)
-	      _results[i] = 0;
+// 	  for(unsigned int i=0; i < _nbIteration; ++i)
+// 	      _results[i] = 0;
 	
 	  // Initialisation de la population
 	  populate();
@@ -382,7 +382,7 @@ public:
 	  
 	  std::string resultFileName = "results/"+_unitaryName+tmp+"_"+std::to_string(al*al2)+".txt";
 	  
-	  //writeBestScoreAverage(resultFileName, 10, 0);
+	  writeBestScoreAverage(resultFileName, 10, 0);
 	  // Début de la boucle centrale
 	  unsigned i=0;
 	      int pass = 0;
@@ -564,16 +564,16 @@ public:
 	      ++i;
 	      
 	      // extraction du meilleur individus de la population
-	      std::vector<float> bestScore(_population.size());
+	     /* std::vector<float> bestScore(_population.size());
 	      for (unsigned int i = 0; i < _population.size(); ++i) bestScore[i] = _population[i]->getScore();
-	      std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
+	      std::sort(bestScore.begin(), bestScore.end());//, [](float a, float b) {return (a > b);});
 	      _results[i] = bestScore[0];
-	  
+	    */
 	      
-	     // writeBestScoreAverage(resultFileName, 10, i);
+	     writeBestScoreAverage(resultFileName, 10, i);
 	  }
 	  
-	  exportResults(_results);
+// // 	  exportResults(_results);
       }
       catch(std::string Exception){
 	  std::cerr << Exception << std::endl;	
@@ -584,9 +584,9 @@ public:
   
 void exportResults(float* _results){
     
-    std::string filename = _unitaryName;
+    std::string filename = "results/"+_unitaryName;
     filename.append(std::to_string(_idIsland));
-    filename.append("/result_");
+    filename.append("_result_");
     time_t timer = time(NULL);
     int al1 = rand() % 1111 + 10000;
     int al2 = rand() % 3333 + 2000;
