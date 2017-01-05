@@ -71,7 +71,7 @@
                     "type": "object",
                     "properties": {
                       "class": {
-                        "enum": ["itemset", "itemsetO"]
+                        "enum": ["itemsetO"]
                       },
                       "typePrimitif": {
                         "enum": ["char"] 

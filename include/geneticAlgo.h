@@ -19,6 +19,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <string.h>
+#include <algorithm>
 
 /**
  * Cette classe implémente un algorithme génétique
@@ -286,7 +287,6 @@ public:
     catch(std::string E1){
 	try{
 	  _initPop->execute(_population);  
-
 	}
 	catch(std::string Excep){
 	    std::cerr << E1 << " then " << Excep << std::endl;
@@ -302,7 +302,7 @@ public:
   {
     
     for (unsigned int i = 0; i < _population.size(); ++i) {
-      try{      
+      try {
 	  _eval->executeO(*(_population[i]));
       }
       catch(std::string E1){
@@ -310,7 +310,7 @@ public:
 	      _eval->execute(*(_population[i]));
 	  }
 	  catch(std::string Excep){
-	      std::cerr << E1 << " then " <<Excep << std::endl;
+	      std::cerr << E1 << " then " << Excep << std::endl;
 	  }
       }
     }
@@ -334,23 +334,23 @@ public:
 	for (unsigned int i = 0; i < n; ++i) bestScore[i] = _population[i]->getScore();
 	std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
 	for (unsigned int i = n; i < _population.size(); ++i) {
-	  std::cout << "i = "<< i << std::endl;
 	  float newScore = _population[i]->getScore();
-	  std::cout << "newScore = " << newScore << std::endl;
-	  std::cout << "bestScore[0] = " << bestScore[0] << std::endl;
 	  unsigned int j = n - 1;
+	  std::cout << " i = " << i << std::endl;
 	  if (newScore > bestScore[0]) j = 0;
 	  else {
 	    while (newScore > bestScore[j]) {
 	      j--;
 	    }
 	  }
-	  std::cout << "j = " << j << std::endl;
 	  if ((j >= 0) && (j < (n - 1))) {
+	    std::cout << "j = " << j << std::endl;
+	    for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
 	    bestScore.insert(bestScore.begin()+j, newScore);
-	    std::cout << "bestScore[0] = " << bestScore[0] << std::endl;
-	    std::cout << "bestScore[1] = " << bestScore[1] << std::endl;
 	    bestScore.pop_back();
+	    std::cout << std::endl <<"Après insertion" << std::endl;
+	    for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
+	    std::cout << std::endl;
 	  }
 	}
 	float average = 0.0;

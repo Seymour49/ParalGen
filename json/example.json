@@ -7,15 +7,15 @@
  "tabAlgoGen": [{	
  	"id":1,
 	"initParam": {
-		"taillePop": 200,
-		"nbGeneration": 10000,
-		"dataFile": "mushroom.dat",
+		"taillePop": 20,
+		"nbGeneration": 1000,
+		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.7,
 		"probaMutation": 0.005,
 		"tabProbaMigration": [0.78, 0.09, 0.07, 0.04],
 		"classUsed": {
 			"typeInd": { 
-				"class": "itemset",
+				"class": "itemsetO",
 				"typePrimitif": "char"
 				},
 			"populate": { 
@@ -45,8 +45,8 @@
  	"id":2,
 	"initParam": {
 		"taillePop": 20,
-		"nbGeneration": 100000,
-		"dataFile": "mushroom.dat",
+		"nbGeneration": 1000,
+		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.85,
 		"probaMutation": 0.0005,
 		"tabProbaMigration": [0.78, 0.09, 0.07, 0.04],
@@ -60,11 +60,12 @@
 				"param":0.4
 				},				      
 			"evaluate": { 
-				"class":"closeEval",
+				"class":"freqEval",
 				"param":0.7
 				},
 			"crossover": {
-				"class":"multiPCross"
+				"class":"multiPCross",
+				"param":4
 				},
 			"mutator": {
 				"class":"randMut"
@@ -82,15 +83,15 @@
 	{
 	"id":3,
 	"initParam": {
-		"taillePop": 2000000,
+		"taillePop": 20,
 		"nbGeneration": 1000,
-		"dataFile": "mushroom.dat",
+		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.9,
 		"probaMutation": 0.01,
 		"tabProbaMigration": [0.78, 0.09, 0.07, 0.04],
 		"classUsed":{
 			"typeInd": { 
-				"class": "itemset",
+				"class": "itemsetO",
 				"typePrimitif": "char"
 				},
 			"populate": { 
@@ -119,22 +120,23 @@
 	{
 	"id":4,
 	"initParam": {
-		"taillePop": 200,
-		"nbGeneration": 10000,
-		"dataFile": "mushroom.dat",
+		"taillePop": 20,
+		"nbGeneration": 1000,
+		"dataFile": "data/mushroom.dat",
 		"probaCroisement": 0.7,
 		"probaMutation": 0.005,
 		"tabProbaMigration": [0.78, 0.09, 0.07, 0.04],
 		"classUsed":{
 			"typeInd": { 
-				"class": "itemset",
+				"class": "itemsetO",
 				"typePrimitif": "char"
 			},
 			"populate": { 
 				"class":"randPop"
 				},				      
 			"evaluate": { 
-				"class":"closeEval"
+				"class":"closeEval",
+				"param": 0.3
 				},
 			"crossover": {
 				"class":"monoPCross"
