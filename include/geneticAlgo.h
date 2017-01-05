@@ -70,7 +70,6 @@ private:
     
     
     /* Gestion des résultats */
-    float* _results;
     
     
 public:
@@ -107,7 +106,6 @@ public:
    _selectMig(migS), _indelMig(migID),_tPop(taillePop), _nbIteration(it),_probaM(pm), _probaC(pc),
   _population(taillePop),_nbIsland(nbI), _idIsland(id), _unitaryName(name), _stepM(step),_nbMigrants(nbMig)
   {
-    
     if (ind != NULL) {
       ItemSet<T> * itemset = dynamic_cast<ItemSet<T> *>(ind);
       ItemSetO<T> * itemsetO = dynamic_cast<ItemSetO<T> *>(ind);
@@ -125,7 +123,6 @@ public:
 	_typeFlag = 1;
       }
       
-      _results = new float[_nbIteration];
     }
   }
   
@@ -137,7 +134,6 @@ public:
     for (unsigned int i = 0; i < _population.size(); ++i) {
       delete _population[i];
     }
-    delete[] _results;
   }
   
   /* * * * * * * * * 
@@ -345,10 +341,10 @@ public:
 	    j++;
 	  }
 	  if ((j >= 0) && (j < n)) {
-	    for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
+	   
 	    bestScore.insert(bestScore.begin()+j, newScore);
 	    bestScore.pop_back();
-	    for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
+	    
 	  }
 	}
 	float average = 0.0;
@@ -368,11 +364,12 @@ public:
  */
   void run()
   {
+      float _results[_nbIteration];
       try{
 	
 	  /* Gestion résultats */
 	  for(unsigned int i=0; i < _nbIteration; ++i)
-	      _results = 0;
+	      _results[i] = 0;
 	
 	  // Initialisation de la population
 	  populate();
@@ -380,9 +377,12 @@ public:
 	  // Evaluation de la population
 	  evalPop();
 	  char tmp = _idIsland + '0';
-	  std::string resultFileName = "result"+_unitaryName+tmp+".txt";
+	  int al = rand() % 3333 + 25;
+	  int al2 = rand() % 245547+ 5788;
 	  
-	  writeBestScoreAverage(resultFileName, 10, 0);
+	  std::string resultFileName = "results/"+_unitaryName+tmp+"_"+std::to_string(al*al2)+".txt";
+	  
+	  //writeBestScoreAverage(resultFileName, 10, 0);
 	  // Début de la boucle centrale
 	  unsigned i=0;
 	      int pass = 0;
@@ -454,7 +454,7 @@ public:
 			   * puis le stream dans le fichier			   * 
 			   */
 			  std::ofstream outfile (filepath,std::ofstream::binary);
-			  if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier");
+			  if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier "+filepath);
 			  else{
 			      for(unsigned x=0; x < migMat[k].size() ; ++x){
 				  
@@ -564,16 +564,16 @@ public:
 	      ++i;
 	      
 	      // extraction du meilleur individus de la population
-	  /*    std::vector<float> bestScore(_population.size());
+	      std::vector<float> bestScore(_population.size());
 	      for (unsigned int i = 0; i < _population.size(); ++i) bestScore[i] = _population[i]->getScore();
 	      std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
-	  
 	      _results[i] = bestScore[0];
-	      */
-	      writeBestScoreAverage(resultFileName, 10, i);
+	  
+	      
+	     // writeBestScoreAverage(resultFileName, 10, i);
 	  }
 	  
-	  exportResults();
+	  exportResults(_results);
       }
       catch(std::string Exception){
 	  std::cerr << Exception << std::endl;	
@@ -582,7 +582,7 @@ public:
     
   }
   
-void exportResults(){
+void exportResults(float* _results){
     
     std::string filename = _unitaryName;
     filename.append(std::to_string(_idIsland));
@@ -595,7 +595,7 @@ void exportResults(){
     filename.append(std::to_string(timer));
     
     std::ofstream outfile(filename, std::ofstream::binary);
-    if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier");
+    if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier "+filename);
     else{
 	for(unsigned i=0; i < _nbIteration; ++i)
 	    outfile << i << " " << _results[i] << std::endl;
