@@ -58,8 +58,8 @@ void FreqPop::execute(std::vector< Individual< char >* >& pop)
       
 	cout << "DEBUG : Nombre items fréquents : " << itemOcc.size() << endl;
 	sort(itemOcc.begin(), itemOcc.end(), descPair);
-
 	unsigned nbBrik = (itemOcc.size()/5);
+	if (nbBrik == 0) nbBrik = 1;
 	int brik[nbBrik] = { };
 	unsigned nbCiment = itemOcc.size() - nbBrik;
 	int ciment[nbCiment] = { };
@@ -75,7 +75,6 @@ void FreqPop::execute(std::vector< Individual< char >* >& pop)
 		++cimentP;
 	    }
 	} 
-	
 	for (unsigned int i = 0; i < pop.size(); ++i) {
 	    pop[i]->resize(item);
 	    for(unsigned int j = 0; j < item; ++j) (*pop[i])[j] = '0';
@@ -122,13 +121,12 @@ void FreqPop::executeO(std::vector< Individual< char >* >& pop)
     
       cout << "DEBUG : Nombre items fréquents : " << itemOcc.size() << endl;
       sort(itemOcc.begin(), itemOcc.end(), descPair);
-
       unsigned nbBrik = (itemOcc.size() / 5);
+      if (nbBrik == 0) nbBrik = 1;
       int brik[nbBrik] = { };
       unsigned nbCiment = itemOcc.size() - nbBrik;
       int ciment[nbCiment] = { };
       int brikP = 0 ; int cimentP = 0;
-      
       for(unsigned int i = 0; i < item; ++i){
 	  if(i <= nbBrik){
 	      brik[brikP] = itemOcc[i].first;
@@ -139,26 +137,19 @@ void FreqPop::executeO(std::vector< Individual< char >* >& pop)
 	      ++cimentP;
 	  }
       }
-      
-      
       for (unsigned int i = 0; i < pop.size(); ++i) {
-	
 	pop[i]->resize(item);
 	for(unsigned int j = 0; j < item; ++j) (*pop[i])[j] = '0';
-	
 	int selectedBrik = rand() % nbBrik;
 	int selectedCiment = rand() % nbCiment;
-      
 	for(int j = 0; j < selectedBrik; ++j){
 	    int indBrik = rand() % (nbBrik -1);
 	    (*pop[i])[brik[indBrik]] = '1';
 	}
-	
 	for(int j = 0; j < selectedCiment; ++j){
 	    int indCiment = rand() % (nbCiment-1);
 	    (*pop[i])[ciment[indCiment]] = '1';
 	}
-	
       }
   }
 }

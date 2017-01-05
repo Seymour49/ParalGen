@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     /* Valeurs par défaut	*/
     unsigned int nbGeneration = 100;
     unsigned int taillePop = 25;
-    string dataFile = "./data/mushroom.dat";
+    string dataFile = "./data/testCloture.dat";
     float evalSeuilF = 0.6;
     float initSeuilF = 0.3;
     float probaM = 0.5;
@@ -62,6 +62,7 @@ int main(int argc, char **argv)
     unsigned int idIsland = 1;
     std::string nameIsland = "Node";
     float* tabMig = NULL;
+
     unsigned stepM = 50;
     
     unsigned nbMig = 3;
@@ -86,8 +87,7 @@ int main(int argc, char **argv)
 	<< "idIsland : " << idIsland << endl 
 	<< "nameIsland : " << nameIsland << endl 
 	<< "nbMig : " << nbMig << endl 
-	<< "migPart : " << migPart << endl
-	<< "stepM : " << stepM << endl;
+	<< "migPart : " << migPart << endl;
 	
   cout 	<< "==================================="<< endl
 	<< "======= Méthodes par défaut ======="<< endl
@@ -333,11 +333,11 @@ int main(int argc, char **argv)
 		break;
 	
 	    case 1:
-#if DEBUG_PARAM
-    cout << "data profiling : cols : "<<data->getNbCol()<<" lines : " << data->getNbLine() << endl;
-#endif
 		data2 = new CharDataSet();
 		data2->loadFile(dataFile);
+#if DEBUG_PARAM
+    cout << "data profiling : cols : "<<data2->getNbCol()<<" lines : " << data2->getNbLine() << endl;
+#endif
 		break;     
 	}
 	
@@ -380,6 +380,7 @@ int main(int argc, char **argv)
 		  pop = new FreqPop(data, initSeuilF);
 	      else if(ind_flag == 1)
 		  pop = new FreqPop(data2, initSeuilF);
+	      
 	      break;
 	    case 2:	      
 #if DEBUG_PARAM
@@ -470,7 +471,7 @@ int main(int argc, char **argv)
 						(IndelPolicy<char> *)indel, tabMig,
 						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
 						taillePop,nbGeneration,probaM,probaC,
-						nbIsland, idIsland, nameIsland,  stepM, nbMig
+						nbIsland, idIsland, nameIsland,  stepM
 					      );
 	}else if(ind_flag == 1){
 #if DEBUG_PARAM
@@ -483,24 +484,16 @@ int main(int argc, char **argv)
 						(IndelPolicy<char> *)indel, tabMig,
 						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
 						taillePop,nbGeneration,probaM,probaC,
-						nbIsland, idIsland, nameIsland,  stepM, nbMig
+						nbIsland, idIsland, nameIsland,  stepM
 					      );	
 	}
 	
 	cout << "DEBUT RUN" << endl;
 	
-	algo->run();
-	//algo->populate();
-	//algo->evalPop();
-	//algo->displayPopulation();
-	
-	cout << "==================================" << endl;
-	cout << "==================================" << endl;
-	
-	//algo->processDir();
-	
-	cout << "==================================" << endl;
-	cout << "==================================" << endl;
+	//algo->run();
+	algo->populate();
+	algo->evalPop();
+	algo->displayPopulation();
 	cout << "FIN RUN" << endl;
 	
 	delete mut;
@@ -508,9 +501,6 @@ int main(int argc, char **argv)
 	delete eval;
 	delete pop;
 	delete select;
-	delete migselect;
-	delete migindel;
-	delete tabMig;
 	delete indel;
 	delete data;
 	delete data2;

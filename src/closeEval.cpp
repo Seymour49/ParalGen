@@ -193,9 +193,9 @@ void CloseEval::executeO(Individual< char >& ind)
       }
     }
         
-    if ( isClosed && (result >= _freq)) {
+    if ( isClosed && (result >= _freq)) 
       ind.setScore(result + 1.0); // Si clos on augmentre le score de 1
-    }
+    
     else
       ind.setScore(result);
   }

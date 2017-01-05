@@ -21,6 +21,8 @@
 #include <string.h>
 #include <time.h> 
 #include <fstream>
+#include <algorithm>
+
 
 /**
  * Cette classe implémente un algorithme génétique
@@ -288,7 +290,6 @@ public:
     catch(std::string E1){
 	try{
 	  _initPop->execute(_population);  
-
 	}
 	catch(std::string Excep){
 	    std::cerr << E1 << " then " << Excep << std::endl;
@@ -304,8 +305,7 @@ public:
   {
     
     for (unsigned int i = 0; i < _population.size(); ++i) {
-      
-      try{      
+      try {
 	  _eval->executeO(*(_population[i]));
       }
       catch(std::string E1){
@@ -313,11 +313,58 @@ public:
 	      _eval->execute(*(_population[i]));
 	  }
 	  catch(std::string Excep){
-	      std::cerr << E1 << " then " <<Excep << std::endl;
+	      std::cerr << E1 << " then " << Excep << std::endl;
 	  }
       }
     }
   }
+  
+  
+  /**
+   * Ecrit dans un fichier dont le nom est passé en paramètre le score moyen des n meilleurs individus de la population
+   * @param fileName : Nom du fichier ou les résultats sont écrits
+   * @param n: nombre d'indivus à faire la moyenne
+   * @param generation: numéro de la génération
+   * @author Johan Defaye
+   */
+  void writeBestScoreAverage(const std::string & fileName, unsigned int n, unsigned int generation) const 
+  {
+    if ((n > _population.size()) || (n == 0)) throw std::string("Erreur, nombre d'individu incorrecte");
+    else {
+      std::ofstream file(fileName, std::ios::out | std::ios::app);
+      if (file) {
+	std::vector<float> bestScore(n);
+	for (unsigned int i = 0; i < n; ++i) bestScore[i] = _population[i]->getScore();
+	std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
+	for (unsigned int i = n; i < _population.size(); ++i) {
+	  float newScore = _population[i]->getScore();
+	  unsigned int j = n - 1;
+	  std::cout << " i = " << i << std::endl;
+	  if (newScore > bestScore[0]) j = 0;
+	  else {
+	    while (newScore > bestScore[j]) {
+	      j--;
+	    }
+	  }
+	  if ((j >= 0) && (j < (n - 1))) {
+	    std::cout << "j = " << j << std::endl;
+	    for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
+	    bestScore.insert(bestScore.begin()+j, newScore);
+	    bestScore.pop_back();
+	    std::cout << std::endl <<"Après insertion" << std::endl;
+	    for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
+	    std::cout << std::endl;
+	  }
+	}
+	float average = 0.0;
+	for (unsigned int i = 0; i < n; ++i) average += bestScore[i];
+	average = average/n;
+	file << generation << " " << average << std::endl;
+      }
+      else throw std::string("Erreur, impossible d'ouvrir le fichier " + fileName);
+    }
+  }
+  
   
 /**
  * Méthode principale de la classe. Lance l'algorithme génétique avec un nombre d'itération 
@@ -511,7 +558,7 @@ public:
 	      delete os1;
 	      delete os2;
 	      incAgePop();
-	      ++i;      	      
+	      ++i;
 	  }
       }
       catch(std::string Exception){
