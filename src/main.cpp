@@ -489,10 +489,10 @@ int main(int argc, char **argv)
 	
 	cout << "DEBUT RUN" << endl;
 	
-	//algo->run();
-	algo->populate();
-	algo->evalPop();
-	algo->displayPopulation();
+	algo->run();
+	//algo->populate();
+	//algo->evalPop();
+	//algo->displayPopulation();
 	cout << "FIN RUN" << endl;
 	
 	delete mut;
