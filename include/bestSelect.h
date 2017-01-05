@@ -74,7 +74,7 @@ public:
      */
     std::pair<int, int> execute(const std::vector<Individual<T> *> & pop) const
     {
-      if (pop.size() < 2) throw std::string("Erreur, impossible d'exécuter une sélection par tournoi avec une population possédant moins de deux individus");
+      if (pop.size() < 2) throw std::string("Erreur, impossible de sélectionner deux individus car la population en contient moins de deux (bestSelect)");
       else {
 	int b1 = 0;
 	int b2 = 1;

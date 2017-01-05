@@ -84,11 +84,9 @@ int main(int argc, char **argv)
 
   /* * * * * * TEST CLASSICCROSS * * * * */
   
-//   ClassicCross<char> monClassicCross(5), monClassicCross2(monClassicCross);
+//   ClassicCross<char> monClassicCross, monClassicCross2(monClassicCross);
 //   ClassicCross<char> tmp = monClassicCross;
-//   
-//   cout << tmp.getPivot() << " " << monClassicCross2.getPivot() << endl;
-//   
+//     
 //   vector<char> v(10, '0'), v2(10, '1');
 //   
 //   ItemSet<char> monItemSet(v), monItemSet2(v2), monItemSet3;
@@ -143,7 +141,7 @@ int main(int argc, char **argv)
 //   
 //   vector<char> v(4, '0');
 //   
-//   v[0] = '1';
+//   v[0] = '0';
 //   v[1] = '1';
 //   v[2] = '0';
 //   v[3] = '0';
@@ -152,13 +150,13 @@ int main(int argc, char **argv)
 //   v2[3] = '1';
 //   
 //   ItemSet<char> monItemSet(v);
-//   for (int i = 0; i < 1000000; ++i) {
+//   for (int i = 0; i < 1; ++i) {
 //     try {
 //       //cout << monItemSet << endl;
 //       
 //       monEval.executeO(monItemSet);
 //       
-//       //cout << monItemSet << endl;
+//       cout << monItemSet << endl;
 //     } catch (string exception) {
 //       cerr << exception << endl;
 //     }
@@ -173,7 +171,7 @@ int main(int argc, char **argv)
 //   monDataSet.loadFile("./data/mushroom.dat");
 //   monDataSetO.loadFile("./data/mushroom.dat");
 // //   FreqPop maPop(&monDataSet, &monDataSetO);
-//   FreqPop maPop(&monDataSetO);
+//   FreqPop maPop(&monDataSetO, 0.5);
 //   maPop.setData(&monDataSet);
 //   vector< Individual<char> *> v;
 //   vector< ItemSet<char> > v1;
@@ -192,18 +190,7 @@ int main(int argc, char **argv)
 
   /* * * * * * TEST MULTIPOINTCROSS * * * * */
   
-//   unsigned int mesPivots[4];
-//   mesPivots[0] = 3; mesPivots[1] = 6; mesPivots[2] = 9; mesPivots[3] = 12;
-//   
-//   vector<unsigned int> mesPivots2;
-//   mesPivots2.push_back(3); mesPivots2.push_back(6); mesPivots2.push_back(9); mesPivots2.push_back(12);
-//   
-//   MultiPointCross<char> monCross(mesPivots, 4), monCross2(mesPivots2), monCross3(monCross2);
-//   
-//   unsigned int * mesPivots3 = monCross2.getPivots();
-//   
-//   for (unsigned int i = 0; i < monCross3.getNbPivots(); ++i) cout << mesPivots3[i] << " ";
-//   cout << endl;
+//   MultiPointCross<char> monCross(4), monCross2(3), monCross3(monCross2);
 //   
 //   vector<char> v(15, '0'), v2(15, '1');
 //   
@@ -440,7 +427,6 @@ int main(int argc, char **argv)
   
   //UniformCross<char> monCross;
   //ClassicCross<char> monCross(30);
-
   MultiPointCross<char> monCross(3);
   
   CharDataSetO monDataSetO;
@@ -455,57 +441,62 @@ int main(int argc, char **argv)
   vector<char> v;
   v.push_back('0');
   v.push_back('1');
+  float t = 1.0;
   RandomMutator<char> monMutator(v);
   
   ItemSetO<char> monItem;
   
   FreqEval monEval(&monDataSet, &monDataSetO);
   
-  RandomSelect<char> monSelect;
+  RandomSelect<char> monSelect, monSelect2;
   
-  FitnessIDPolicy<char> monInsert;
+  FitnessIDPolicy<char> monInsert, monInsert2;
   
-  GeneticAlgo<char> monAlgoGen((Individual<char> *)&monItem, (Mutator<char> *)&monMutator, (Cross<char> *)&monCross, (Evaluate<char> *)&monEval ,(InitPop<char> *)&maPop, (SelectPolicy<char> *)&monSelect, (IndelPolicy<char> *)&monInsert, 5);
+  GeneticAlgo<char> monAlgoGen((Individual<char> *)&monItem, (Mutator<char> *)&monMutator, (Cross<char> *)&monCross, (Evaluate<char> *)&monEval ,(InitPop<char> *)&maPop, (SelectPolicy<char> *)&monSelect, (IndelPolicy<char> *)&monInsert, &t, (SelectPolicy<char> *)&monSelect2, (IndelPolicy<char> *)&monInsert2);
   
   try {
     
-    cout << endl << endl << "PHASE 1" << endl << endl;
+//     cout << endl << endl << "PHASE 1" << endl << endl;
+//     
+//     cout << "TAILLE = " << monAlgoGen.getTaillePop() << endl;
+//     
+//     cout << "NB ITÉRATION = " << monAlgoGen.getNbIteration() << endl;
+//     
+//     monAlgoGen.displayPopulation();
+//   
+//     cout << endl << endl << "PHASE 2" << endl << endl;
+//     
+//     monAlgoGen.populate();
+//         
+//     monAlgoGen.displayPopulation();
+//     
+//     cout << endl << endl << "PHASE 3" << endl << endl;
+//     
+//     monAlgoGen.evalPop();
+//     
+//     monAlgoGen.displayPopulation();
+//     
+//     cout << endl << endl << "PHASE 4" << endl << endl;
+//     
+//     monAlgoGen.doCrossFor(0, 1, monItem);
+//     
+//     monAlgoGen.displayPopulation();
+//     
+//     cout << "Résultat cross : " << monItem << endl;
+//     
+//     cout << endl << endl << "PHASE 5" << endl << endl;
+//     
+//     monAlgoGen.doMutationFor(0);
+//     
+//     monAlgoGen.displayPopulation();
+//     
+//     cout << endl << endl << "PHASE 6" << endl << endl;
+//     
+//     monAlgoGen.incAgePop();
+//     
+//     monAlgoGen.displayPopulation();
     
-    cout << "TAILLE = " << monAlgoGen.getTaillePop() << endl;
-    
-    cout << "NB ITÉRATION = " << monAlgoGen.getNbIteration() << endl;
-    
-    monAlgoGen.displayPopulation();
-  
-    cout << endl << endl << "PHASE 2" << endl << endl;
-    
-    monAlgoGen.initPop();
-        
-    monAlgoGen.displayPopulation();
-    
-    cout << endl << endl << "PHASE 3" << endl << endl;
-    
-    monAlgoGen.evalPop();
-    
-    monAlgoGen.displayPopulation();
-    
-    cout << endl << endl << "PHASE 4" << endl << endl;
-    
-    monAlgoGen.doCrossFor(0,1,2);
-    
-    monAlgoGen.displayPopulation();
-    
-    cout << endl << endl << "PHASE 5" << endl << endl;
-    
-    monAlgoGen.doMutationFor(0);
-    
-    monAlgoGen.displayPopulation();
-    
-    cout << endl << endl << "PHASE 6" << endl << endl;
-    
-    monAlgoGen.incAgePop();
-    
-    monAlgoGen.displayPopulation();
+    monAlgoGen.run();
     
   } catch (string exception) {
     

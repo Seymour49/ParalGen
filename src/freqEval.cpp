@@ -28,9 +28,9 @@ FreqEval::FreqEval(const FreqEval& f)
 
 void FreqEval::execute(Individual< char >& ind)
 {
-    if (_data1 == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé");
-    else if (_data1->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide");
-    else if( ind.size() != _data1->getNbCol() ) throw string("Erreur, le nombre d'item de l'individu est différent du nombre d'item du jeu de donnée");
+    if (_data1 == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé (freqEval)");
+    else if (_data1->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide (freqEval)");
+    else if( ind.size() != _data1->getNbCol() ) throw string("Erreur, le nombre d'item de l'individu est différent du nombre d'item du jeu de donnée (freqEval)");
     else {
       float result = 0.0;
       bool newO;
@@ -59,9 +59,9 @@ void FreqEval::execute(Individual< char >& ind)
 
 void FreqEval::executeO(Individual< char >& ind)
 {
-    if (_data2 == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé");
-    else if (_data2->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide");
-    else if( ind.size() != _data2->getNbCol() ) throw string("Erreur, le nombre d'item de l'individu est différent du nombre d'item du jeu de donnée");
+    if (_data2 == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé (freqEval)");
+    else if (_data2->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide (freqEval)");
+    else if( ind.size() != _data2->getNbCol() ) throw string("Erreur, le nombre d'item de l'individu est différent du nombre d'item du jeu de donnée (freqEval)");
     else {
 	float result = 0.0;
 	bool newO;
@@ -74,9 +74,10 @@ void FreqEval::executeO(Individual< char >& ind)
 	  
 	    newO = true;	    
 	    for(unsigned int j = 0; ((j<nbCol)&&newO); ++j) {
+	      
 	      if (ind[j] != '0') {
 		if (empty) empty = false;
-		if (_data1->getDataAt(i,j) == '0') newO = false;
+		if (_data2->getDataAt(i, j) == '0') newO = false;
 	      }
 	    }
 	    if (newO) ++result;

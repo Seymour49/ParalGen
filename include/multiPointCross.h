@@ -59,13 +59,6 @@ public:
   * DESTRUCTOR  *
   * * * * * * * */
  
- 
-/**
- * Redéfinition du destructeur virtuel
- */
-  ~MultiPointCross()
-  {
-  }
   
    /* * * * * *
    * METHODS *
@@ -85,11 +78,11 @@ public:
  */
   void execute(const Individual<T> & parent1, const Individual<T> & parent2, Individual<T> & enfant) {
     
-    if( _nbPivots >= parent1.size() ) throw std::string("Erreur, trop de pivots");
+    if( _nbPivots > (parent1.size() - 2)) throw std::string("Erreur, trop de pivots (multiPointCross)");
         
-    else if (parent1.size() != parent2.size()) throw std::string("Erreur, les individus parents n'ont pas la même taille");
+    else if (parent1.size() != parent2.size()) throw std::string("Erreur, les individus parents n'ont pas la même taille (multiPointCross)");
     
-    else if( parent1.size() <= 2 || parent2.size() <= 2) throw std::string("Parents de taille <= 2");
+    else if( parent1.size() <= 2 || parent2.size() <= 2) throw std::string("Parents de taille <= 2 (multiPointCross)");
     
     else{
       

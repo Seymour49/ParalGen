@@ -1,18 +1,18 @@
 {
  "migration": {
- 	"nbCandidatMigration":2,
- 	"stepMigration":1
+ 	"nbCandidatMigration":3,
+ 	"stepMigration":5
  	},
  "name": "island",
  "tabAlgoGen": [{
  	"id":1,
 	"initParam": {
-		"taillePop": 20,
-		"nbGeneration": 1000,
+		"taillePop": 5,
+		"nbGeneration": 50,
 		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.85,
 		"probaMutation": 0.0005,
-		"tabProbaMigration": [0.65, 0.35],
+		"tabProbaMigration": [0.35, 0.65],
 		"classUsed":{
 			"typeInd": { 
 				"class": "itemsetO",
@@ -28,7 +28,7 @@
 				},
 			"crossover": {
 				"class":"multiPCross",
-				"param":4
+				"param":1
 				},
 			"mutator": {
 				"class":"randMut"
@@ -38,20 +38,26 @@
 				},
 			"indelPolicy":{
 				"class":"fitnessID"
+				},
+			"selectPolicyMigrate":{
+				"class":"bestMig"
+				},
+			"indelPolicyMigrate":{
+				"class":"oldestIDMig"
 				}
 			}
 		},
-	"resultFile": "result2.txt"
+	"resultFile": "result1.txt"
 	},
  	{	
  	"id":2,
 	"initParam": {
-		"taillePop": 20,
-		"nbGeneration": 1000,
+		"taillePop": 5,
+		"nbGeneration": 50,
 		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.7,
 		"probaMutation": 0.005,
-		"tabProbaMigration": [0.78, 0.22],
+		"tabProbaMigration": [0.65, 0.35],
 		"classUsed": {
 			"typeInd": { 
 				"class": "itemsetO",
@@ -75,10 +81,16 @@
 				},
 			"indelPolicy":{
 				"class":"ageID"
+				},
+			"selectPolicyMigrate":{
+				"class":"bestMig"
+				},
+			"indelPolicyMigrate":{
+				"class":"oldestIDMig"
 				}
 			}
 		},
-	"resultFile": "result1.txt"
+	"resultFile": "result2.txt"
 	}]
 }
 

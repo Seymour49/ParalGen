@@ -34,11 +34,11 @@ bool descPair (const pair<int,float>& i, const pair<int,float>& j) { return (i.s
 
 void FreqPop::execute(std::vector< Individual< char >* >& pop)
 {
-    if (pop.empty()) throw string("Erreur, la population à initialiser est vide !");
+    if (pop.empty()) throw string("Erreur, la population à initialiser est vide ! (freqPop)");
   
-    else if (_data == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé !");
+    else if (_data == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé ! (freqPop)");
   
-    else if (_data->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide !");
+    else if (_data->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide ! (freqPop)");
     
     else {
 	unsigned line = _data->getNbLine();
@@ -97,11 +97,11 @@ void FreqPop::execute(std::vector< Individual< char >* >& pop)
 
 void FreqPop::executeO(std::vector< Individual< char >* >& pop)
 {
-  if (pop.empty()) throw string("Erreur, la population à initialiser est vide !");
+  if (pop.empty()) throw string("Erreur, la population à initialiser est vide ! (freqPop)");
   
-  else if (_dataO == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé !");
+  else if (_dataO == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé ! (freqPop)");
   
-  else if (_dataO->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide !");
+  else if (_dataO->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide ! (freqPop)");
   
   else {
       unsigned line = _dataO->getNbLine();

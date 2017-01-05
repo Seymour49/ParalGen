@@ -61,7 +61,7 @@ public:
  * @author Ugo Rayer, Johan Defaye
  */
   void execute(Individual<T> & ind) {
-    if (ind.size() == 0) throw std::string("Erreur, l'individu à muter est vide ");
+    if (ind.size() == 0) throw std::string("Erreur, l'individu à muter est vide (randomMutator)");
     else {
       ind.setAge(0);
       int pivot = rand() % (ind.size());

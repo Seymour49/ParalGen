@@ -29,10 +29,10 @@ CloseEval::CloseEval(const CloseEval& c): _freq(c.getFrequence()), _itemFreq(c.g
 
 void CloseEval::execute(Individual< char >& ind)
 {
-  if (_data1 == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé");
-  else if (_data1->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide");
-  else if( ind.size() != _data1->getNbCol() ) throw string("Erreur, le nombre d'item de l'individu est différent du nombre d'item du jeu de donnée");
-  else if (_freq < 0 || _freq > 1) throw string("Erreur, le seuil de fréquence doit être entre 0 et 1");
+  if (_data1 == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé (closeEval)");
+  else if (_data1->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide (closeEval)");
+  else if( ind.size() != _data1->getNbCol() ) throw string("Erreur, le nombre d'item de l'individu est différent du nombre d'item du jeu de donnée (closeEval)");
+  else if (_freq < 0 || _freq > 1) throw string("Erreur, le seuil de fréquence doit être entre 0 et 1 (closeEval)");
   else {
 
     float result = 0.0;
@@ -130,10 +130,10 @@ void CloseEval::execute(Individual< char >& ind)
 
 void CloseEval::executeO(Individual< char >& ind)
 {
-  if (_data2 == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé");
-  else if (_data2->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide");
-  else if( ind.size() != _data2->getNbCol() ) throw string("Erreur, le nombre d'item de l'individu est différent du nombre d'item du jeu de donnée");
-  else if (_freq < 0 || _freq > 1) throw string("Erreur, le seuil de fréquence doit être entre 0 et 1");
+  if (_data2 == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé (closeEval)");
+  else if (_data2->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide (closeEval)");
+  else if( ind.size() != _data2->getNbCol() ) throw string("Erreur, le nombre d'item de l'individu est différent du nombre d'item du jeu de donnée (closeEval)");
+  else if (_freq < 0 || _freq > 1) throw string("Erreur, le seuil de fréquence doit être entre 0 et 1 (closeEval)");
   else {
     float result = 0.0;
     bool newO;
@@ -147,7 +147,7 @@ void CloseEval::executeO(Individual< char >& ind)
 	for (unsigned int j = 0; ((j < nbCol)&&newO); ++j) {
 	    if (ind[j] != '0') {
 		if (empty) empty = false;
-		if (_data1->getDataAt(i,j) == '0') newO = false;
+		if (_data2->getDataAt(i,j) == '0') newO = false;
 	    }
 	}
 	if(newO) ++result;
@@ -213,7 +213,7 @@ void CloseEval::executeO(Individual< char >& ind)
 // 	  vide = false;
 // 	++inc;      
 //     }
-    if(!empty){
+    if (!empty){
       if ( isClosed && (result >= _freq)) // Si clos et fréquent on augmente le score de 1
 	ind.setScore(result + 1.0);
       else

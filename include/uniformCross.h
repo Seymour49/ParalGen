@@ -49,8 +49,8 @@ public:
  * @author Ugo Rayer, Johan Defaye
  */
   void execute(const Individual<T> & parent1, const Individual<T> & parent2, Individual<T> & enfant) {
-    if( parent1.size() == 0 || parent2.size() == 0) throw std::string("Erreur, un des individu parent est vide");
-    else if( parent1.size() != parent2.size() ) throw std::string("Erreur, individus parents de taille différente");
+    if( parent1.size() == 0 || parent2.size() == 0) throw std::string("Erreur, un des individu parent est vide (uniformCross)");
+    else if( parent1.size() != parent2.size() ) throw std::string("Erreur, individus parents de taille différente (uniformCross)");
     else {
       enfant.resize(parent1.size());
       int alea;
