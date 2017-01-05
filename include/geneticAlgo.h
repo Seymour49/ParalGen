@@ -388,6 +388,7 @@ public:
 	  /* Gestion résultats */
 	  //for(unsigned int i=0; i < _nbIteration; ++i)
 	  //    _results[i] = 0;
+
 	
 	  // Initialisation de la population
 	  populate();
@@ -577,9 +578,7 @@ public:
 // 	      for (unsigned int i = 0; i < _population.size(); ++i) bestScore[i] = _population[i]->getScore();
 // 	      std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
 // 	      _results[i] = bestScore[0];
-	  
-	      
-	     
+	       
 	  }
 	  
 	  //exportResults(_results);
@@ -594,9 +593,9 @@ public:
   
 void exportResults(float* _results){
     
-    std::string filename = _unitaryName;
+    std::string filename = "results/"+_unitaryName;
     filename.append(std::to_string(_idIsland));
-    filename.append("/result_");
+    filename.append("_result_");
     time_t timer = time(NULL);
     int al1 = rand() % 1111 + 10000;
     int al2 = rand() % 3333 + 2000;

@@ -206,6 +206,7 @@ void CloseEval::executeO(Individual< char >& ind)
 	
       }
     }
+
 //     bool vide = true;
 //     unsigned int inc = 0;
 //     while( vide && inc < ind.size()){
