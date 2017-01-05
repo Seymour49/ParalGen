@@ -68,6 +68,8 @@ private:
     
     unsigned _nbMigrants;
     
+    float * _scores;			// Score d'individu
+    
     
     /* Gestion des résultats */
     
@@ -86,14 +88,22 @@ public:
   * @param ind : Type d'individu à manipuler
   * @param mut : opérateur de mutation
   * @param cross : opérateur de croisement
+  * @param eval : fonction d'évaluation
   * @param init : opérateur d'initialisation de la population
   * @param select : politique de sélection des individu pour le croisement
   * @param insert : politique de suppression d'un individu en faveur d'un autre individu résultant d'un croisement
+  * @param tM : tableau de probabilité de migration
+  * @param migS : politique de sélection d'un individu
+  * @param migID : politique de suppression d'un individu
   * @param taillePop : Taille de la population à manipuler
   * @param it : nombre d'itérations de l'algorithme
-  * @param seuilFrequence : seuil minimum de fréquence
-  * @param probaM : probabilité de mutation
-  * @param probaC : probabilité de croisement
+  * @param pm : probabilité de mutation
+  * @param pc : probabilité de croisement
+  * @param nbI : nombre d'îles
+  * @param id : identifiant de l'île
+  * @param name : nom de l'île
+  * @param step : nombre de générations avant migration d'individus vers une autre île
+  * @param nbMig : nombre de migration
   * @author Ugo Rayer, Johan Defaye
   */
   GeneticAlgo(Individual<T> * const ind, Mutator<T>* const mut, Cross<T> * const cross, 
@@ -122,7 +132,7 @@ public:
 	}
 	_typeFlag = 1;
       }
-      
+      _scores = new float[_nbIteration];
     }
   }
   
@@ -134,6 +144,7 @@ public:
     for (unsigned int i = 0; i < _population.size(); ++i) {
       delete _population[i];
     }
+    delete [] _scores;
   }
   
   /* * * * * * * * * 
@@ -315,45 +326,50 @@ public:
   
   
   /**
-   * Ecrit dans un fichier dont le nom est passé en paramètre le score moyen des n meilleurs individus de la population
+   * Ecrit dans un fichier dont le nom est passé en paramètre le score moyen des n meilleurs individus de la population pour chaque génération
    * @param fileName : Nom du fichier ou les résultats sont écrits
-   * @param n: nombre d'indivus à faire la moyenne
-   * @param generation: numéro de la génération
    * @author Johan Defaye
    */
-  void writeBestScoreAverage(const std::string & fileName, unsigned int n, unsigned int generation) const 
+  void writeBestScoreAverage(const std::string & fileName) const 
   {
-    if ((n > _population.size()) || (n == 0)) throw std::string("Erreur, nombre d'individu incorrecte");
-    else {
-      std::ofstream file(fileName, std::ios::out | std::ios::app);
-      if (file) {
-	std::vector<float> bestScore(n);
-	for (unsigned int i = 0; i < n; ++i) bestScore[i] = _population[i]->getScore();
-	std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
-	for (unsigned int i = n; i < _population.size(); ++i) {
-	  float newScore = _population[i]->getScore();
-	  unsigned int j = n - 1;
-	  if (newScore > bestScore[0]) j = 0;
-	  else {
-	    while (newScore > bestScore[j]) {
-	      j--;
-	    }
-	    j++;
-	  }
-	  if ((j >= 0) && (j < n)) {
-	   
-	    bestScore.insert(bestScore.begin()+j, newScore);
-	    bestScore.pop_back();
-	    
-	  }
-	}
-	float average = 0.0;
-	for (unsigned int i = 0; i < n; ++i) average += bestScore[i];
-	average = average/n;
-	file << generation << " " << average << std::endl;
-      }
-      else throw std::string("Erreur, impossible d'ouvrir le fichier " + fileName);
+    std::ofstream file(fileName, std::ios::out | std::ios::app);
+    if (file) {
+      for (unsigned int i = 0; i < _nbIteration; ++i) file << i << " " << _scores[i] << std::endl;
     }
+    else throw std::string("Erreur, impossible d'ouvrir le fichier " + fileName);
+  }
+  
+  /**
+   * Renvoi la moyenne des score des n meilleurs individu de la population
+   * @param n: nombre d'indivus à faire la moyenne
+   * @author Johan Defaye
+   */
+  float getBestScoreAverage(unsigned int n) const 
+  {
+    float average = 0.0;
+    if ((n > _population.size()) || (n == 0)) throw std::string("Erreur, nombre d'individu incorrect");
+    else {
+      std::vector<float> bestScore(n);
+      for (unsigned int i = 0; i < n; ++i) bestScore[i] = _population[i]->getScore();
+      std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
+      for (unsigned int i = n; i < _population.size(); ++i) {
+	float newScore = _population[i]->getScore();
+	unsigned int j = n - 1;
+	if (newScore > bestScore[0]) j = 0;
+	else {
+	  while (newScore > bestScore[j]) j--;
+	  j++;
+	}
+	if ((j >= 0) && (j < n)) {
+	  bestScore.insert(bestScore.begin()+j, newScore);
+	  bestScore.pop_back();
+	}
+      }
+      
+      for (unsigned int i = 0; i < n; ++i) average += bestScore[i];
+      average = average/n;
+    }
+    return average;
   }
   
   
@@ -364,31 +380,30 @@ public:
  */
   void run()
   {
-//       float _results[_nbIteration];
+      //float _results[_nbIteration];
       try{
 	
 	  /* Gestion résultats */
-// 	  for(unsigned int i=0; i < _nbIteration; ++i)
-// 	      _results[i] = 0;
+	  //for(unsigned int i=0; i < _nbIteration; ++i)
+	  //    _results[i] = 0;
+
 	
 	  // Initialisation de la population
 	  populate();
-	  
 	  // Evaluation de la population
 	  evalPop();
 	  char tmp = _idIsland + '0';
-	  int al = rand() % 3333 + 25;
-	  int al2 = rand() % 245547+ 5788;
+	  //int al = rand() % 3333 + 25;
+	  //int al2 = rand() % 245547+ 5788;
 	  
-	  std::string resultFileName = "results/"+_unitaryName+tmp+"_"+std::to_string(al*al2)+".txt";
+	  //std::string resultFileName = "results/"+_unitaryName+tmp+"_"+std::to_string(al*al2)+".gpd";
+	  std::string resultFileName = "results/"+_unitaryName+tmp+".gpd";
 	  
-	  writeBestScoreAverage(resultFileName, 10, 0);
 	  // Début de la boucle centrale
-	  unsigned i=0;
-	      int pass = 0;
+	  unsigned i = 0;
+	  int pass = 0;
+	  _scores[0] = getBestScoreAverage(10);
 	  while( i < _nbIteration ){
-	      
-	
 	      // Gestion du modèle en îles
 	      if( _nbIsland > 1 && (i%_stepM) == 0 && i > 0){
 		  std::cout << "test passage " << pass << ". iteration : " << i << ". nbMigrants : " << _nbMigrants << std::endl;
@@ -420,7 +435,7 @@ public:
 		      _population.erase(_population.begin()+selected.first);
 		  }
 		
-		  for( unsigned k=0; k < migMat.size(); ++k){
+		  for (unsigned k = 0; k < migMat.size(); ++k){
 		    
 		      if(migMat[k].size() > 0 && (k+1) != _idIsland ){
 			  // filename 
@@ -540,7 +555,7 @@ public:
 	      
 	      // Evaluation des offsprings
 	      
-	      try{
+	      try {
 		  _eval->executeO(*os1);
 		  _eval->executeO(*os2);
 	      }
@@ -562,18 +577,17 @@ public:
 	      delete os2;
 	      incAgePop();
 	      ++i;
-	      
+	      _scores[i] = getBestScoreAverage(10);
 	      // extraction du meilleur individus de la population
-	     /* std::vector<float> bestScore(_population.size());
-	      for (unsigned int i = 0; i < _population.size(); ++i) bestScore[i] = _population[i]->getScore();
-	      std::sort(bestScore.begin(), bestScore.end());//, [](float a, float b) {return (a > b);});
-	      _results[i] = bestScore[0];
-	    */
-	      
-	     writeBestScoreAverage(resultFileName, 10, i);
+// 	      std::vector<float> bestScore(_population.size());
+// 	      for (unsigned int i = 0; i < _population.size(); ++i) bestScore[i] = _population[i]->getScore();
+// 	      std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
+// 	      _results[i] = bestScore[0];
+	       
 	  }
 	  
-// // 	  exportResults(_results);
+	  //exportResults(_results);
+	  writeBestScoreAverage(resultFileName);
       }
       catch(std::string Exception){
 	  std::cerr << Exception << std::endl;	

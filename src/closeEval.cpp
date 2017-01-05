@@ -37,6 +37,7 @@ void CloseEval::execute(Individual< char >& ind)
 
     float result = 0.0;
     bool newO;
+    bool empty = true;
     unsigned nbCol = _data1->getNbCol();
     unsigned nbRow = _data1->getNbLine();
     
@@ -44,8 +45,9 @@ void CloseEval::execute(Individual< char >& ind)
       
 	newO = true;	    
 	for (unsigned int j = 0; ((j < nbCol)&&newO); ++j) {
-	    if( ((ind[j] != '0') && (_data1->getDataAt(i,j) == '0')) ){
-		newO = false;		    
+	    if (ind[j] != '0') {
+		if (empty) empty = false;
+		if (_data1->getDataAt(i,j) == '0') newO = false;
 	    }
 	}
 	if(newO) ++result;
@@ -106,23 +108,21 @@ void CloseEval::execute(Individual< char >& ind)
       }
       
     }
-    bool vide = true;
-    unsigned int inc = 0;
-    while( vide && inc < ind.size()){
-	if( ind[inc] == '1')
-	  vide = false;
-	
-	++inc;      
-    }
-    if(!vide){
-      if ( isClosed && (result >= _freq)) // Si clos on augmentre le score de 1
+//     bool vide = true;
+//     unsigned int inc = 0;
+//     while( vide && inc < ind.size()){
+// 	if( ind[inc] == '1')
+// 	  vide = false;
+// 	++inc;      
+//     }
+    if (!empty){
+      if ( isClosed && (result >= _freq)) // Si clos et fréquent on augmentre le score de 1
 	ind.setScore(result + 1.0);
       else
 	ind.setScore(result);
     }
-    else{
-	ind.setScore(0);
-    }
+    else 
+      ind.setScore(0);
   }
 }
 
@@ -137,6 +137,7 @@ void CloseEval::executeO(Individual< char >& ind)
   else {
     float result = 0.0;
     bool newO;
+    bool empty = true;
     unsigned nbCol = _data2->getNbCol();
     unsigned nbRow = _data2->getNbLine();
     
@@ -144,8 +145,9 @@ void CloseEval::executeO(Individual< char >& ind)
       
 	newO = true;	    
 	for (unsigned int j = 0; ((j < nbCol)&&newO); ++j) {
-	    if( ((ind[j] == '1') && (_data2->getDataAt(i,j) == '0')) ){
-		newO = false;		    
+	    if (ind[j] != '0') {
+		if (empty) empty = false;
+		if (_data1->getDataAt(i,j) == '0') newO = false;
 	    }
 	}
 	if(newO) ++result;
@@ -204,23 +206,21 @@ void CloseEval::executeO(Individual< char >& ind)
 	
       }
     }
-        
-    bool vide = true;
-    unsigned int inc = 0;
-    while( vide && inc < ind.size()){
-	if( ind[inc] == '1')
-	  vide = false;
-	
-	++inc;      
+
+//     bool vide = true;
+//     unsigned int inc = 0;
+//     while( vide && inc < ind.size()){
+// 	if( ind[inc] == '1')
+// 	  vide = false;
+// 	++inc;      
+//     }
+    if(!empty){
+      if ( isClosed && (result >= _freq)) // Si clos et fréquent on augmente le score de 1
+	ind.setScore(result + 1.0);
+      else
+	ind.setScore(result);
     }
-    if(!vide){
-	if ( isClosed && (result >= _freq)) 
-	  ind.setScore(result + 1.0); // Si clos on augmentre le score de 1
-	
-	else
-	  ind.setScore(result);
-    }
-    else{
+    else {
 	ind.setScore(0);
     }
   }

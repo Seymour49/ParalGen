@@ -53,8 +53,8 @@ int main(int argc, char **argv)
     string dataFile = "./data/mushroom.dat";
     float evalSeuilF = 0.6;
     float initSeuilF = 0.3;
-    float probaM = 0.05;
-    float probaC = 0.8;
+    float probaM = 0.8;
+    float probaC = 0.05;
     unsigned int nbPivots = 4;
     unsigned int participants = 10;
     
@@ -515,3 +515,4 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 
 }
+
