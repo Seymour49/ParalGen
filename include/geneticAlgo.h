@@ -88,14 +88,22 @@ public:
   * @param ind : Type d'individu à manipuler
   * @param mut : opérateur de mutation
   * @param cross : opérateur de croisement
+  * @param eval : fonction d'évaluation
   * @param init : opérateur d'initialisation de la population
   * @param select : politique de sélection des individu pour le croisement
   * @param insert : politique de suppression d'un individu en faveur d'un autre individu résultant d'un croisement
+  * @param tM : tableau de probabilité de migration
+  * @param migS : politique de sélection d'un individu
+  * @param migID : politique de suppression d'un individu
   * @param taillePop : Taille de la population à manipuler
   * @param it : nombre d'itérations de l'algorithme
-  * @param seuilFrequence : seuil minimum de fréquence
-  * @param probaM : probabilité de mutation
-  * @param probaC : probabilité de croisement
+  * @param pm : probabilité de mutation
+  * @param pc : probabilité de croisement
+  * @param nbI : nombre d'îles
+  * @param id : identifiant de l'île
+  * @param name : nom de l'île
+  * @param step : nombre de générations avant migration d'individus vers une autre île
+  * @param nbMig : nombre de migration
   * @author Ugo Rayer, Johan Defaye
   */
   GeneticAlgo(Individual<T> * const ind, Mutator<T>* const mut, Cross<T> * const cross, 
