@@ -48,15 +48,15 @@ int main(int argc, char **argv)
      */
     
     /* Valeurs par défaut	*/
-    unsigned int nbGeneration = 100;
-    unsigned int taillePop = 25;
+    unsigned int nbGeneration = 2000;
+    unsigned int taillePop = 50;
     string dataFile = "./data/mushroom.dat";
     float evalSeuilF = 0.6;
     float initSeuilF = 0.3;
-    float probaM = 0.5;
-    float probaC = 0.5;
-    unsigned int nbPivots = 2;
-    unsigned int participants = 4;
+    float probaM = 0.8;
+    float probaC = 0.05;
+    unsigned int nbPivots = 4;
+    unsigned int participants = 10;
     
     unsigned int nbIsland = 1;
     unsigned int idIsland = 1;
@@ -505,8 +505,10 @@ int main(int argc, char **argv)
 	delete indel;
 	delete data;
 	delete data2;
-	delete algo;
+	delete tabMig;
+	delete migindel;
 	delete migselect;
+	delete algo;
 	      	   
     }
  
