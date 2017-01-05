@@ -62,9 +62,10 @@ int main(int argc, char **argv)
     unsigned int idIsland = 1;
     std::string nameIsland = "Node";
     float* tabMig = NULL;
-    unsigned stepM = 1;
+
+    unsigned stepM = 50;
     
-    unsigned nbMig = 2;
+    unsigned nbMig = 3;
     unsigned int migPart = 5;
     
     
