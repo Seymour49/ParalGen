@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     /* Valeurs par défaut	*/
     unsigned int nbGeneration = 100;
     unsigned int taillePop = 25;
-    string dataFile = "./data/testCloture.dat";
+    string dataFile = "./data/mushroom.dat";
     float evalSeuilF = 0.6;
     float initSeuilF = 0.3;
     float probaM = 0.5;
@@ -491,9 +491,10 @@ int main(int argc, char **argv)
 	cout << "DEBUT RUN" << endl;
 	
 	algo->run();
-	//algo->populate();
-	//algo->evalPop();
-	//algo->displayPopulation();
+// 	algo->populate();
+// 	algo->evalPop();
+	algo->displayPopulation();
+
 	cout << "FIN RUN" << endl;
 	
 	delete mut;

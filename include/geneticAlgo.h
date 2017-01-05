@@ -69,13 +69,8 @@ private:
     unsigned _nbMigrants;
     
     
-    
-    // Méthodes
-    // void checkFiles()
-    // void readFile(File) -> Appel à _indelMig
-    
-    // void writeFile(File) -> Appel à _selectMig
-    
+    /* Gestion des résultats */
+    float* _results;
     
     
 public:
@@ -129,6 +124,8 @@ public:
 	}
 	_typeFlag = 1;
       }
+      
+      _results = new float[_nbIteration];
     }
   }
   
@@ -140,6 +137,7 @@ public:
     for (unsigned int i = 0; i < _population.size(); ++i) {
       delete _population[i];
     }
+    delete[] _results;
   }
   
   /* * * * * * * * * 
@@ -372,6 +370,10 @@ public:
   {
       try{
 	
+	  /* Gestion résultats */
+	  for(unsigned int i=0; i < _nbIteration; ++i)
+	      _results = 0;
+	
 	  // Initialisation de la population
 	  populate();
 	  // Evaluation de la population
@@ -413,6 +415,7 @@ public:
 		      migMat[j].push_back(selected.first);
 		      
 		      // TODO RETIRER l'INDIVIDU DE LA POPULATION
+		      _population.erase(_population.begin()+selected.first);
 		  }
 		
 		  for( unsigned k=0; k < migMat.size(); ++k){
@@ -557,14 +560,47 @@ public:
 	      delete os2;
 	      incAgePop();
 	      ++i;
+	      
+	      // extraction du meilleur individus de la population
+	  /*    std::vector<float> bestScore(_population.size());
+	      for (unsigned int i = 0; i < _population.size(); ++i) bestScore[i] = _population[i]->getScore();
+	      std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
+	  
+	      _results[i] = bestScore[0];
+	      */
 	      writeBestScoreAverage(resultFileName, 10, i);
 	  }
+	  
+	  exportResults();
       }
       catch(std::string Exception){
 	  std::cerr << Exception << std::endl;	
       }
+      
     
   }
+  
+void exportResults(){
+    
+    std::string filename = _unitaryName;
+    filename.append(std::to_string(_idIsland));
+    filename.append("/result_");
+    time_t timer = time(NULL);
+    int al1 = rand() % 1111 + 10000;
+    int al2 = rand() % 3333 + 2000;
+    int al3 = al1*al2;
+    timer -= al3;
+    filename.append(std::to_string(timer));
+    
+    std::ofstream outfile(filename, std::ofstream::binary);
+    if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier");
+    else{
+	for(unsigned i=0; i < _nbIteration; ++i)
+	    outfile << i << " " << _results[i] << std::endl;
+      
+	outfile.close();
+    }
+}  
   
 /**
  * Méthode d'affichage de la population utile pendant le dev.
