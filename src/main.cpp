@@ -506,6 +506,7 @@ int main(int argc, char **argv)
 	delete data;
 	delete data2;
 	delete algo;
+	delete migselect;
 	      	   
     }
  

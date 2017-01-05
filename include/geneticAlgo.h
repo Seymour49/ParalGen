@@ -319,45 +319,54 @@ public:
   
   
   /**
-   * Ecrit dans un fichier dont le nom est passé en paramètre le score moyen des n meilleurs individus de la population
+   * Ecrit dans un fichier dont le nom est passé en paramètre le score moyen des n meilleurs individus de la population pour chaque génération
    * @param fileName : Nom du fichier ou les résultats sont écrits
-   * @param n: nombre d'indivus à faire la moyenne
-   * @param generation: numéro de la génération
    * @author Johan Defaye
    */
-  void writeBestScoreAverage(const std::string & fileName, unsigned int n, unsigned int generation) const 
+  void writeBestScoreAverage(const std::string & fileName) const 
   {
+    std::ofstream file(fileName, std::ios::out | std::ios::app);
+    if (file) {
+      for (unsigned int i = 0; i < _nbIteration; ++i) file << i << " " << _results[i] << std::endl;
+    }
+    else throw std::string("Erreur, impossible d'ouvrir le fichier " + fileName);
+  }
+  
+  /**
+   * Renvoi la moyenne des score des n meilleurs individu de la population
+   * @param n: nombre d'indivus à faire la moyenne
+   * @author Johan Defaye
+   */
+  float getBestScoreAverage(unsigned int n) const 
+  {
+    float average = 0.0;
     if ((n > _population.size()) || (n == 0)) throw std::string("Erreur, nombre d'individu incorrecte");
     else {
-      std::ofstream file(fileName, std::ios::out | std::ios::app);
-      if (file) {
-	std::vector<float> bestScore(n);
-	for (unsigned int i = 0; i < n; ++i) bestScore[i] = _population[i]->getScore();
-	std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
-	for (unsigned int i = n; i < _population.size(); ++i) {
-	  float newScore = _population[i]->getScore();
-	  unsigned int j = n - 1;
-	  if (newScore > bestScore[0]) j = 0;
-	  else {
-	    while (newScore > bestScore[j]) {
-	      j--;
-	    }
-	    j++;
+      std::vector<float> bestScore(n);
+      for (unsigned int i = 0; i < n; ++i) bestScore[i] = _population[i]->getScore();
+      std::sort(bestScore.begin(), bestScore.end(), [](float a, float b) {return (a > b);});
+      for (unsigned int i = n; i < _population.size(); ++i) {
+	float newScore = _population[i]->getScore();
+	unsigned int j = n - 1;
+	if (newScore > bestScore[0]) j = 0;
+	else {
+	  while (newScore > bestScore[j]) {
+	    j--;
 	  }
-	  if ((j >= 0) && (j < n)) {
-	    for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
-	    bestScore.insert(bestScore.begin()+j, newScore);
-	    bestScore.pop_back();
-	    for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
-	  }
+	  j++;
 	}
-	float average = 0.0;
-	for (unsigned int i = 0; i < n; ++i) average += bestScore[i];
-	average = average/n;
-	file << generation << " " << average << std::endl;
+	if ((j >= 0) && (j < n)) {
+	  for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
+	  bestScore.insert(bestScore.begin()+j, newScore);
+	  bestScore.pop_back();
+	  for (unsigned int k = 0; k < n; ++k) std::cout << bestScore[k] << " ";
+	}
       }
-      else throw std::string("Erreur, impossible d'ouvrir le fichier " + fileName);
+      
+      for (unsigned int i = 0; i < n; ++i) average += bestScore[i];
+      average = average/n;
     }
+    return average;
   }
   
   
@@ -386,7 +395,6 @@ public:
 	  unsigned i=0;
 	      int pass = 0;
 	  while( i < _nbIteration ){
-	
 	      // Gestion du modèle en îles
 	      if( _nbIsland > 1 && (i%_stepM) == 0 && i > 0){
 		  std::cout << "test passage " << pass << ". iteration : " << i << ". nbMigrants : " << _nbMigrants << std::endl;
