@@ -9,7 +9,7 @@
 	"initParam": {
 		"taillePop": 20,
 		"nbGeneration": 1000,
-		"dataFile": "data/mushroom.dat",
+		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.85,
 		"probaMutation": 0.0005,
 		"tabProbaMigration": [0.65, 0.35],
@@ -48,7 +48,7 @@
 	"initParam": {
 		"taillePop": 20,
 		"nbGeneration": 1000,
-		"dataFile": "data/mushroom.dat",
+		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.7,
 		"probaMutation": 0.005,
 		"tabProbaMigration": [0.78, 0.22],

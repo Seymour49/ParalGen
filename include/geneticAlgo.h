@@ -374,7 +374,6 @@ public:
 	
 	  // Initialisation de la population
 	  populate();
-	  
 	  // Evaluation de la population
 	  evalPop();
 	  char tmp = _idIsland + '0';
@@ -385,7 +384,6 @@ public:
 	  unsigned i=0;
 	      int pass = 0;
 	  while( i < _nbIteration ){
-	      
 	
 	      // Gestion du modèle en îles
 	      if( _nbIsland > 1 && (i%_stepM) == 0 && i > 0){
