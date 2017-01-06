@@ -1,30 +1,29 @@
 {
  "migration": {
- 	"nbCandidatMigration":2,
- 	"stepMigration":1
+ 	"nbCandidatMigration":5,
+ 	"stepMigration":2
  	},
- "name": "island",
+ "name": "Node",
  "tabAlgoGen": [{
  	"id":1,
 	"initParam": {
-		"taillePop": 20,
-		"nbGeneration": 1000,
-		"dataFile": "data/testCloture.dat",
+		"taillePop": 50,
+		"nbGeneration": 2000,
+		"dataFile": "data/mushroom.dat",
 		"probaCroisement": 0.85,
-		"probaMutation": 0.0005,
-		"tabProbaMigration": [0.65, 0.35],
+		"probaMutation": 0.05,
+		"tabProbaMigration": [0.70, 0.15, 0.10, 0.05],
 		"classUsed":{
 			"typeInd": { 
 				"class": "itemsetO",
 				"typePrimitif": "char"
 				},
 			"populate": { 
-				"class":"freqPop",
-				"param":0.4
+				"class":"irandPop"
 				},				      
 			"evaluate": { 
 				"class":"closeEval",
-				"param":0.7
+				"param":0.4
 				},
 			"crossover": {
 				"class":"multiPCross",
@@ -34,35 +33,36 @@
 				"class":"randMut"
 				},
 			"selectPolicy":{
-				"class":"randS"
+				"class":"tournamentS",
+				"param":10
 				},
 			"indelPolicy":{
 				"class":"fitnessID"
 				}
 			}
 		},
-	"resultFile": "result2.txt"
+	"resultFile": "result1.txt"
 	},
  	{	
  	"id":2,
 	"initParam": {
-		"taillePop": 20,
-		"nbGeneration": 1000,
-		"dataFile": "data/testCloture.dat",
+		"taillePop": 50,
+		"nbGeneration": 2000,
+		"dataFile": "data/mushroom.dat",
 		"probaCroisement": 0.7,
 		"probaMutation": 0.005,
-		"tabProbaMigration": [0.78, 0.22],
+		"tabProbaMigration": [0.05, 0.80, 0.1, 0.05],
 		"classUsed": {
 			"typeInd": { 
 				"class": "itemsetO",
 				"typePrimitif": "char"
 				},
 			"populate": { 
-				"class":"randPop"
+				"class":"irandPop"
 				},				      
 			"evaluate": { 
 				"class":"closeEval",
-				"param":0.8
+				"param":0.6
 				},
 			"crossover": {
 				"class":"monoPCross"
@@ -71,14 +71,91 @@
 				"class":"randMut"
 				},
 			"selectPolicy":{
-				"class":"bestS"
+				"class":"tournamentS",
+				"param":10
 				},
 			"indelPolicy":{
 				"class":"ageID"
 				}
 			}
 		},
-	"resultFile": "result1.txt"
+	"resultFile": "result2.txt"
+	},
+	{	
+ 	"id":3,
+	"initParam": {
+		"taillePop": 50,
+		"nbGeneration": 2000,
+		"dataFile": "data/mushroom.dat",
+		"probaCroisement": 0.6,
+		"probaMutation": 0.15,
+		"tabProbaMigration": [0.08, 0.08, 0.64, 0.2],
+		"classUsed": {
+			"typeInd": { 
+				"class": "itemsetO",
+				"typePrimitif": "char"
+				},
+			"populate": { 
+				"class":"irandPop"
+				},				      
+			"evaluate": { 
+				"class":"closeEval",
+				"param":0.45
+				},
+			"crossover": {
+				"class":"uCross"
+				},
+			"mutator": {
+				"class":"randMut"
+				},
+			"selectPolicy":{
+				"class":"tournamentS",
+				"param":10
+				},
+			"indelPolicy":{
+				"class":"fitnessID"
+				}
+			}
+		},
+	"resultFile": "result3.txt"
+	},
+	{	
+ 	"id":4,
+	"initParam": {
+		"taillePop": 50,
+		"nbGeneration": 2000,
+		"dataFile": "data/mushroom.dat",
+		"probaCroisement": 0.9,
+		"probaMutation": 0.09,
+		"tabProbaMigration": [0.06, 0.06, 0.06, 0.82],
+		"classUsed": {
+			"typeInd": { 
+				"class": "itemsetO",
+				"typePrimitif": "char"
+				},
+			"populate": { 
+				"class":"irandPop"
+				},				      
+			"evaluate": { 
+				"class":"closeEval",
+				"param":0.6
+				},
+			"crossover": {
+				"class":"uCross"
+				},
+			"mutator": {
+				"class":"randMut"
+				},
+			"selectPolicy":{
+				"class":"tournamentS",
+				"param":10
+				},
+			"indelPolicy":{
+				"class":"fitnessID"
+				}
+			}
+		},
+	"resultFile": "result4.txt"
 	}]
 }
 

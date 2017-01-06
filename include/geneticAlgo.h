@@ -381,6 +381,7 @@ public:
   void run()
   {
       //float _results[_nbIteration];
+      float resMig[_nbIteration/_stepM];
       try{
 	
 	  /* Gestion résultats */
@@ -402,12 +403,11 @@ public:
 	  // Début de la boucle centrale
 	  unsigned i = 0;
 	  int pass = 0;
-	  _scores[0] = getBestScoreAverage(10);
+// 	  _scores[0] = getBestScoreAverage(10);
 	  while( i < _nbIteration ){
 	      // Gestion du modèle en îles
 	      if( _nbIsland > 1 && (i%_stepM) == 0 && i > 0){
-		  std::cout << "test passage " << pass << ". iteration : " << i << ". nbMigrants : " << _nbMigrants << std::endl;
-		  ++pass;
+		
 		  // on effectue _nbMigrants selections
 		  std::vector<std::vector<int>> migMat; 
 		  for(unsigned i = 0; i < _nbIsland; ++i){
@@ -428,26 +428,27 @@ public:
 		      }
 		      
 		      // Indice de l'île dans la variable j, individu dans selected.first
-		      std::cout << "Individu à migrer " << selected.first << " sur l'île " << j+1 << std::endl ;
+// 		      std::cout << "Individu à migrer " << selected.first << " sur l'île " << j+1 << std::endl ;
 		      migMat[j].push_back(selected.first);
 		      
-		      // TODO RETIRER l'INDIVIDU DE LA POPULATION
-		      _population.erase(_population.begin()+selected.first);
 		  }
 		
+		  float scoretmp = 0;
+		  int outsider = 0;
+		  
 		  for (unsigned k = 0; k < migMat.size(); ++k){
-		    
+		      // Les individus quittent l'île
 		      if(migMat[k].size() > 0 && (k+1) != _idIsland ){
 			  // filename 
 			  std::string filepath = _unitaryName;
 			  filepath.append(std::to_string(k+1));
 			  filepath.append("/");
 			  
-			  for(unsigned l=0; l < migMat[k].size(); ++l){
+			 /* for(unsigned l=0; l < migMat[k].size(); ++l){
 			      std::cout <<" " << migMat[k][l] ;
 			  }
 			  std::cout << std::endl;
-			  
+			 */ 
 			  time_t timer = time(NULL);
 			  int al1 = rand() % 1111 + 10000;
 			  int al2 = rand() % 3333 + 2000;
@@ -456,46 +457,34 @@ public:
 			  
 			  filepath.append("fromNode"+std::to_string(_idIsland)+"_");
 			  filepath.append(std::to_string(timer));
-			  std::cout << "migration sur l'ile " << k+1 << std::endl;
-			  std::cout << "filename : " << filepath << std::endl;
+// 			  std::cout << "migration sur l'ile " << k+1 << std::endl;
+// 			  std::cout << "filename : " << filepath << std::endl;
 			  
-			  for(unsigned t=0; t < _population[0]->size(); ++t){
-			    std::cout << " " << (*_population[migMat[k][0]])[t];
-			  }
-			  std::cout << std::endl;
 			  
-			  /*	TODO
-			   * Reprendre ici, il reste à écrire les individus dans un stream
-			   * puis le stream dans le fichier			   * 
-			   */
 			  std::ofstream outfile (filepath,std::ofstream::binary);
 			  if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier "+filepath);
 			  else{
 			      for(unsigned x=0; x < migMat[k].size() ; ++x){
 				  
+				  outsider += 1;
+				  scoretmp += _population[migMat[k][x]]->getScore();
+				  
 				  for(unsigned t=0; t < _population[0]->size(); ++t){
 				      outfile << (*_population[migMat[k][x]])[t] << " ";
 				  }
 				  outfile << std::endl;
+				  // TODO RETIRER l'INDIVIDU DE LA POPULATION
+				  _population.erase(_population.begin()+migMat[k][x]);
+		  
 			      }
 			  
 			      outfile.close();
 			  }
-		      }
-		      else if(migMat[k].size() == 0 && (k+1) != _idIsland){
-			  std::cout << "Pas de migration sur ile " << (k+1) << std::endl;
-			  
-		      }
-		      else if((k+1)==_idIsland){
-			  std::cout << "Pas de mouvement, on reste sur l'ile "<<k+1 << std::endl;
-			
-		      }
-			  
-			
-		      
+		      }   
 		  }
 		  
-		  
+		  resMig[pass] = scoretmp/outsider;		  
+		  ++pass;
 		  // Traitement du dossier pour insertion
 		  try{
 		    processDir();
@@ -577,7 +566,7 @@ public:
 	      delete os2;
 	      incAgePop();
 	      ++i;
-	      _scores[i] = getBestScoreAverage(10);
+// 	      _scores[i] = getBestScoreAverage(10);
 	      // extraction du meilleur individus de la population
 // 	      std::vector<float> bestScore(_population.size());
 // 	      for (unsigned int i = 0; i < _population.size(); ++i) bestScore[i] = _population[i]->getScore();
@@ -586,8 +575,8 @@ public:
 	       
 	  }
 	  
-	  //exportResults(_results);
-	  writeBestScoreAverage(resultFileName);
+	  exportResults(resMig);
+// 	  writeBestScoreAverage(resultFileName);
       }
       catch(std::string Exception){
 	  std::cerr << Exception << std::endl;	
