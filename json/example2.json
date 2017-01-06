@@ -44,6 +44,10 @@
 				},
 			"indelPolicyMigrate":{
 				"class":"oldestIDMig"
+				},
+			"selectPolicyMigrate": {
+				"class":"tournamentMig",
+				"param":6
 				}
 			}
 		},
@@ -88,6 +92,10 @@
 				},
 			"indelPolicyMigrate":{
 				"class":"oldestIDMig"
+				},
+			"selectPolicyMigrate": {
+				"class":"tournamentMig",
+				"param":6
 				}
 			}
 		},
@@ -126,6 +134,10 @@
 				},
 			"indelPolicy":{
 				"class":"fitnessID"
+				},
+			"selectPolicyMigrate": {
+				"class":"tournamentMig",
+				"param":6
 				}
 			}
 		},
@@ -164,6 +176,10 @@
 				},
 			"indelPolicy":{
 				"class":"fitnessID"
+				},
+			"selectPolicyMigrate": {
+				"class":"tournamentMig",
+				"param":6
 				}
 			}
 		},
