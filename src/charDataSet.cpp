@@ -33,7 +33,7 @@ void CharDataSet::loadFile(const string& fileName)
     
   ifstream f(fileName.c_str());
   
-  if(!f) throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
+  if(!f) throw string("Erreur lors de l'ouverture du fichier " + fileName + " ! (charDataSet)");
   else {
     
     // Test pour savoir s'il s'agit d'un fichier csv ou non
@@ -67,7 +67,7 @@ void CharDataSet::loadFile(const string& fileName)
     if (isCSV) { // Lecture de matrice composé exclusivement de '0' et de '1'
       vector <char> tmp;
       for (unsigned int i = 0; i < tokens.size(); ++i) {
-	if (tokens[i].size() != 1) throw string("Erreur, format du jeu de donnée à lire non conforme !");
+	if (tokens[i].size() != 1) throw string("Erreur, format du jeu de donnée à lire non conforme ! (charDataSet)");
 	else tmp.push_back(tokens[i][0]);
       }
       this->push_back(tmp);
@@ -76,7 +76,7 @@ void CharDataSet::loadFile(const string& fileName)
 	  tmp.clear();
 	  tokens = explode(line);
 	  for (unsigned int i = 0; i < tokens.size(); ++i) {
-	    if (tokens[i].size() != 1) throw string("Erreur, format de jeu de donnée à lire non conforme !");
+	    if (tokens[i].size() != 1) throw string("Erreur, format de jeu de donnée à lire non conforme ! (charDataSet)");
 	    else {
 	      tmp.push_back(tokens[i][0]);
 	    }

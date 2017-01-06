@@ -48,7 +48,7 @@ public:
    */
   void execute(const Individual<T> & ind, std::vector<Individual<T> *> & pop)
   {
-    if (pop.empty()) throw std::string("Erreur, impossible d'ajouter un individu si la population est vide");
+    if (pop.empty()) throw std::string("Erreur, impossible d'ajouter un individu si la population est vide (fitnessIDPolicy)");
     else {
       // Rechercher l'indice du plus mauvais individus
       int worst = 0;

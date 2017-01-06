@@ -67,7 +67,7 @@ public:
    */
   T getDataAt(unsigned row, unsigned col) const 
   {
-    if ((row < 0) || (row >= _nbLine) || (col < 0) || (col >= _nbCol)) throw std::string("Erreur, indice non conforme"); 
+    if ((row < 0) || (row >= _nbLine) || (col < 0) || (col >= _nbCol)) throw std::string("Erreur, indice non conforme dataSetO"); 
     else return _data[row][col];
   }
 

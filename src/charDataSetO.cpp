@@ -36,7 +36,7 @@ void CharDataSetO::loadFile(const string& fileName)
     
   ifstream f(fileName.c_str());
   
-  if(!f) throw string("Erreur lors de l'ouverture du fichier " + fileName + " !");
+  if(!f) throw string("Erreur lors de l'ouverture du fichier " + fileName + " ! (charDataSetO)");
   else {
     
     string line;
@@ -65,7 +65,7 @@ void CharDataSetO::loadFile(const string& fileName)
       vector< vector<char> > matrice;
       unsigned int nbCol;
       for (unsigned int i = 0; i < tokens.size(); ++i) {
-	if (tokens[i].size() != 1) throw string("Erreur, format du jeu de donnée à lire non conforme !");
+	if (tokens[i].size() != 1) throw string("Erreur, format du jeu de donnée à lire non conforme ! (charDataSetO)");
 	else tmp.push_back(tokens[i][0]);
       }
       matrice.push_back(tmp);
@@ -75,12 +75,12 @@ void CharDataSetO::loadFile(const string& fileName)
 	  tmp.clear();
 	  tokens = explode2(line);
 	  for (unsigned int i = 0; i < tokens.size(); ++i) {
-	    if (tokens[i].size() != 1) throw string("Erreur, format de jeu de donnée à lire non conforme !");
+	    if (tokens[i].size() != 1) throw string("Erreur, format de jeu de donnée à lire non conforme ! (charDataSetO)");
 	    else {
 	      tmp.push_back(tokens[i][0]);
 	    }
 	  }
-	  if (tmp.size() != nbCol) throw string("Erreur, format de jeu de donnée à lire non conforme !");
+	  if (tmp.size() != nbCol) throw string("Erreur, format de jeu de donnée à lire non conforme ! (charDataSetO)");
 	  else matrice.push_back(tmp);
 	}
       }

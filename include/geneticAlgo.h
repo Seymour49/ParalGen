@@ -23,6 +23,7 @@
 #include <fstream>
 #include <algorithm>
 
+#define verbose 0
 
 /**
  * Cette classe implémente un algorithme génétique
@@ -31,6 +32,7 @@
  * fait muter pendant un nombre d'itérations passé en 
  * paramètre.
  */
+
 
 template <typename T>
 class GeneticAlgo {
@@ -108,8 +110,8 @@ public:
   */
   GeneticAlgo(Individual<T> * const ind, Mutator<T>* const mut, Cross<T> * const cross, 
 	      Evaluate<T> * const eval, InitPop<T> * const init, SelectPolicy<T> * const select,
-	      IndelPolicy<T> * const insert, float* tM,SelectPolicy<T> * const migS, IndelPolicy<T>* const migID,
-	      unsigned int taillePop = 100, unsigned int it = 10000,
+	      IndelPolicy<T> * const insert, float* tM, SelectPolicy<T> * const migS, IndelPolicy<T>* const migID,
+	      unsigned int taillePop = 100, unsigned int it = 100,
 	      float pm = 0.005, float pc = 0.8, unsigned int nbI = 1, unsigned int id = 1,
 	      std::string name = "Node", unsigned int step = 10, unsigned int nbMig = 2)
   :_mutator(mut), _cross(cross), _eval(eval), _initPop(init), _select(select), _insert(insert),_tabMig(tM),
@@ -184,18 +186,17 @@ public:
 	  if( !strcmp(d->d_name, ".") || !strcmp(d->d_name, "..") )
 	  {}
 	  else{
-	      std::cout << "processing file : " << d->d_name << std::endl;
+	      if (verbose) std::cout << "processing file : " << d->d_name << std::endl;
 	      std::string filepath = dirname+"/"+d->d_name;
 	      
 	      // Traitement du fichier courant
 	      
 	      std::ifstream f(filepath.c_str());
 	      
-	      if(!f) throw std::string("Erreur lors de l'ouverture du fichier " + filepath + "!");
+	      if(!f) throw std::string("Erreur lors de l'ouverture du fichier " + filepath + "!"+" (geneticAlgo))");
 	      else{
 		  std::string line;
-		  
-		  while( std::getline(f,line)){		     
+		  while( std::getline(f,line)){	     
 		      
 		      if(!line.empty()) {
 			  std::vector<std::string> tokens;
@@ -206,11 +207,13 @@ public:
 			      bitset.push_back(*tokens[i].c_str()); // TODO typage de l'individu
 			  
 			  // DEBUG DISPLAY
-			  std::cout << "Bitset :";
-			  for(unsigned int i=0; i < bitset.size(); ++i)
-			      std::cout <<" " <<bitset[i];
-			  std::cout << std::endl;
-			  // END DD
+			  if (verbose){
+			    std::cout << "Bitset :";
+			    for(unsigned int i=0; i < bitset.size(); ++i)
+				std::cout <<" " <<bitset[i];
+			    std::cout << std::endl;
+			    // END DD
+			  }
 			  
 			  // Création de l'individu
 			  Individual<T>* newcomer = NULL;
@@ -226,12 +229,11 @@ public:
 		  f.close();
 		  // Suppression du fichier après traitement
 		  if( std::remove(filepath.c_str()) != 0)		      
-			throw std::string("Suppression impossible");
+			throw std::string("Suppression impossible (geneticAlgo))");
 		  
 	      }	      
 	  }
       }
-	
       closedir(dir);
       
       return 0;
@@ -247,7 +249,7 @@ public:
  */
   void doMutationFor(unsigned ind)
   {
-    if (ind > (_population.size() - 1) || ind < 0) throw std::string("Erreur, indice de l'individu à muter hors de la population");
+    if (ind > (_population.size() - 1) || ind < 0) throw std::string("Erreur, indice de l'individu à muter hors de la population (geneticAlgo))");
     else _mutator->execute(*_population[ind]);
   }
 
@@ -264,7 +266,7 @@ public:
   void doCrossFor(unsigned int indParent1, unsigned int indParent2, Individual<T> & ind)
   {
     if( (indParent1 < 0) || (indParent2 < 0) || (indParent1 > (_population.size() - 1)) || (indParent2 > (_population.size() - 1)) )
-      throw std::string("Erreur, indices des parents hors de la population");
+      throw std::string("Erreur, indices des parents hors de la population (geneticAlgo)");
     else 
       _cross->execute(*(_population[indParent1]), *(_population[indParent2]), ind);
   }
@@ -318,7 +320,7 @@ public:
 	      _eval->execute(*(_population[i]));
 	  }
 	  catch(std::string Excep){
-	      std::cerr << E1 << " then " << Excep << std::endl;
+	      std::cerr << E1 << " then 1 " << Excep << std::endl;
 	  }
       }
     }
@@ -332,11 +334,11 @@ public:
    */
   void writeBestScoreAverage(const std::string & fileName) const 
   {
-    std::ofstream file(fileName, std::ios::out | std::ios::app);
+    std::ofstream file(fileName, std::ios::out | std::ios::trunc);
     if (file) {
-      for (unsigned int i = 0; i < _nbIteration; ++i) file << i << " " << _scores[i] << std::endl;
+      for (unsigned int i = 0; i < _nbIteration; ++i) file << i + 1 << " " << _scores[i] << std::endl;
     }
-    else throw std::string("Erreur, impossible d'ouvrir le fichier " + fileName);
+    else throw std::string("Erreur, impossible d'ouvrir le fichier " + fileName+" (geneticAlgo)" );
   }
   
   /**
@@ -347,7 +349,7 @@ public:
   float getBestScoreAverage(unsigned int n) const 
   {
     float average = 0.0;
-    if ((n > _population.size()) || (n == 0)) throw std::string("Erreur, nombre d'individu incorrect");
+    if ((n > _population.size()) || (n == 0)) throw std::string("Erreur, nombre d'individu incorrect (geneticAlgo)");
     else {
       std::vector<float> bestScore(n);
       for (unsigned int i = 0; i < n; ++i) bestScore[i] = _population[i]->getScore();
@@ -401,34 +403,34 @@ public:
 	  std::string resultFileName = "results/"+_unitaryName+tmp+".gpd";
 	  
 	  // Début de la boucle centrale
-	  unsigned i = 0;
+	  unsigned int i = 0;
 	  int pass = 0;
 // 	  _scores[0] = getBestScoreAverage(10);
 	  while( i < _nbIteration ){
+	    _scores[i] = getBestScoreAverage(1);
 	      // Gestion du modèle en îles
-	      if( _nbIsland > 1 && (i%_stepM) == 0 && i > 0){
-		
-		  // on effectue _nbMigrants selections
-		  std::vector<std::vector<int>> migMat; 
-		  for(unsigned i = 0; i < _nbIsland; ++i){
-		      std::vector<int> migIle;
-		      migMat.push_back(migIle);
-		  }
+
+	      if( (_nbIsland > 1) && ((i%_stepM) == 0) && (i > 0)){
+		  if (verbose) std::cout << "test passage " << pass << ". iteration : " << i << ". nbMigrants : " << _nbMigrants << std::endl;
 		  
-		  for(unsigned i = 0; i < _nbMigrants; ++i){
+		  // on effectue _nbMigrants selections
+		  std::vector<std::vector<int>> migMat(_nbIsland);
+		  std::cout << "Taille avant ecriture dans l'autre dossier pour l'itération " << i << " = " << _population.size() << std::endl;
+		  for(unsigned k = 0; k < _nbMigrants; ++k){
 		      std::pair<int,int> selected( _selectMig->execute(_population));
 		      // Sélection de l'île
 		      int alea = rand() % 1000;
 		      int tmp = _tabMig[0] * 1000;
 		      
-		      int j = 0;
+		      unsigned int j = 0;
 		      while( tmp <= alea ){
 			  ++j;
 			  tmp += (_tabMig[j]*1000);			  
 		      }
 		      
 		      // Indice de l'île dans la variable j, individu dans selected.first
-// 		      std::cout << "Individu à migrer " << selected.first << " sur l'île " << j+1 << std::endl ;
+
+		      if (verbose) std::cout << "Individu à migrer " << selected.first << " sur l'île " << j+1 << std::endl ;
 		      migMat[j].push_back(selected.first);
 		      
 		  }
@@ -436,19 +438,23 @@ public:
 		  float scoretmp = 0;
 		  int outsider = 0;
 		  
+		  std::cout << "Taille après ecriture dans l'autre dossier pour l'itération " << i << " = " << _population.size() << std::endl;
 		  for (unsigned k = 0; k < migMat.size(); ++k){
 		      // Les individus quittent l'île
-		      if(migMat[k].size() > 0 && (k+1) != _idIsland ){
+		      if(migMat[k].size() > 0 && ((k+1) != _idIsland) ){
+
 			  // filename 
 			  std::string filepath = _unitaryName;
 			  filepath.append(std::to_string(k+1));
 			  filepath.append("/");
 			  
-			 /* for(unsigned l=0; l < migMat[k].size(); ++l){
-			      std::cout <<" " << migMat[k][l] ;
+			  if(verbose){
+			      for(unsigned l=0; l < migMat[k].size(); ++l){
+				  std::cout <<" " << migMat[k][l] ;
+			      }
+			      std::cout << std::endl;
 			  }
-			  std::cout << std::endl;
-			 */ 
+
 			  time_t timer = time(NULL);
 			  int al1 = rand() % 1111 + 10000;
 			  int al2 = rand() % 3333 + 2000;
@@ -457,9 +463,9 @@ public:
 			  
 			  filepath.append("fromNode"+std::to_string(_idIsland)+"_");
 			  filepath.append(std::to_string(timer));
-// 			  std::cout << "migration sur l'ile " << k+1 << std::endl;
-// 			  std::cout << "filename : " << filepath << std::endl;
-			  
+
+			  if (verbose) std::cout << "migration sur l'ile " << k+1 << std::endl;
+			  if (verbose) std::cout << "filename : " << filepath << std::endl;
 			  
 			  std::ofstream outfile (filepath,std::ofstream::binary);
 			  if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier "+filepath);
@@ -470,28 +476,28 @@ public:
 				  scoretmp += _population[migMat[k][x]]->getScore();
 				  
 				  for(unsigned t=0; t < _population[0]->size(); ++t){
+
 				      outfile << (*_population[migMat[k][x]])[t] << " ";
+				      if (verbose) std::cout << (*_population[migMat[k][x]])[t] << " ";
 				  }
 				  outfile << std::endl;
 				  // TODO RETIRER l'INDIVIDU DE LA POPULATION
 				  _population.erase(_population.begin()+migMat[k][x]);
-		  
 			      }
 			  
 			      outfile.close();
 			  }
 		      }   
+
 		  }
 		  
 		  resMig[pass] = scoretmp/outsider;		  
 		  ++pass;
 		  // Traitement du dossier pour insertion
-		  try{
+		  std::cout << "Taille avant lecture dans le dossier pour l'itération " << i << " = " << _population.size() << std::endl;
 		    processDir();
-		  }
-		  catch( std::string Excep){
-		      std::cerr << Excep << std::endl;
-		  }
+		  std::cout << "Taille après lecture dans le dossier pour l'itération " << i << " = " << _population.size() << std::endl;
+
 	      }
 	      
 	      Individual<T>* os1 = NULL;
@@ -554,7 +560,7 @@ public:
 		    _eval->execute(*os2);
 		}
 		catch(std::string Ex2){
-		    std::cerr << Ex1 << " then " << Ex2 << std::endl;
+		    std::cerr << Ex1 << " then 2 " << Ex2 << std::endl;
 		}
 	      }
 	      
@@ -566,6 +572,7 @@ public:
 	      delete os2;
 	      incAgePop();
 	      ++i;
+
 // 	      _scores[i] = getBestScoreAverage(10);
 	      // extraction du meilleur individus de la population
 // 	      std::vector<float> bestScore(_population.size());
@@ -598,7 +605,7 @@ void exportResults(float* _results){
     filename.append(std::to_string(timer));
     
     std::ofstream outfile(filename, std::ofstream::binary);
-    if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier "+filename);
+    if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier "+filename+"(geneticAlgo)");
     else{
 	for(unsigned i=0; i < _nbIteration; ++i)
 	    outfile << i << " " << _results[i] << std::endl;

@@ -50,7 +50,7 @@ public:
      */
       void execute(const Individual<T> & ind, std::vector<Individual<T> *> & pop)
       {
-	if (pop.empty()) throw std::string("Erreur, impossible d'ajouter un individu si la population est vide");
+	if (pop.empty()) throw std::string("Erreur, impossible d'ajouter un individu si la population est vide (ageIDPolicy)");
 	else {
 	  // Recherche de l'individu le plus agé
 	  int oldest = 0;

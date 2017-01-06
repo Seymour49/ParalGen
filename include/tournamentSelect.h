@@ -61,9 +61,9 @@ public:
      */
       std::pair<int,int> execute(const std::vector<Individual<T> *> & pop) const
       {
-	if (_nbP < 2) throw std::string("Erreur, impossible d'exécuter une sélection par tournoi avec un nombre de participant inférieur à 2");
-	else if (_nbP > pop.size()) throw std::string("Erreur, impossible d'exécuter une sélection par tournoi avec un nombre de participant supérieur à la taille de la population");
-	else if (pop.size() < 2) throw std::string("Erreur, impossible d'exécuter une sélection par tournoi avec une population possédant moins de deux individus");
+	if (_nbP < 2) throw std::string("Erreur, impossible d'exécuter une sélection par tournoi avec un nombre de participant inférieur à 2 (tournamentSelect)");
+	else if (_nbP > pop.size()) throw std::string("Erreur, impossible d'exécuter une sélection par tournoi avec un nombre de participant supérieur à la taille de la population (tournamentSelect)");
+	else if (pop.size() < 2) throw std::string("Erreur, impossible d'exécuter une sélection par tournoi avec une population possédant moins de deux individus (tournamentSelect)");
 	else {
 	  
 	  unsigned int sizePop = pop.size();

@@ -26,11 +26,11 @@ IRandomPop::IRandomPop(const IRandomPop& irp)
 
 void IRandomPop::execute(std::vector< Individual< char >* >& pop)
 {
-    if (pop.empty()) throw string("Erreur, la population à initialiser est vide !");
+    if (pop.empty()) throw string("Erreur, la population à initialiser est vide ! (irandomPop)");
   
-    else if (_dataO == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé !");
+    else if (_dataO == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé ! (irandomPop)");
   
-    else if (_dataO->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide !");
+    else if (_dataO->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide ! (irandomPop)");
   
     else {
 	unsigned int line = _data->getNbLine();
@@ -50,11 +50,11 @@ void IRandomPop::execute(std::vector< Individual< char >* >& pop)
 
 void IRandomPop::executeO(std::vector< Individual< char >* >& pop)
 {
-    if (pop.empty()) throw string("Erreur, la population à initialiser est vide !");
+    if (pop.empty()) throw string("Erreur, la population à initialiser est vide ! (irandomPop)");
   
-    else if (_dataO == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé !");
+    else if (_dataO == NULL) throw string("Erreur, le jeu de donnée n'a pas été initialisé ! (irandomPop)");
   
-    else if (_dataO->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide !");
+    else if (_dataO->getNbLine() == 0) throw string("Erreur, le jeu de donnée est vide ! (irandomPop)");
   
     else {
 	unsigned int line = _dataO->getNbLine();

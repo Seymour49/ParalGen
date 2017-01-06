@@ -27,7 +27,7 @@
 				},
 			"crossover": {
 				"class":"multiPCross",
-				"param":4
+				"param":1
 				},
 			"mutator": {
 				"class":"randMut"
@@ -38,6 +38,12 @@
 				},
 			"indelPolicy":{
 				"class":"fitnessID"
+				},
+			"selectPolicyMigrate":{
+				"class":"bestMig"
+				},
+			"indelPolicyMigrate":{
+				"class":"oldestIDMig"
 				}
 			}
 		},
@@ -76,6 +82,12 @@
 				},
 			"indelPolicy":{
 				"class":"ageID"
+				},
+			"selectPolicyMigrate":{
+				"class":"bestMig"
+				},
+			"indelPolicyMigrate":{
+				"class":"oldestIDMig"
 				}
 			}
 		},

@@ -55,7 +55,7 @@ public:
  */
   void execute(const Individual<T> & parent1, const Individual<T> & parent2, Individual<T> & enfant) {
     
-    if ( parent1.size() != parent2.size()) throw std::string("Erreur, individus parents de tailles différentes");
+    if ( parent1.size() != parent2.size()) throw std::string("Erreur, individus parents de tailles différentes (classicCross)");
     else {
       unsigned int alea = rand() % parent1.size();
       enfant.resize(parent1.size());

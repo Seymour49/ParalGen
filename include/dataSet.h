@@ -59,7 +59,8 @@ public:
    */
   const T& getDataAt(unsigned row, unsigned col) const 
   {
-    if ((row < 0) || (row >= _nbLine) || (col < 0) || (col >= _nbCol)) throw std::string("Erreur, indice non conforme"); 
+    std::cout << "row = " << row << "\tcol = " << col << std::endl;
+    if ((row < 0) || (row >= _nbLine) || (col < 0) || (col >= _nbCol)) throw std::string("Erreur, indice non conforme (dataSet)"); 
     else return this->at(row).at(col);
   }
 

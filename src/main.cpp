@@ -25,7 +25,7 @@
 #include "../include/randomSelect.h"
 #include "../include/closeEval.h"
 
-#define DEBUG_PARAM 1
+#define DEBUG_PARAM 0
 
 using namespace std;
 
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 	    {"stepMig", required_argument, 0, 's'},
 	    
 	    {"bestMig", no_argument, &smig_flag, 0},
-	    {"TournamentMig", required_argument, &smig_flag, 1},
+	    {"tournamentMig", required_argument, &smig_flag, 1},
 
 	    {"oldestIDMig", no_argument, &dmig_flag, 0},
 	    {"worstIDMig", no_argument, &dmig_flag, 1},
@@ -286,7 +286,7 @@ int main(int argc, char **argv)
 	InitPop<char>* pop = NULL;
 	SelectPolicy<char>* select = NULL;
 	IndelPolicy<char>* indel = NULL;
-      
+        
 	DataSetO<char>* data = NULL;
 	DataSet<char>* data2 = NULL;
 	
@@ -445,6 +445,7 @@ int main(int argc, char **argv)
 	}
 	
 	switch(dmig_flag){
+	  case 0:
 #if DEBUG_PARAM
     cout << "Deleting oldest for receiving migrants" << endl;
 #endif    
@@ -471,7 +472,7 @@ int main(int argc, char **argv)
 						(IndelPolicy<char> *)indel, tabMig,
 						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
 						taillePop,nbGeneration,probaM,probaC,
-						nbIsland, idIsland, nameIsland,  stepM
+						nbIsland, idIsland, nameIsland, stepM, nbMig
 					      );
 	}else if(ind_flag == 1){
 #if DEBUG_PARAM
@@ -484,7 +485,7 @@ int main(int argc, char **argv)
 						(IndelPolicy<char> *)indel, tabMig,
 						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
 						taillePop,nbGeneration,probaM,probaC,
-						nbIsland, idIsland, nameIsland,  stepM
+						nbIsland, idIsland, nameIsland, stepM, nbMig
 					      );	
 	}
 	
@@ -493,9 +494,9 @@ int main(int argc, char **argv)
 	algo->run();
 // 	algo->populate();
 // 	algo->evalPop();
-	algo->displayPopulation();
-
+	
 	cout << "FIN RUN" << endl;
+	algo->displayPopulation();
 	
 	delete mut;
 	delete cross;
@@ -505,13 +506,11 @@ int main(int argc, char **argv)
 	delete indel;
 	delete data;
 	delete data2;
-	delete tabMig;
+	delete [] tabMig;
 	delete migindel;
 	delete migselect;
 	delete algo;
-	      	   
     }
- 
     return EXIT_SUCCESS;
 
 }

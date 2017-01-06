@@ -147,6 +147,28 @@
                     "required": [
                       "class"
                     ]
+                  },
+                  "selectPolicyMigrate": {
+                    "type": "object",
+                    "properties": {
+                      "class": {
+                        "enum" : ["bestMig", "tournamentMig"]
+                      }
+                    },
+                    "required": [
+                      "class"
+                    ]
+                  },
+                  "indelPolicyMigrate": {
+                    "type": "object",
+                    "properties": {
+                      "class": {
+                        "enum" : ["oldestIDMig", "worstIDMig"]
+                      }
+                    },
+                    "required": [
+                      "class"
+                    ]
                   }
                 }
               }

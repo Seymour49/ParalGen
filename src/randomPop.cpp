@@ -13,8 +13,8 @@ RandomPop::RandomPop(const RandomPop& r): _nbItem(r.getNbItem()), _density(r.get
 
 void RandomPop::execute(vector< Individual<char>* >& pop)
 {
-  if (pop.size() == 0) throw string("Erreur, population à initialiser vide");
-  else if (_nbItem == 0) throw string("Erreur, le nombre d'item par individu n'est pas initalisé");
+  if (pop.size() == 0) throw string("Erreur, population à initialiser vide (randomPop)");
+  else if (_nbItem == 0) throw string("Erreur, le nombre d'item par individu n'est pas initalisé (randomPop)");
   else {
     
     

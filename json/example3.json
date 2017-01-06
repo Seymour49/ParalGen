@@ -1,0 +1,53 @@
+{
+ "migration": {
+ 	"nbCandidatMigration":2,
+ 	"stepMigration":1
+ 	},
+ "name": "island",
+ "tabAlgoGen": [{
+ 	"id":1,
+	"initParam": {
+		"taillePop": 200,
+		"nbGeneration": 1000,
+		"dataFile": "data/testCloture.dat",
+		"probaCroisement": 0.85,
+		"probaMutation": 0.0005,
+		"tabProbaMigration": [1.0],
+		"classUsed":{
+			"typeInd": { 
+				"class": "itemsetO",
+				"typePrimitif": "char"
+				},
+			"populate": { 
+				"class":"freqPop",
+				"param":0.4
+				},				      
+			"evaluate": { 
+				"class":"closeEval",
+				"param":0.7
+				},
+			"crossover": {
+				"class":"multiPCross",
+				"param":1
+				},
+			"mutator": {
+				"class":"randMut"
+				},
+			"selectPolicy":{
+				"class":"randS"
+				},
+			"indelPolicy":{
+				"class":"fitnessID"
+				},
+			"selectPolicyMigrate":{
+				"class":"bestMig"
+				},
+			"indelPolicyMigrate":{
+				"class":"worstIDMig"
+				}
+			}
+		},
+	"resultFile": "result1.txt"
+	}]
+}
+

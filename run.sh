@@ -137,6 +137,31 @@ $(json validate --schema-file=$JSONSCHEMA --document-file=$JSONFILE) &&
 		fi
 		
 		
+		# Sélection d'un individu pour migration
+		
+		selectionMig=$(jshon -e tabAlgoGen -e $i -e initParam -e classUsed -e selectPolicyMigrate -e class < $JSONFILE)
+		selectionMig=${selectionMig:1:$((${#selectionMig}-2))}
+		nbArg=$(jshon -e tabAlgoGen -e $i -e initParam -e classUsed -e selectPolicyMigrate -l < $JSONFILE)
+		if [ $nbArg -eq 2 ]
+		then
+			paramSelectionMig=$(jshon -e tabAlgoGen -e $i -e initParam -e classUsed -e selectPolicyMigrate -e param < $JSONFILE)
+		else
+			paramSelectionMig=""
+		fi
+		
+		
+		# Ajout/Suppression d'un individu pour migration
+		
+		inDelMig=$(jshon -e tabAlgoGen -e $i -e initParam -e classUsed -e indelPolicyMigrate -e class < $JSONFILE)
+		inDelMig=${inDelMig:1:$((${#inDelMig}-2))}
+		nbArg=$(jshon -e tabAlgoGen -e $i -e initParam -e classUsed -e indelPolicyMigrate -l < $JSONFILE)
+		if [ $nbArg -eq 2 ]
+		then
+			paramInDelMig=$(jshon -e tabAlgoGen -e $i -e initParam -e classUsed -e indelPolicyMigrate -e param < $JSONFILE)
+		else
+			paramInDelMig=""
+		fi
+		
 		# Création des dossiers utiles à la gestions des différentes exécutions
 		
 		mkdir $nom$identifiant
@@ -144,7 +169,7 @@ $(json validate --schema-file=$JSONSCHEMA --document-file=$JSONFILE) &&
 		
 		# Ecriture des ligne d'exécution avec les options courtes et les options longues
 		
-		tableauExecution[$i]="valgrind $EXE -k $nbMig -s $stepMig -i $identifiant -u $nom -n $taillePop -g $nbGeneration -d $jeuDeDonnee -c $probaCroisement -m $probaMutation -l $nbExec -t $proba --$typeIndividu --$typePrimitif --$populate $paramPopulate --$evaluation $paramEvaluation --$croisement $paramCroisement --$mutation $paramMutation --$selection $paramSelection --$inDel $paramInDel"
+		tableauExecution[$i]="$EXE -k $nbMig -s $stepMig -i $identifiant -u $nom -n $taillePop -g $nbGeneration -d $jeuDeDonnee -c $probaCroisement -m $probaMutation -l $nbExec -t $proba --$typeIndividu --$typePrimitif --$populate $paramPopulate --$evaluation $paramEvaluation --$croisement $paramCroisement --$mutation $paramMutation --$selection $paramSelection --$inDel $paramInDel --$selectionMig $paramSelectionMig --$inDelMig $paramInDelMig"
 		
 		
 	done
