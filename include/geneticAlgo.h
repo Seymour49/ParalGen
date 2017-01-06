@@ -384,6 +384,7 @@ public:
   void run()
   {
       //float _results[_nbIteration];
+      float resMig[_nbIteration/_stepM];
       try{
 	
 	  /* Gestion résultats */
@@ -405,12 +406,14 @@ public:
 	  // Début de la boucle centrale
 	  unsigned int i = 0;
 	  int pass = 0;
+// 	  _scores[0] = getBestScoreAverage(10);
 	  while( i < _nbIteration ){
 	    _scores[i] = getBestScoreAverage(1);
 	      // Gestion du modèle en îles
+
 	      if( (_nbIsland > 1) && ((i%_stepM) == 0) && (i > 0)){
 		  if (verbose) std::cout << "test passage " << pass << ". iteration : " << i << ". nbMigrants : " << _nbMigrants << std::endl;
-		  ++pass;
+		  
 		  // on effectue _nbMigrants selections
 		  std::vector<std::vector<int>> migMat(_nbIsland);
 		  std::cout << "Taille avant ecriture dans l'autre dossier pour l'itération " << i << " = " << _population.size() << std::endl;
@@ -427,26 +430,32 @@ public:
 		      }
 		      
 		      // Indice de l'île dans la variable j, individu dans selected.first
+
 		      if (verbose) std::cout << "Individu à migrer " << selected.first << " sur l'île " << j+1 << std::endl ;
 		      migMat[j].push_back(selected.first);
 		      
-		      // TODO RETIRER l'INDIVIDU DE LA POPULATION
-		      if ((j + 1) != _idIsland)_population.erase(_population.begin()+selected.first);
 		  }
+		
+		  float scoretmp = 0;
+		  int outsider = 0;
+		  
 		  std::cout << "Taille après ecriture dans l'autre dossier pour l'itération " << i << " = " << _population.size() << std::endl;
 		  for (unsigned k = 0; k < migMat.size(); ++k){
-		    
+		      // Les individus quittent l'île
 		      if(migMat[k].size() > 0 && ((k+1) != _idIsland) ){
+
 			  // filename 
 			  std::string filepath = _unitaryName;
 			  filepath.append(std::to_string(k+1));
 			  filepath.append("/");
 			  
-			  for(unsigned l=0; l < migMat[k].size(); ++l){
-			      if (verbose) std::cout <<" " << migMat[k][l] ;
+			  if(verbose){
+			      for(unsigned l=0; l < migMat[k].size(); ++l){
+				  std::cout <<" " << migMat[k][l] ;
+			      }
+			      std::cout << std::endl;
 			  }
-			  if (verbose) std::cout << std::endl;
-			  
+
 			  time_t timer = time(NULL);
 			  int al1 = rand() % 1111 + 10000;
 			  int al2 = rand() % 3333 + 2000;
@@ -455,47 +464,37 @@ public:
 			  
 			  filepath.append("fromNode"+std::to_string(_idIsland)+"_");
 			  filepath.append(std::to_string(timer));
+
 			  if (verbose) std::cout << "migration sur l'ile " << k+1 << std::endl;
 			  if (verbose) std::cout << "filename : " << filepath << std::endl;
 			  
-			  for(unsigned t=0; t < _population[0]->size(); ++t){
-			    if (verbose) std::cout << " " << (*_population[migMat[k][0]])[t];
-			  }
-			  if (verbose) std::cout << std::endl;
-			  
-			  /*	TODO
-			   * Reprendre ici, il reste à écrire les individus dans un stream
-			   * puis le stream dans le fichier			   * 
-			   */
-			  std::ofstream outfile (filepath, std::ofstream::binary);
-			  std::cout << "Création du fichier " << filepath << " à la " << i << " ème génération" << std::endl;
-			  if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier "+filepath+" (geneticAlgo)");
+
+			  std::ofstream outfile (filepath,std::ofstream::binary);
+			  if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier "+filepath);
 			  else{
-			      for (unsigned x = 0; x < migMat[k].size() ; ++x){
-				  if (verbose) std::cout << "Ecriture des bitset dans le fichier : " << filepath << std::endl;
-				  for(unsigned t = 0; t < _population[0]->size(); ++t){
+			      for(unsigned x=0; x < migMat[k].size() ; ++x){
+				  
+				  outsider += 1;
+				  scoretmp += _population[migMat[k][x]]->getScore();
+				  
+				  for(unsigned t=0; t < _population[0]->size(); ++t){
+
 				      outfile << (*_population[migMat[k][x]])[t] << " ";
 				      if (verbose) std::cout << (*_population[migMat[k][x]])[t] << " ";
 				  }
 				  outfile << std::endl;
-				  if (verbose) std::cout << std::endl;
+				  // TODO RETIRER l'INDIVIDU DE LA POPULATION
+				  _population.erase(_population.begin()+migMat[k][x]);
 			      }
 			  
 			      outfile.close();
 			  }
-		      }
-		      else if(migMat[k].size() == 0 && ((k+1) != _idIsland)){
-			  if (verbose) std::cout << "Pas de migration sur ile " << (k+1) << std::endl;
-			  
-		      }
-		      else if((k+1)==_idIsland){
-			  if (verbose) std::cout << "Pas de mouvement, on reste sur l'ile "<<k+1 << std::endl;
-			
-		      }
-		      
+		      }   
+
 		  }
 		  
-		  
+		  resMig[pass] = scoretmp/outsider;		  
+		  ++pass;
 		  // Traitement du dossier pour insertion
 		  std::cout << "Taille avant lecture dans le dossier pour l'itération " << i << " = " << _population.size() << std::endl;
 		    processDir();
@@ -575,6 +574,8 @@ public:
 	      delete os2;
 	      incAgePop();
 	      ++i;
+
+// 	      _scores[i] = getBestScoreAverage(10);
 	      // extraction du meilleur individus de la population
 // 	      std::vector<float> bestScore(_population.size());
 // 	      for (unsigned int i = 0; i < _population.size(); ++i) bestScore[i] = _population[i]->getScore();
@@ -583,8 +584,8 @@ public:
 	       
 	  }
 	  
-	  //exportResults(_results);
-	  writeBestScoreAverage(resultFileName);
+	  exportResults(resMig);
+// 	  writeBestScoreAverage(resultFileName);
       }
       catch(std::string Exception){
 	  std::cerr << Exception << std::endl;	
