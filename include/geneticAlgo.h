@@ -195,6 +195,7 @@ public:
 	      
 	      if(!f) throw std::string("Erreur lors de l'ouverture du fichier " + filepath + "!"+" (geneticAlgo))");
 	      else{
+		std::cout << "Extraction des itemset du fichier " << filepath << std::endl;
 		  std::string line;
 		  while( std::getline(f,line)){	     
 		      
@@ -467,6 +468,7 @@ public:
 			   * puis le stream dans le fichier			   * 
 			   */
 			  std::ofstream outfile (filepath, std::ofstream::binary);
+			  std::cout << "Création du fichier " << filepath << " à la " << i << " ème génération" << std::endl;
 			  if(!outfile) throw std::string("Erreur lors de l'ouverture du fichier "+filepath+" (geneticAlgo)");
 			  else{
 			      for (unsigned x = 0; x < migMat[k].size() ; ++x){

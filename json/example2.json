@@ -1,6 +1,6 @@
 {
  "migration": {
- 	"nbCandidatMigration":3,
+ 	"nbCandidatMigration":2,
  	"stepMigration":5
  	},
  "name": "island",
@@ -8,7 +8,7 @@
  	"id":1,
 	"initParam": {
 		"taillePop": 5,
-		"nbGeneration": 50,
+		"nbGeneration": 500,
 		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.85,
 		"probaMutation": 0.0005,
@@ -53,7 +53,7 @@
  	"id":2,
 	"initParam": {
 		"taillePop": 5,
-		"nbGeneration": 50,
+		"nbGeneration": 500,
 		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.7,
 		"probaMutation": 0.005,
