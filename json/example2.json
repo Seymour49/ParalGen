@@ -40,15 +40,12 @@
 				"class":"fitnessID"
 				},
 			"selectPolicyMigrate":{
-				"class":"bestMig"
+				"class":"tournamentMig",
+				"param":10
 				},
 			"indelPolicyMigrate":{
 				"class":"oldestIDMig"
 				},
-			"selectPolicyMigrate": {
-				"class":"tournamentMig",
-				"param":6
-				}
 			}
 		},
 	"resultFile": "result1.txt"
@@ -87,15 +84,12 @@
 			"indelPolicy":{
 				"class":"ageID"
 				},
-			"selectPolicyMigrate":{
-				"class":"bestMig"
-				},
-			"indelPolicyMigrate":{
-				"class":"oldestIDMig"
-				},
 			"selectPolicyMigrate": {
 				"class":"tournamentMig",
 				"param":6
+				},
+			"indelPolicyMigrate": {
+				"class":"worstIDMig"
 				}
 			}
 		},
@@ -138,6 +132,9 @@
 			"selectPolicyMigrate": {
 				"class":"tournamentMig",
 				"param":6
+				},			,
+			"indelPolicyMigrate": {
+				"class":"worstIDMig"
 				}
 			}
 		},
@@ -180,6 +177,9 @@
 			"selectPolicyMigrate": {
 				"class":"tournamentMig",
 				"param":6
+				},				,
+			"indelPolicyMigrate": {
+				"class":"worstIDMig"
 				}
 			}
 		},
