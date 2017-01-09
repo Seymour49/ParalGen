@@ -8,11 +8,11 @@ using namespace std;
 CloseEval::CloseEval(float freq):_freq(freq)
 {}
 
-CloseEval::CloseEval(float freq, DataSet<char> * const data): _freq(freq), _data1(data)
+CloseEval::CloseEval(float freq, DataSet<char> * const data): _freq(freq), _data1(data), _data2(NULL)
 {}
 
 
-CloseEval::CloseEval(float freq, DataSetO<char> * const data):_freq(freq), _data2(data)
+CloseEval::CloseEval(float freq, DataSetO<char> * const data):_freq(freq), _data1(NULL), _data2(data)
 {}
 
 
@@ -56,10 +56,10 @@ void CloseEval::execute(Individual< char >& ind)
 
     // Traiter la fermeture de l'individu
     
-    /* Calcul des items fréquents pour ne tester que les sur-ensembles
-      * potentiellement fréquents
-      * Si le calcul a déjà été réalisé pour ce jeu de donnée, on passe à la suite
-      */
+//   Calcul des items fréquents pour ne tester que les sur-ensembles
+//   potentiellement fréquents
+//   Si le calcul a déjà été réalisé pour ce jeu de donnée, on passe à la suite
+      
     if (_itemFreq.empty()) {
       for (unsigned int i = 0; i < nbCol; ++i) {
 	float tmp = 0.0;
@@ -108,13 +108,6 @@ void CloseEval::execute(Individual< char >& ind)
       }
       
     }
-//     bool vide = true;
-//     unsigned int inc = 0;
-//     while( vide && inc < ind.size()){
-// 	if( ind[inc] == '1')
-// 	  vide = false;
-// 	++inc;      
-//     }
     if (!empty){
       if ( isClosed && (result >= _freq)) // Si clos et fréquent on augmentre le score de 1
 	ind.setScore(result + 1.0);
@@ -206,14 +199,6 @@ void CloseEval::executeO(Individual< char >& ind)
 	
       }
     }
-
-//     bool vide = true;
-//     unsigned int inc = 0;
-//     while( vide && inc < ind.size()){
-// 	if( ind[inc] == '1')
-// 	  vide = false;
-// 	++inc;      
-//     }
     if (!empty){
       if ( isClosed && (result >= _freq)) // Si clos et fréquent on augmente le score de 1
 	ind.setScore(result + 1.0);

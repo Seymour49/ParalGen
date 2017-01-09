@@ -5,23 +5,19 @@
 using namespace std;
 
 IRandomPop::IRandomPop(DataSet< char >*const data):_data(data), _dataO(NULL)
-{
-}
+{}
 
 
 IRandomPop::IRandomPop(DataSetO< char >*const data):_data(NULL),_dataO(data)
-{
-}
+{}
 
 
 IRandomPop::IRandomPop(DataSet< char >*const data, DataSetO< char >*const dataO):
 _data(data),_dataO(dataO)
-{
-}
+{}
 
 IRandomPop::IRandomPop(const IRandomPop& irp)
-{
-}
+{}
 
 
 void IRandomPop::execute(std::vector< Individual< char >* >& pop)

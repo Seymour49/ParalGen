@@ -32,14 +32,13 @@ void RandomPop::execute(vector< Individual<char>* >& pop)
       for (unsigned int j = 0; j < _nbItem; ++j)
 	  (*pop[i])[j] = '0';
 	  
-      for(int j = 0; j < nbBits; ++j){
+      for (int j = 0; j < nbBits; ++j){
 	  int pos = rand() % lim;
 	  (*pop[i])[indice[pos]] = '1';
 	  int tmp = indice[pos];
 	  indice[pos] = indice[lim-1];
 	  indice[lim-1] = tmp;
 	  --lim;
-	 
       }
     }
   }

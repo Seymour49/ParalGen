@@ -4,18 +4,18 @@
  	"stepMigration":1
  	},
  "name": "island",
+ "dataFile": "data/testCloture.dat",
  "tabAlgoGen": [{
  	"id":1,
 	"initParam": {
 		"taillePop": 200,
 		"nbGeneration": 1000,
-		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.85,
 		"probaMutation": 0.0005,
 		"tabProbaMigration": [1.0],
 		"classUsed":{
 			"typeInd": { 
-				"class": "itemsetO",
+				"class": "itemset",
 				"typePrimitif": "char"
 				},
 			"populate": { 

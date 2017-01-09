@@ -56,7 +56,6 @@ void FreqPop::execute(std::vector< Individual< char >* >& pop)
 		itemOcc.push_back(tmp);
 	}
       
-	cout << "DEBUG : Nombre items fréquents : " << itemOcc.size() << endl;
 	sort(itemOcc.begin(), itemOcc.end(), descPair);
 	unsigned nbBrik = (itemOcc.size()/5);
 	if (nbBrik == 0) nbBrik = 1;
@@ -119,7 +118,6 @@ void FreqPop::executeO(std::vector< Individual< char >* >& pop)
 	      itemOcc.push_back(tmp);
       }
     
-      cout << "DEBUG : Nombre items fréquents : " << itemOcc.size() << endl;
       sort(itemOcc.begin(), itemOcc.end(), descPair);
       unsigned nbBrik = (itemOcc.size() / 5);
       if (nbBrik == 0) nbBrik = 1;

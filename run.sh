@@ -22,6 +22,10 @@ $(json validate --schema-file=$JSONSCHEMA --document-file=$JSONFILE) &&
 	nom=$(jshon -e name < $JSONFILE)
 	nom=${nom:1:$((${#nom}-2))}
 	
+	# Récupération du jeu de données
+	jeuDeDonnee=$(jshon -e dataFile < $JSONFILE)
+	jeuDeDonnee=${jeuDeDonnee:1:$((${#jeuDeDonnee}-2))}
+	
 	# Initialisation des lignes d'exécutions
 	for ((i=0 ; $i<$nbExec ; i++))
 	do 
@@ -31,13 +35,14 @@ $(json validate --schema-file=$JSONSCHEMA --document-file=$JSONFILE) &&
 		
 		taillePop=$(jshon -e tabAlgoGen -e $i -e initParam -e taillePop < $JSONFILE)
 		nbGeneration=$(jshon -e tabAlgoGen -e $i -e initParam -e nbGeneration < $JSONFILE)
-		jeuDeDonnee=$(jshon -e tabAlgoGen -e $i -e initParam -e dataFile < $JSONFILE)
-		jeuDeDonnee=${jeuDeDonnee:1:$((${#jeuDeDonnee}-2))}
 		probaCroisement=$(jshon -e tabAlgoGen -e $i -e initParam -e probaCroisement < $JSONFILE)
 		#probaCroisement= printf '%.*f\n' $nbDecimalFloat $probaCroisement2
 		probaMutation=$(jshon -e tabAlgoGen -e $i -e initParam -e probaMutation < $JSONFILE)
 		
 		nbProba=$(jshon -e tabAlgoGen -e $i -e initParam -e tabProbaMigration -l < $JSONFILE)
+		resultFileName=$(jshon -e tabAlgoGen -e $i -e resultFile < $JSONFILE)
+		resultFileName=${resultFileName:1:$((${#resultFileName}-2))}
+		
 		if  [ $nbExec -ne $nbProba ]
 		then 
 			echo "Erreur, attribut tabProbaMigration incorrecte !"
@@ -162,6 +167,7 @@ $(json validate --schema-file=$JSONSCHEMA --document-file=$JSONFILE) &&
 			paramInDelMig=""
 		fi
 		
+		
 		# Création des dossiers utiles à la gestions des différentes exécutions
 		
 		mkdir $nom$identifiant
@@ -169,7 +175,7 @@ $(json validate --schema-file=$JSONSCHEMA --document-file=$JSONFILE) &&
 		
 		# Ecriture des ligne d'exécution avec les options courtes et les options longues
 		
-		tableauExecution[$i]="$EXE -k $nbMig -s $stepMig -i $identifiant -u $nom -n $taillePop -g $nbGeneration -d $jeuDeDonnee -c $probaCroisement -m $probaMutation -l $nbExec -t $proba --$typeIndividu --$typePrimitif --$populate $paramPopulate --$evaluation $paramEvaluation --$croisement $paramCroisement --$mutation $paramMutation --$selection $paramSelection --$inDel $paramInDel --$selectionMig $paramSelectionMig --$inDelMig $paramInDelMig"
+		tableauExecution[$i]="valgrind $EXE -k $nbMig -s $stepMig -i $identifiant -u $nom -n $taillePop -g $nbGeneration -d $jeuDeDonnee -c $probaCroisement -m $probaMutation -l $nbExec -t $proba -o $resultFileName --$typeIndividu --$typePrimitif --$populate $paramPopulate --$evaluation $paramEvaluation --$croisement $paramCroisement --$mutation $paramMutation --$selection $paramSelection --$inDel $paramInDel --$selectionMig $paramSelectionMig --$inDelMig $paramInDelMig"
 		
 		
 	done
@@ -183,13 +189,12 @@ $(json validate --schema-file=$JSONSCHEMA --document-file=$JSONFILE) &&
 	done
 	
 	
-	# Lancement des exécutions parallels
+	# Lancement des exécutions parallèlesg
 	parallel --no-notice :::: $CMDFILE
 	
 	
 	# Suppression des dossiers relatifs aux différentes exécutions
 	
-	#rm -r $nom*
+	rm -r $nom*
 	
-
 }

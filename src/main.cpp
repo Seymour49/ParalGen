@@ -2,6 +2,7 @@
 #include <ctime>
 #include <vector>
 #include <getopt.h>
+#include <string>
 
 #include "../include/dataSet.h"
 #include "../include/itemSet.h"
@@ -25,7 +26,7 @@
 #include "../include/randomSelect.h"
 #include "../include/closeEval.h"
 
-#define DEBUG_PARAM 0
+#define DEBUG_PARAM 1
 
 using namespace std;
 
@@ -68,6 +69,8 @@ int main(int argc, char **argv)
     unsigned nbMig = 3;
     unsigned int migPart = 5;
     
+    string resultFileName = "./results/bestInd.txt";
+    
     
     
 #if DEBUG_PARAM
@@ -87,7 +90,8 @@ int main(int argc, char **argv)
 	<< "idIsland : " << idIsland << endl 
 	<< "nameIsland : " << nameIsland << endl 
 	<< "nbMig : " << nbMig << endl 
-	<< "migPart : " << migPart << endl;
+	<< "migPart : " << migPart << endl
+	<< "resultFileName : " << resultFileName << endl;
 	
   cout 	<< "==================================="<< endl
 	<< "======= Méthodes par défaut ======="<< endl
@@ -186,7 +190,7 @@ int main(int argc, char **argv)
 	// getopt_long récupère l'option ici
 	int option_index = 0;
 	
-	opt = getopt_long(argc,argv, "n:d:g:c:m:l:i:u:t:s:k:", long_options, &option_index);
+	opt = getopt_long(argc,argv, "n:d:g:c:m:l:i:u:k:s:o:t:", long_options, &option_index);
       
 	if( opt == -1) // Fin des options
 	    break;
@@ -256,7 +260,10 @@ int main(int argc, char **argv)
 	    case 's':
 		stepM = atoi(optarg);
 		break;
-	    case 't':		
+	    case 'o':
+		resultFileName = "./results/"+string(optarg);
+		break;
+	    case 't':	
 		string proba(optarg);
 		istringstream split(proba);
 		
@@ -465,38 +472,39 @@ int main(int argc, char **argv)
 #if DEBUG_PARAM
     cout << "Itemset optimisé"<< endl;
 #endif
-		  ItemSetO<char> isT1;
-		  algo = new GeneticAlgo<char>((Individual<char> *)&isT1,(Mutator<char> *)mut,
+		  algo = new GeneticAlgo<char>("itemSetO",(Mutator<char> *)mut,
 						(Cross<char> *)cross,(Evaluate<char> *)eval,
 						(InitPop<char> *)pop, (SelectPolicy<char> *)select,
 						(IndelPolicy<char> *)indel, tabMig,
 						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
-						taillePop,nbGeneration,probaM,probaC,
+						resultFileName, taillePop,nbGeneration,probaM,probaC,
 						nbIsland, idIsland, nameIsland, stepM, nbMig
 					      );
 	}else if(ind_flag == 1){
 #if DEBUG_PARAM
     cout << "Itemset classique"<< endl;
 #endif
-		  ItemSet<char>isT2;
-		  algo = new GeneticAlgo<char>((Individual<char> *)&isT2,(Mutator<char> *)mut,
+		  algo = new GeneticAlgo<char>("itemSet", (Mutator<char> *)mut,
 						(Cross<char> *)cross,(Evaluate<char> *)eval,
 						(InitPop<char> *)pop, (SelectPolicy<char> *)select,
 						(IndelPolicy<char> *)indel, tabMig,
 						(SelectPolicy<char> *)migselect, (IndelPolicy<char> *)migindel,
-						taillePop,nbGeneration,probaM,probaC,
+						resultFileName, taillePop,nbGeneration,probaM,probaC,
 						nbIsland, idIsland, nameIsland, stepM, nbMig
 					      );	
 	}
 	
-	cout << "DEBUT RUN" << endl;
 	
-	algo->run();
-// 	algo->populate();
-// 	algo->evalPop();
+	try {
+	  cout << "DEBUT RUN" << endl;
+	  algo->run();
+	  cout << "FIN RUN" << endl;
+	  algo->printPopulationInResultFile();
+	} catch (string exception) {
+	    cerr << exception << endl;
+	}
 	
-	cout << "FIN RUN" << endl;
-	algo->displayPopulation();
+	
 	
 	delete mut;
 	delete cross;

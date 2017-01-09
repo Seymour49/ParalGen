@@ -1,18 +1,18 @@
 {
  "migration": {
  	"nbCandidatMigration":2,
- 	"stepMigration":1
+ 	"stepMigration":100
  	},
  "name": "island",
+ "dataFile": "data/testCloture.dat",
  "tabAlgoGen": [{	
  	"id":1,
 	"initParam": {
-		"taillePop": 20,
+		"taillePop": 50,
 		"nbGeneration": 1000,
-		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.7,
 		"probaMutation": 0.005,
-		"tabProbaMigration": [0.78, 0.09, 0.07, 0.04],
+		"tabProbaMigration": [0.25, 0.25, 0.25, 0.25],
 		"classUsed": {
 			"typeInd": { 
 				"class": "itemsetO",
@@ -36,6 +36,12 @@
 				},
 			"indelPolicy":{
 				"class":"ageID"
+				},
+			"selectPolicyMigrate":{
+				"class":"bestMig"
+				},
+			"indelPolicyMigrate":{
+				"class":"worstIDMig"
 				}
 			}
 		},
@@ -44,12 +50,11 @@
  	{
  	"id":2,
 	"initParam": {
-		"taillePop": 20,
+		"taillePop": 50,
 		"nbGeneration": 1000,
-		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.85,
 		"probaMutation": 0.0005,
-		"tabProbaMigration": [0.78, 0.09, 0.07, 0.04],
+		"tabProbaMigration": [0.25, 0.25, 0.25, 0.25],
 		"classUsed":{
 			"typeInd": { 
 				"class": "itemsetO",
@@ -65,7 +70,7 @@
 				},
 			"crossover": {
 				"class":"multiPCross",
-				"param":4
+				"param":1
 				},
 			"mutator": {
 				"class":"randMut"
@@ -75,6 +80,12 @@
 				},
 			"indelPolicy":{
 				"class":"fitnessID"
+				},
+			"selectPolicyMigrate":{
+				"class":"bestMig"
+				},
+			"indelPolicyMigrate":{
+				"class":"worstIDMig"
 				}
 			}
 		},
@@ -83,12 +94,11 @@
 	{
 	"id":3,
 	"initParam": {
-		"taillePop": 20,
+		"taillePop": 50,
 		"nbGeneration": 1000,
-		"dataFile": "data/testCloture.dat",
 		"probaCroisement": 0.9,
 		"probaMutation": 0.01,
-		"tabProbaMigration": [0.78, 0.09, 0.07, 0.04],
+		"tabProbaMigration": [0.25, 0.25, 0.25, 0.25],
 		"classUsed":{
 			"typeInd": { 
 				"class": "itemsetO",
@@ -107,11 +117,16 @@
 				"class":"randMut"
 				},
 			"selectPolicy":{
-				"class":"tournamentS",
-				"param":5000
+				"class":"bestS"
 				},
 			"indelPolicy":{
 				"class":"fitnessID"
+				},
+			"selectPolicyMigrate":{
+				"class":"bestMig"
+				},
+			"indelPolicyMigrate":{
+				"class":"worstIDMig"
 				}
 			}
 		},
@@ -120,12 +135,11 @@
 	{
 	"id":4,
 	"initParam": {
-		"taillePop": 20,
+		"taillePop": 50,
 		"nbGeneration": 1000,
-		"dataFile": "data/mushroom.dat",
 		"probaCroisement": 0.7,
 		"probaMutation": 0.005,
-		"tabProbaMigration": [0.78, 0.09, 0.07, 0.04],
+		"tabProbaMigration": [0.25, 0.25, 0.25, 0.25],
 		"classUsed":{
 			"typeInd": { 
 				"class": "itemsetO",
@@ -149,6 +163,12 @@
 				},
 			"indelPolicy":{
 				"class":"ageID"
+				},
+			"selectPolicyMigrate":{
+				"class":"bestMig"
+				},
+			"indelPolicyMigrate":{
+				"class":"worstIDMig"
 				}
 			}
 		},

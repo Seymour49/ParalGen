@@ -23,6 +23,10 @@
       "type": "string",
       "minLength": 1
     },
+    "dataFile": {
+      "type": "string",
+      "minLength": 1
+    },
     "tabAlgoGen": {
       "type": "array",
       "items": {
@@ -42,9 +46,6 @@
               "nbGeneration": {
                 "type": "integer",
                 "minimum": 0
-              },
-              "dataFile": {
-                "type": "string"
               },
               "probaCroisement": {
                 "type": "number",
@@ -71,7 +72,7 @@
                     "type": "object",
                     "properties": {
                       "class": {
-                        "enum": ["itemsetO"]
+                        "enum": ["itemset", "itemsetO"]
                       },
                       "typePrimitif": {
                         "enum": ["char"] 
@@ -170,13 +171,23 @@
                       "class"
                     ]
                   }
-                }
+                },
+                "required": [
+                  "typeInd",
+                  "populate",
+                  "evaluate",
+                  "crossover",
+                  "mutator",
+                  "selectPolicy",
+                  "indelPolicy",
+                  "selectPolicyMigrate",
+                  "indelPolicyMigrate"
+                ]
               }
             },
             "required": [
               "taillePop",
               "nbGeneration",
-              "dataFile",
               "probaCroisement",
               "probaMutation",
               "tabProbaMigration",
@@ -200,6 +211,7 @@
   "required": [
     "migration",
     "name",
+    "dataFile",
     "tabAlgoGen"
   ]
 }
