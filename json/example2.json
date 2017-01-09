@@ -39,7 +39,8 @@
 				"class":"fitnessID"
 				},
 			"selectPolicyMigrate":{
-				"class":"bestMig"
+				"class":"tournamentMig",
+				"param":10
 				},
 			"indelPolicyMigrate":{
 				"class":"oldestIDMig"
@@ -84,6 +85,7 @@
 				"class":"bestMig"
 				},
 			"indelPolicyMigrate":{
+
 				"class":"worstIDMig"
 				}
 			}
